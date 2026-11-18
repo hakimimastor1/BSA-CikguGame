@@ -1,0 +1,110 @@
+import type { Band, Mark, PlayResult, Question, StoryChoice, SubjectKey, SubjectResult, Trait } from '../types'
+import { BAND_SUBJECTS } from '../content/subjects'
+import { TRAIT_ORDER } from '../content/story'
+
+export const SEMAK_ITEMS = 8
+export const SEMAK_SECONDS = 45
+export const MARK_XP = 20
+export const SPEED_XP_MAX = 5
+export const STREAK_XP = 5
+
+const shuffle = <T,>(arr: T[], rand = Math.random): T[] => {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+/** Which 4 subjects a round uses. */
+export function roundSubjects(band: Band, teachSubjects: SubjectKey[] = []): SubjectKey[] {
+  const available = BAND_SUBJECTS[band]
+  const picked = teachSubjects.filter((s) => available.includes(s))
+  if (band === 'f4_5' && picked.length === 0) {
+    // SPM: BI and Matematik, plus 2 of the three sciences.
+    return ['bi', 'math', ...shuffle(['phy', 'chem', 'bio'] as SubjectKey[]).slice(0, 2)]
+  }
+  const rest = shuffle(available.filter((s) => !picked.includes(s)))
+  return [...picked, ...rest].slice(0, 4)
+}
+
+/**
+ * 8 items: 2 from each of 4 subjects, with roughly half the pupil answers wrong.
+ * In M2 the server picks these and keeps `correct` hidden until the play is submitted.
+ */
+export function pickQuestions(bank: Question[], band: Band, teachSubjects: SubjectKey[] = []): Question[] {
+  const subjects = roundSubjects(band, teachSubjects)
+  const chosen: Question[] = []
+  for (const s of subjects) {
+    const pool = bank.filter((q) => q.band === band && q.subject === s)
+    const right = shuffle(pool.filter((q) => q.correct))
+    const wrong = shuffle(pool.filter((q) => !q.correct))
+    // One right and one wrong per subject when possible, so the round isn't guessable.
+    const pair = [right[0], wrong[0]].filter(Boolean) as Question[]
+    const extra = shuffle(pool.filter((q) => !pair.includes(q)))
+    chosen.push(...[...pair, ...extra].slice(0, 2))
+  }
+  return shuffle(chosen).slice(0, SEMAK_ITEMS)
+}
+
+/** XP for one mark, given the streak of right marks before it. */
+export function markXp(right: boolean, ms: number, streakBefore: number): number {
+  if (!right) return 0
+  const speed = Math.max(0, Math.round(SPEED_XP_MAX * (1 - ms / 5000)))
+  const streak = streakBefore >= 2 ? STREAK_XP : 0
+  return MARK_XP + speed + streak
+}
+
+export function scorePlay(
+  storyPicks: StoryChoice[],
+  questions: Question[],
+  marks: Mark[],
+): PlayResult {
+  const traitCounts: Record<Trait, number> = { kreatif: 0, penyayang: 0, strategik: 0, inspirasi: 0 }
+  let storyXp = 0
+  for (const c of storyPicks) {
+    storyXp += c.xp
+    if (c.trait) traitCounts[c.trait] += 1
+  }
+  const personality = TRAIT_ORDER.reduce((best, tr) => (traitCounts[tr] > traitCounts[best] ? tr : best), TRAIT_ORDER[0])
+
+  let semakXp = 0
+  let streak = 0
+  let rightMarks = 0
+  const bySubject = new Map<SubjectKey, SubjectResult>()
+  for (const q of questions) {
+    const entry = bySubject.get(q.subject) ?? { subject: q.subject, right: 0, total: 0 }
+    entry.total += 1
+    const m = marks.find((x) => x.questionId === q.id)
+    const right = m != null && m.verdict === q.correct
+    if (right) {
+      semakXp += markXp(true, m!.ms, streak)
+      streak += 1
+      rightMarks += 1
+      entry.right += 1
+    } else {
+      streak = 0
+    }
+    bySubject.set(q.subject, entry)
+  }
+  const subjects = [...bySubject.values()]
+  const ranked = [...subjects].sort((a, b) => b.right / b.total - a.right / a.total)
+  const strongest = ranked.length && ranked[0].right > 0 ? ranked[0].subject : null
+  const levelUp = subjects
+    .filter((s) => s.right < s.total)
+    .sort((a, b) => a.right / a.total - b.right / b.total)
+    .map((s) => s.subject)
+
+  return {
+    storyXp,
+    semakXp,
+    totalXp: storyXp + semakXp,
+    personality,
+    traitCounts,
+    subjects,
+    strongest,
+    levelUp,
+    rightMarks,
+  }
+}

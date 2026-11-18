@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+@theme {
+  --color-yellow: #f9c414;
+  --color-yellow-soft: #fde68a;
+  --color-navy: #023e86;
+  --color-navy-deep: #012a5c;
+  --color-cream: #fff8e1;
+  --color-sky: #dcebff;
+  --color-muted: #4a5878;
+  --color-correct: #16804a;
+  --color-correct-soft: #d6f2e2;
+  --color-wrong: #c0362c;
+  --color-wrong-soft: #fbe0dd;
+
+  --font-display: "Baloo 2", ui-rounded, system-ui, sans-serif;
+  --font-body: "Lato", system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  background: var(--color-cream);
+  color: var(--color-navy);
+  font-family: var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  min-height: 100dvh;
+  background-image:
+    radial-gradient(circle at 15% 0%, #fff3c4 0, transparent 40%),
+    radial-gradient(circle at 100% 30%, #e6f0ff 0, transparent 35%);
+  background-attachment: fixed;
+}
+
+/* ---- Clay building blocks ---- */
+
+.clay-card {
+  background: #fff;
+  border: 3px solid var(--color-navy);
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 0 var(--color-navy);
+}
+
+.clay-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.25rem;
+  padding: 0.6rem 1.25rem;
+  border: 3px solid var(--color-navy);
+  border-radius: 1.1rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.1;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--color-navy);
+  transition:
+    transform 120ms ease-out,
+    box-shadow 120ms ease-out,
+    background-color 150ms;
+  user-select: none;
+}
+.clay-btn:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--color-navy);
+}
+.clay-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.clay-btn:focus-visible,
+.clay-option:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-yellow);
+  outline-offset: 3px;
+}
+
+.clay-option {
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 3px solid var(--color-navy);
+  border-radius: 1.1rem;
+  box-shadow: 0 4px 0 var(--color-navy);
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition:
+    transform 120ms ease-out,
+    box-shadow 120ms ease-out,
+    background-color 150ms;
+}
+.clay-option:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--color-navy);
+}
+.clay-option[aria-pressed="true"] {
+  background: var(--color-sky);
+}
+
+.field {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.6rem 0.9rem;
+  border: 3px solid var(--color-navy);
+  border-radius: 0.9rem;
+  background: #fff;
+  font-size: 1rem;
+  color: var(--color-navy);
+}
+.field::placeholder {
+  color: #8592ad;
+}
+
+/* ---- Motion ---- */
+
+@keyframes pop-in {
+  0% { transform: scale(0.85); opacity: 0; }
+  60% { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes slide-up {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes glow {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+@keyframes confetti-fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(720deg); opacity: 0.9; }
+}
+
+.anim-pop { animation: pop-in 320ms ease-out both; }
+.anim-slide { animation: slide-up 280ms ease-out both; }
+.anim-bob { animation: bob 2.4s ease-in-out infinite; }
+.anim-glow { animation: glow 1.8s ease-in-out infinite; }
+.anim-shake { animation: shake 260ms ease-in-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
