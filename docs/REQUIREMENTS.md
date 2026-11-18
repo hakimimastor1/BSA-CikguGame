@@ -1,4 +1,4 @@
-# Cikgu Sehari — Requirements (v0.3)
+# Cikgu Sehari — Requirements (v0.4)
 
 > Status: **for sign-off**. Items marked ❓ still need an answer from BSA (see section 11).
 
@@ -20,8 +20,8 @@ The core idea is **"Cikgu Sehari" (Teacher for a Day)**: a ~3-minute story game 
 plays a BSA tutor for one day, makes choices in teaching situations, marks a pupil's work against the
 clock, and ends up with a *Cikgu personality* card, a score, and the event offer.
 
-**First event: PESKON UPSI 2026** (Pesta Konvokesyen UPSI), **ending 2 December 2026**. The start date ❓
-sets the launch deadline. The first version must be ready for it, so section 6 marks what is needed for
+**First event: PESKON UPSI 2026** (Pesta Konvokesyen UPSI), **25 November – 2 December 2026**. A projector
+at the booth shows the QR code and leaderboard; visitors scan and play on their own phones. The first version must be ready for it, so section 6 marks what is needed for
 PESKON (**M**) and what comes after (**S**, **C**).
 
 ## 2. BSA facts the game uses
@@ -49,7 +49,7 @@ PESKON (**M**) and what comes after (**S**, **C**).
 | **Pelajar** (school student) | Std 1 – Form 5 students, often visiting with family | Fun, beat their friends, something to share | Book the 3-subject free trial, then enrol |
 | **Ibu bapa** (parent) | Parents of Std 1 – Form 5 students | Know if BSA suits their child; a good deal | Book the free trial for their child |
 | **Bakal cikgu** (future tutor) | UPSI students (sem 5+), fresh graduates, job-seekers | See what tutoring at BSA is like and what it pays | Apply to become a BSA tutor |
-| **Booth staff** (2) | BSA staff at the event | Run the booth; see who signed up and follow up | — |
+| **Booth staff** (2) | BSA staff at the event | Run the booth; see all sign-ups and follow up on WhatsApp | — |
 | **Admin** (1) | BSA office | Manage the event and offer; follow up all sign-ups | — |
 
 ## 4. How the game serves each visitor
@@ -71,7 +71,7 @@ Kids love being the teacher, so students play the same *Cikgu Sehari* story, but
 - **Competition**: their nickname on the TV leaderboard; they challenge friends and siblings to beat it.
 - **Sharing**: a result card made for Instagram/TikTok stories.
 - **Safety**: under-18 players give a **parent or guardian's** WhatsApp number, and the trial is booked with
-  the parent ❓.
+  the parent.
 
 ### 4.2 Parents (ibu bapa)
 
@@ -122,7 +122,7 @@ Priority: **M** = must have for PESKON, **S** = should have (after PESKON), **C*
 | # | Requirement | Pri |
 |---|---|---|
 | R1 | Sign-up after the result, to unlock the offer | M |
-| R2 | Pelajar: name, level, school, parent/guardian WhatsApp if under 18 ❓, 3 trial subjects | M |
+| R2 | Pelajar: name, level, school, parent/guardian WhatsApp if under 18, 3 trial subjects | M |
 | R3 | Ibu bapa: name, WhatsApp, child's level, 3 trial subjects, area (for home tuition) | M |
 | R4 | Bakal cikgu: name, WhatsApp, UPSI student or graduate, semester and CGPA (UPSI), subjects, area, availability | M |
 | R5 | PDPA consent checkbox (required) and separate marketing consent (optional) | M |
@@ -145,7 +145,7 @@ Priority: **M** = must have for PESKON, **S** = should have (after PESKON), **C*
 
 | # | Requirement | Pri |
 |---|---|---|
-| A1 | Staff login: **1 admin** and **2 booth staff** accounts | M |
+| A1 | Staff login: **1 admin** and **2 booth staff** accounts; all three see all sign-ups | M |
 | A2 | Sign-ups list, filterable by role, level, subject, day and follow-up status | M |
 | A3 | One-tap **WhatsApp** button per sign-up, opening a chat with a pre-filled message | M |
 | A4 | Follow-up status: new / contacted / trial booked / enrolled / not interested (tutors: new / contacted / interviewed / hired / not suitable) | M |
@@ -198,13 +198,11 @@ Details are in [DESIGN.md](DESIGN.md).
 
 ## 11. Open questions for BSA
 
-1. **PESKON dates**: which day does it start, and what are the booth hours? Is there a TV or projector at
-   the booth?
-2. **Under-18 players**: OK to ask for a parent/guardian's WhatsApp instead of the child's?
-3. **Data**: how long should sign-up data be kept? Do you already have a PDPA notice we should use?
-4. **Booth staff**: should the 2 booth staff see all sign-ups (to follow up on WhatsApp), or only the
-   leaderboard and counts?
-5. **Accounts**: are the Supabase and Netlify accounts connected here BSA's (or yours), and is it OK to
-   create the project there?
-6. **Trial run**: a few students or tutors who can test the game a day or two before PESKON.
-7. **Targets**: rough goals for players, sign-ups and tutor applications at PESKON.
+Answered: PESKON dates (25 Nov – 2 Dec) and projector, under-18 contact (parent's WhatsApp), booth staff
+see all sign-ups, BSA's own Netlify and Supabase accounts.
+
+1. **Booth hours** at PESKON (so the daily leaderboard resets at the right time).
+2. **Data**: how long should sign-up data be kept? Do you already have a PDPA notice we should use?
+3. **Trial run**: a few students or tutors who can test the game on Mon 23 or Tue 24 Nov.
+4. **Targets**: rough goals for players, sign-ups and tutor applications at PESKON.
+5. **Staff emails** for the 3 logins (1 admin, 2 booth staff).
