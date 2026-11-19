@@ -8,6 +8,8 @@ export const SEMAK_SECONDS = 45
 export const MARK_XP = 20
 export const SPEED_XP_MAX = 5
 export const STREAK_XP = 5
+/** Taps faster than this can't have been read, so they score nothing (the server does the same). */
+export const MIN_MARK_MS = 250
 
 const shuffle = <T,>(arr: T[], rand = Math.random): T[] => {
   const a = [...arr]
@@ -51,7 +53,7 @@ export function pickQuestions(bank: Question[], band: Band, teachSubjects: Subje
 
 /** XP for one mark, given the streak of right marks before it. */
 export function markXp(right: boolean, ms: number, streakBefore: number): number {
-  if (!right) return 0
+  if (!right || ms < MIN_MARK_MS) return 0
   const speed = Math.max(0, Math.round(SPEED_XP_MAX * (1 - ms / 5000)))
   const streak = streakBefore >= 2 ? STREAK_XP : 0
   return MARK_XP + speed + streak
@@ -78,7 +80,7 @@ export function scorePlay(
     const entry = bySubject.get(q.subject) ?? { subject: q.subject, right: 0, total: 0 }
     entry.total += 1
     const m = marks.find((x) => x.questionId === q.id)
-    const right = m != null && m.verdict === q.correct
+    const right = m != null && m.verdict === q.correct && m.ms >= MIN_MARK_MS
     if (right) {
       semakXp += markXp(true, m!.ms, streak)
       streak += 1

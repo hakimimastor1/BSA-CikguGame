@@ -340,7 +340,7 @@ function Signups({ me }: { me: Me }) {
           <Search size={18} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
           <input className="field pl-10" placeholder="Cari nama, rujukan, nombor…" value={q} onChange={(e) => setQ(e.target.value)} />
         </label>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           <select className="field text-sm" value={role} onChange={(e) => setRole(e.target.value)} aria-label="Peranan">
             <option value="all">Semua peranan</option>
             <option value="pelajar">Pelajar</option>

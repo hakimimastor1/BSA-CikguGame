@@ -1,8 +1,10 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import type { Band, Lang, Question, Role, SubjectKey, SubjectResult, Trait } from '../types'
 
-const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
-const key = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
+// The project's API address and publishable key are public by design: visitors can only call the
+// game functions, never read tables. Set VITE_SUPABASE_URL to an empty string for a local-only build.
+const url = (import.meta.env.VITE_SUPABASE_URL ?? 'https://bfsjskgqlcafydejotsc.supabase.co') as string
+const key = (import.meta.env.VITE_SUPABASE_ANON_KEY ?? 'sb_publishable_akNWAL0QIIlHenb7qceVGQ_diX8E1od') as string
 
 /** Null when the app is built without Supabase settings: the game then runs in local preview mode. */
 export const supabase: SupabaseClient | null = url && key ? createClient(url, key) : null
