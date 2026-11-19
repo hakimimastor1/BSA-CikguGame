@@ -76,7 +76,12 @@ export function Result({
             {t(S.resultLevelUp, lang)}
           </p>
           <p className="mt-1 font-display text-xl font-bold leading-tight">
-            {result.levelUp.length ? result.levelUp.map((s) => t(SUBJECT_NAMES[s], lang)).join(', ') : t(S.resultAllGood, lang)}
+            {result.levelUp.length
+              ? result.levelUp
+                  .slice(0, 2)
+                  .map((s) => t(SUBJECT_NAMES[s], lang))
+                  .join(', ') + (result.levelUp.length > 2 ? ` +${result.levelUp.length - 2}` : '')
+              : t(S.resultAllGood, lang)}
           </p>
         </div>
       </section>
