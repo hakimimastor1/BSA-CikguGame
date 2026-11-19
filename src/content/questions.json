@@ -1,0 +1,2594 @@
+[
+  {
+    "id": "std1_3-bm-01",
+    "band": "std1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Susun mengikut abjad: cawan, ayam, bola",
+      "en": "Arrange in alphabetical order: cawan, ayam, bola"
+    },
+    "a": {
+      "ms": "ayam, bola, cawan",
+      "en": "ayam, bola, cawan"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "ayam, bola, cawan",
+      "en": "ayam, bola, cawan"
+    }
+  },
+  {
+    "id": "std1_3-bm-02",
+    "band": "std1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Isi tempat kosong: Saya pergi ___ sekolah.",
+      "en": "Fill in the blank: Saya pergi ___ sekolah."
+    },
+    "a": {
+      "ms": "di",
+      "en": "di"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "ke",
+      "en": "ke"
+    }
+  },
+  {
+    "id": "std1_3-bm-03",
+    "band": "std1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Berapakah suku kata dalam perkataan 'kereta'?",
+      "en": "How many syllables are in the word 'kereta'?"
+    },
+    "a": {
+      "ms": "3",
+      "en": "3"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "3",
+      "en": "3"
+    }
+  },
+  {
+    "id": "std1_3-bm-04",
+    "band": "std1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Isi tempat kosong: Ada tiga ___ rumah di situ.",
+      "en": "Fill in the measure word: Ada tiga ___ rumah di situ."
+    },
+    "a": {
+      "ms": "biji",
+      "en": "biji"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "buah",
+      "en": "buah"
+    }
+  },
+  {
+    "id": "std1_3-bm-05",
+    "band": "std1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Kata nama khas dalam ayat 'Ali pergi ke pasar.' ialah…",
+      "en": "The proper noun (kata nama khas) in 'Ali pergi ke pasar.' is…"
+    },
+    "a": {
+      "ms": "pasar",
+      "en": "pasar"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "Ali",
+      "en": "Ali"
+    }
+  },
+  {
+    "id": "std1_3-bm-06",
+    "band": "std1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Kata ganda bagi 'buku':",
+      "en": "Reduplicated (plural) form of 'buku':"
+    },
+    "a": {
+      "ms": "buku-buku",
+      "en": "buku-buku"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "buku-buku",
+      "en": "buku-buku"
+    }
+  },
+  {
+    "id": "std1_3-bm-07",
+    "band": "std1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Lawan kata bagi 'tua':",
+      "en": "Opposite of 'tua':"
+    },
+    "a": {
+      "ms": "baru",
+      "en": "baru"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "muda",
+      "en": "muda"
+    }
+  },
+  {
+    "id": "std1_3-bm-08",
+    "band": "std1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Susun suku kata menjadi perkataan: ja + me",
+      "en": "Arrange the syllables into a word: ja + me"
+    },
+    "a": {
+      "ms": "meja",
+      "en": "meja"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "meja",
+      "en": "meja"
+    }
+  },
+  {
+    "id": "std1_3-bi-01",
+    "band": "std1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Bentuk plural bagi 'box':",
+      "en": "Plural of 'box':"
+    },
+    "a": {
+      "ms": "boxs",
+      "en": "boxs"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "boxes",
+      "en": "boxes"
+    }
+  },
+  {
+    "id": "std1_3-bi-02",
+    "band": "std1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Past tense bagi 'go':",
+      "en": "Past tense of 'go':"
+    },
+    "a": {
+      "ms": "went",
+      "en": "went"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "went",
+      "en": "went"
+    }
+  },
+  {
+    "id": "std1_3-bi-03",
+    "band": "std1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong: I have ___ apple.",
+      "en": "Fill in the blank: I have ___ apple."
+    },
+    "a": {
+      "ms": "an",
+      "en": "an"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "an",
+      "en": "an"
+    }
+  },
+  {
+    "id": "std1_3-bi-04",
+    "band": "std1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Lawan bagi 'happy':",
+      "en": "Opposite of 'happy':"
+    },
+    "a": {
+      "ms": "sad",
+      "en": "sad"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "sad",
+      "en": "sad"
+    }
+  },
+  {
+    "id": "std1_3-bi-05",
+    "band": "std1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong: She ___ a cat. (has/have)",
+      "en": "Fill in the blank: She ___ a cat. (has/have)"
+    },
+    "a": {
+      "ms": "have",
+      "en": "have"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "has",
+      "en": "has"
+    }
+  },
+  {
+    "id": "std1_3-bi-06",
+    "band": "std1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Bentuk plural bagi 'child':",
+      "en": "Plural of 'child':"
+    },
+    "a": {
+      "ms": "children",
+      "en": "children"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "children",
+      "en": "children"
+    }
+  },
+  {
+    "id": "std1_3-bi-07",
+    "band": "std1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Eja nombor 8 dalam bahasa Inggeris:",
+      "en": "Spell the number 8 in English:"
+    },
+    "a": {
+      "ms": "eigth",
+      "en": "eigth"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "eight",
+      "en": "eight"
+    }
+  },
+  {
+    "id": "std1_3-bi-08",
+    "band": "std1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Hari selepas Monday ialah…",
+      "en": "The day after Monday is…"
+    },
+    "a": {
+      "ms": "Thursday",
+      "en": "Thursday"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "Tuesday",
+      "en": "Tuesday"
+    }
+  },
+  {
+    "id": "std1_3-math-01",
+    "band": "std1_3",
+    "subject": "math",
+    "q": {
+      "ms": "7 + 8 =",
+      "en": "7 + 8 ="
+    },
+    "a": {
+      "ms": "15",
+      "en": "15"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "15",
+      "en": "15"
+    }
+  },
+  {
+    "id": "std1_3-math-02",
+    "band": "std1_3",
+    "subject": "math",
+    "q": {
+      "ms": "52 − 27 =",
+      "en": "52 − 27 ="
+    },
+    "a": {
+      "ms": "35",
+      "en": "35"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "25",
+      "en": "25"
+    }
+  },
+  {
+    "id": "std1_3-math-03",
+    "band": "std1_3",
+    "subject": "math",
+    "q": {
+      "ms": "6 × 4 =",
+      "en": "6 × 4 ="
+    },
+    "a": {
+      "ms": "24",
+      "en": "24"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "24",
+      "en": "24"
+    }
+  },
+  {
+    "id": "std1_3-math-04",
+    "band": "std1_3",
+    "subject": "math",
+    "q": {
+      "ms": "1 jam = ___ minit",
+      "en": "1 hour = ___ minutes"
+    },
+    "a": {
+      "ms": "100",
+      "en": "100"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "60",
+      "en": "60"
+    }
+  },
+  {
+    "id": "std1_3-math-05",
+    "band": "std1_3",
+    "subject": "math",
+    "q": {
+      "ms": "Nilai digit 3 dalam 4 325 ialah…",
+      "en": "The value of the digit 3 in 4 325 is…"
+    },
+    "a": {
+      "ms": "300",
+      "en": "300"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "300",
+      "en": "300"
+    }
+  },
+  {
+    "id": "std1_3-math-06",
+    "band": "std1_3",
+    "subject": "math",
+    "q": {
+      "ms": "RM1 = ___ sen",
+      "en": "RM1 = ___ sen"
+    },
+    "a": {
+      "ms": "100",
+      "en": "100"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "100",
+      "en": "100"
+    }
+  },
+  {
+    "id": "std1_3-math-07",
+    "band": "std1_3",
+    "subject": "math",
+    "q": {
+      "ms": "36 ÷ 4 =",
+      "en": "36 ÷ 4 ="
+    },
+    "a": {
+      "ms": "8",
+      "en": "8"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "9",
+      "en": "9"
+    }
+  },
+  {
+    "id": "std1_3-math-08",
+    "band": "std1_3",
+    "subject": "math",
+    "q": {
+      "ms": "Bundarkan 47 kepada puluh yang terdekat:",
+      "en": "Round 47 to the nearest ten:"
+    },
+    "a": {
+      "ms": "40",
+      "en": "40"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "50",
+      "en": "50"
+    }
+  },
+  {
+    "id": "std1_3-sci-01",
+    "band": "std1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Organ deria untuk menghidu bau ialah…",
+      "en": "The sense organ for smelling is…"
+    },
+    "a": {
+      "ms": "hidung",
+      "en": "nose"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "hidung",
+      "en": "nose"
+    }
+  },
+  {
+    "id": "std1_3-sci-02",
+    "band": "std1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Kucing membiak dengan cara…",
+      "en": "A cat reproduces by…"
+    },
+    "a": {
+      "ms": "bertelur",
+      "en": "laying eggs"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "melahirkan anak",
+      "en": "giving birth"
+    }
+  },
+  {
+    "id": "std1_3-sci-03",
+    "band": "std1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Magnet boleh menarik objek yang diperbuat daripada…",
+      "en": "A magnet can attract objects made of…"
+    },
+    "a": {
+      "ms": "besi",
+      "en": "iron"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "besi",
+      "en": "iron"
+    }
+  },
+  {
+    "id": "std1_3-sci-04",
+    "band": "std1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Tumbuhan memerlukan air, udara dan ___ untuk hidup.",
+      "en": "Plants need water, air and ___ to live."
+    },
+    "a": {
+      "ms": "cahaya matahari",
+      "en": "sunlight"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "cahaya matahari",
+      "en": "sunlight"
+    }
+  },
+  {
+    "id": "std1_3-sci-05",
+    "band": "std1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Lembu ialah haiwan yang memakan…",
+      "en": "A cow is an animal that eats…"
+    },
+    "a": {
+      "ms": "daging",
+      "en": "meat"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "tumbuhan",
+      "en": "plants"
+    }
+  },
+  {
+    "id": "std1_3-sci-06",
+    "band": "std1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Dua kutub magnet yang sama akan…",
+      "en": "Two like poles of a magnet will…"
+    },
+    "a": {
+      "ms": "tarik-menarik",
+      "en": "attract"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "tolak-menolak",
+      "en": "repel"
+    }
+  },
+  {
+    "id": "std1_3-sci-07",
+    "band": "std1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Bahan yang menyerap air dengan baik ialah…",
+      "en": "A material that absorbs water well is…"
+    },
+    "a": {
+      "ms": "span",
+      "en": "sponge"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "span",
+      "en": "sponge"
+    }
+  },
+  {
+    "id": "std1_3-sci-08",
+    "band": "std1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Ikan bernafas melalui…",
+      "en": "Fish breathe through…"
+    },
+    "a": {
+      "ms": "paru-paru",
+      "en": "lungs"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "insang",
+      "en": "gills"
+    }
+  },
+  {
+    "id": "std4_6-bm-01",
+    "band": "std4_6",
+    "subject": "bm",
+    "q": {
+      "ms": "Kata seerti bagi 'pantas':",
+      "en": "Synonym of 'pantas':"
+    },
+    "a": {
+      "ms": "cepat",
+      "en": "cepat"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "cepat",
+      "en": "cepat"
+    }
+  },
+  {
+    "id": "std4_6-bm-02",
+    "band": "std4_6",
+    "subject": "bm",
+    "q": {
+      "ms": "Maksud simpulan bahasa 'ringan tulang':",
+      "en": "Meaning of the idiom 'ringan tulang':"
+    },
+    "a": {
+      "ms": "malas",
+      "en": "malas"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "rajin",
+      "en": "rajin"
+    }
+  },
+  {
+    "id": "std4_6-bm-03",
+    "band": "std4_6",
+    "subject": "bm",
+    "q": {
+      "ms": "Lengkapkan peribahasa: Bagai aur dengan ___",
+      "en": "Complete the proverb: Bagai aur dengan ___"
+    },
+    "a": {
+      "ms": "tebing",
+      "en": "tebing"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "tebing",
+      "en": "tebing"
+    }
+  },
+  {
+    "id": "std4_6-bm-04",
+    "band": "std4_6",
+    "subject": "bm",
+    "q": {
+      "ms": "Ejaan yang betul: 'kapal terbang' atau 'kapalterbang'?",
+      "en": "Correct spelling: 'kapal terbang' or 'kapalterbang'?"
+    },
+    "a": {
+      "ms": "kapalterbang",
+      "en": "kapalterbang"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "kapal terbang",
+      "en": "kapal terbang"
+    }
+  },
+  {
+    "id": "std4_6-bm-05",
+    "band": "std4_6",
+    "subject": "bm",
+    "q": {
+      "ms": "Kata dasar bagi 'permainan':",
+      "en": "Root word of 'permainan':"
+    },
+    "a": {
+      "ms": "main",
+      "en": "main"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "main",
+      "en": "main"
+    }
+  },
+  {
+    "id": "std4_6-bm-06",
+    "band": "std4_6",
+    "subject": "bm",
+    "q": {
+      "ms": "Ayat pasif bagi 'Ali menendang bola.':",
+      "en": "Passive form of 'Ali menendang bola.':"
+    },
+    "a": {
+      "ms": "Bola ditendang oleh Ali.",
+      "en": "Bola ditendang oleh Ali."
+    },
+    "correct": true,
+    "fix": {
+      "ms": "Bola ditendang oleh Ali.",
+      "en": "Bola ditendang oleh Ali."
+    }
+  },
+  {
+    "id": "std4_6-bm-07",
+    "band": "std4_6",
+    "subject": "bm",
+    "q": {
+      "ms": "Isi tempat kosong: Dia rajin ___ adiknya malas.",
+      "en": "Fill in the blank: Dia rajin ___ adiknya malas."
+    },
+    "a": {
+      "ms": "dan",
+      "en": "dan"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "tetapi",
+      "en": "tetapi"
+    }
+  },
+  {
+    "id": "std4_6-bm-08",
+    "band": "std4_6",
+    "subject": "bm",
+    "q": {
+      "ms": "Isi tempat kosong: Ibu menerima ___ surat.",
+      "en": "Fill in the measure word: Ibu menerima ___ surat."
+    },
+    "a": {
+      "ms": "sebuah",
+      "en": "sebuah"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "sepucuk",
+      "en": "sepucuk"
+    }
+  },
+  {
+    "id": "std4_6-bi-01",
+    "band": "std4_6",
+    "subject": "bi",
+    "q": {
+      "ms": "Past tense bagi 'buy':",
+      "en": "Past tense of 'buy':"
+    },
+    "a": {
+      "ms": "buyed",
+      "en": "buyed"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "bought",
+      "en": "bought"
+    }
+  },
+  {
+    "id": "std4_6-bi-02",
+    "band": "std4_6",
+    "subject": "bi",
+    "q": {
+      "ms": "Bentuk comparative bagi 'big':",
+      "en": "Comparative form of 'big':"
+    },
+    "a": {
+      "ms": "bigger",
+      "en": "bigger"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "bigger",
+      "en": "bigger"
+    }
+  },
+  {
+    "id": "std4_6-bi-03",
+    "band": "std4_6",
+    "subject": "bi",
+    "q": {
+      "ms": "Bentuk superlative bagi 'good':",
+      "en": "Superlative form of 'good':"
+    },
+    "a": {
+      "ms": "goodest",
+      "en": "goodest"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "best",
+      "en": "best"
+    }
+  },
+  {
+    "id": "std4_6-bi-04",
+    "band": "std4_6",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong: He ___ to school every day. (walk)",
+      "en": "Fill in the blank: He ___ to school every day. (walk)"
+    },
+    "a": {
+      "ms": "walks",
+      "en": "walks"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "walks",
+      "en": "walks"
+    }
+  },
+  {
+    "id": "std4_6-bi-05",
+    "band": "std4_6",
+    "subject": "bi",
+    "q": {
+      "ms": "Collective noun: a ___ of fish",
+      "en": "Collective noun: a ___ of fish"
+    },
+    "a": {
+      "ms": "school",
+      "en": "school"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "school",
+      "en": "school"
+    }
+  },
+  {
+    "id": "std4_6-bi-06",
+    "band": "std4_6",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong: We have lunch ___ 1 o'clock.",
+      "en": "Fill in the blank: We have lunch ___ 1 o'clock."
+    },
+    "a": {
+      "ms": "at",
+      "en": "at"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "at",
+      "en": "at"
+    }
+  },
+  {
+    "id": "std4_6-bi-07",
+    "band": "std4_6",
+    "subject": "bi",
+    "q": {
+      "ms": "Ejaan yang betul: 'recieve' atau 'receive'?",
+      "en": "Correct spelling: 'recieve' or 'receive'?"
+    },
+    "a": {
+      "ms": "recieve",
+      "en": "recieve"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "receive",
+      "en": "receive"
+    }
+  },
+  {
+    "id": "std4_6-bi-08",
+    "band": "std4_6",
+    "subject": "bi",
+    "q": {
+      "ms": "Bentuk plural bagi 'leaf':",
+      "en": "Plural of 'leaf':"
+    },
+    "a": {
+      "ms": "leafs",
+      "en": "leafs"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "leaves",
+      "en": "leaves"
+    }
+  },
+  {
+    "id": "std4_6-math-01",
+    "band": "std4_6",
+    "subject": "math",
+    "q": {
+      "ms": "¾ = ___ %",
+      "en": "¾ = ___ %"
+    },
+    "a": {
+      "ms": "75%",
+      "en": "75%"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "75%",
+      "en": "75%"
+    }
+  },
+  {
+    "id": "std4_6-math-02",
+    "band": "std4_6",
+    "subject": "math",
+    "q": {
+      "ms": "0.5 + 0.25 =",
+      "en": "0.5 + 0.25 ="
+    },
+    "a": {
+      "ms": "0.30",
+      "en": "0.30"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "0.75",
+      "en": "0.75"
+    }
+  },
+  {
+    "id": "std4_6-math-03",
+    "band": "std4_6",
+    "subject": "math",
+    "q": {
+      "ms": "Luas segi empat tepat 5 cm × 3 cm ialah…",
+      "en": "The area of a 5 cm × 3 cm rectangle is…"
+    },
+    "a": {
+      "ms": "16 cm²",
+      "en": "16 cm²"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "15 cm²",
+      "en": "15 cm²"
+    }
+  },
+  {
+    "id": "std4_6-math-04",
+    "band": "std4_6",
+    "subject": "math",
+    "q": {
+      "ms": "Purata bagi 2, 4 dan 9 ialah…",
+      "en": "The average of 2, 4 and 9 is…"
+    },
+    "a": {
+      "ms": "5",
+      "en": "5"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "5",
+      "en": "5"
+    }
+  },
+  {
+    "id": "std4_6-math-05",
+    "band": "std4_6",
+    "subject": "math",
+    "q": {
+      "ms": "3.00 petang dalam sistem 24 jam:",
+      "en": "3.00 p.m. in the 24-hour system:"
+    },
+    "a": {
+      "ms": "0300",
+      "en": "0300"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "1500",
+      "en": "1500"
+    }
+  },
+  {
+    "id": "std4_6-math-06",
+    "band": "std4_6",
+    "subject": "math",
+    "q": {
+      "ms": "½ + ¼ =",
+      "en": "½ + ¼ ="
+    },
+    "a": {
+      "ms": "¾",
+      "en": "¾"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "¾",
+      "en": "¾"
+    }
+  },
+  {
+    "id": "std4_6-math-07",
+    "band": "std4_6",
+    "subject": "math",
+    "q": {
+      "ms": "25% daripada 80 ialah…",
+      "en": "25% of 80 is…"
+    },
+    "a": {
+      "ms": "20",
+      "en": "20"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "20",
+      "en": "20"
+    }
+  },
+  {
+    "id": "std4_6-math-08",
+    "band": "std4_6",
+    "subject": "math",
+    "q": {
+      "ms": "Isi padu kubus bersisi 3 cm ialah…",
+      "en": "The volume of a cube with 3 cm sides is…"
+    },
+    "a": {
+      "ms": "9 cm³",
+      "en": "9 cm³"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "27 cm³",
+      "en": "27 cm³"
+    }
+  },
+  {
+    "id": "std4_6-sci-01",
+    "band": "std4_6",
+    "subject": "sci",
+    "q": {
+      "ms": "Planet yang paling hampir dengan Matahari ialah…",
+      "en": "The planet closest to the Sun is…"
+    },
+    "a": {
+      "ms": "Utarid",
+      "en": "Mercury"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "Utarid",
+      "en": "Mercury"
+    }
+  },
+  {
+    "id": "std4_6-sci-02",
+    "band": "std4_6",
+    "subject": "sci",
+    "q": {
+      "ms": "Gas yang diambil oleh tumbuhan untuk fotosintesis ialah…",
+      "en": "The gas plants take in for photosynthesis is…"
+    },
+    "a": {
+      "ms": "oksigen",
+      "en": "oxygen"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "karbon dioksida",
+      "en": "carbon dioxide"
+    }
+  },
+  {
+    "id": "std4_6-sci-03",
+    "band": "std4_6",
+    "subject": "sci",
+    "q": {
+      "ms": "Air tulen mendidih pada suhu…",
+      "en": "Pure water boils at…"
+    },
+    "a": {
+      "ms": "100 °C",
+      "en": "100 °C"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "100 °C",
+      "en": "100 °C"
+    }
+  },
+  {
+    "id": "std4_6-sci-04",
+    "band": "std4_6",
+    "subject": "sci",
+    "q": {
+      "ms": "Rumus kelajuan ialah…",
+      "en": "The formula for speed is…"
+    },
+    "a": {
+      "ms": "jarak × masa",
+      "en": "distance × time"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "jarak ÷ masa",
+      "en": "distance ÷ time"
+    }
+  },
+  {
+    "id": "std4_6-sci-05",
+    "band": "std4_6",
+    "subject": "sci",
+    "q": {
+      "ms": "Besi berkarat apabila terdedah kepada…",
+      "en": "Iron rusts when it is exposed to…"
+    },
+    "a": {
+      "ms": "air dan udara",
+      "en": "water and air"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "air dan udara",
+      "en": "water and air"
+    }
+  },
+  {
+    "id": "std4_6-sci-06",
+    "band": "std4_6",
+    "subject": "sci",
+    "q": {
+      "ms": "Organ yang menyingkirkan urea dalam air kencing ialah…",
+      "en": "The organ that removes urea in urine is the…"
+    },
+    "a": {
+      "ms": "ginjal",
+      "en": "kidney"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "ginjal",
+      "en": "kidney"
+    }
+  },
+  {
+    "id": "std4_6-sci-07",
+    "band": "std4_6",
+    "subject": "sci",
+    "q": {
+      "ms": "Bayang-bayang terbentuk kerana cahaya…",
+      "en": "Shadows form because light…"
+    },
+    "a": {
+      "ms": "boleh dipantulkan",
+      "en": "can be reflected"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "bergerak lurus",
+      "en": "travels in straight lines"
+    }
+  },
+  {
+    "id": "std4_6-sci-08",
+    "band": "std4_6",
+    "subject": "sci",
+    "q": {
+      "ms": "Fasa Bulan apabila Bulan tidak kelihatan:",
+      "en": "The Moon phase when the Moon cannot be seen:"
+    },
+    "a": {
+      "ms": "bulan purnama",
+      "en": "full moon"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "anak bulan",
+      "en": "new moon"
+    }
+  },
+  {
+    "id": "f1_3-bm-01",
+    "band": "f1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Golongan kata 'menangis' dalam ayat 'Adik menangis.':",
+      "en": "Word class of 'menangis' in 'Adik menangis.':"
+    },
+    "a": {
+      "ms": "kata kerja tak transitif",
+      "en": "kata kerja tak transitif"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "kata kerja tak transitif",
+      "en": "kata kerja tak transitif"
+    }
+  },
+  {
+    "id": "f1_3-bm-02",
+    "band": "f1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "meN- + 'sapu' menjadi…",
+      "en": "meN- + 'sapu' becomes…"
+    },
+    "a": {
+      "ms": "mensapu",
+      "en": "mensapu"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "menyapu",
+      "en": "menyapu"
+    }
+  },
+  {
+    "id": "f1_3-bm-03",
+    "band": "f1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Maksud peribahasa 'bagai katak di bawah tempurung':",
+      "en": "Meaning of the proverb 'bagai katak di bawah tempurung':"
+    },
+    "a": {
+      "ms": "berpengetahuan sempit",
+      "en": "berpengetahuan sempit"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "berpengetahuan sempit",
+      "en": "berpengetahuan sempit"
+    }
+  },
+  {
+    "id": "f1_3-bm-04",
+    "band": "f1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Kata adjektif dalam ayat 'Rumah itu sangat besar.':",
+      "en": "The adjective (kata adjektif) in 'Rumah itu sangat besar.':"
+    },
+    "a": {
+      "ms": "sangat",
+      "en": "sangat"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "besar",
+      "en": "besar"
+    }
+  },
+  {
+    "id": "f1_3-bm-05",
+    "band": "f1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Imbuhan apitan dalam perkataan 'kebersihan':",
+      "en": "The circumfix (imbuhan apitan) in 'kebersihan':"
+    },
+    "a": {
+      "ms": "ke-…-an",
+      "en": "ke-…-an"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "ke-…-an",
+      "en": "ke-…-an"
+    }
+  },
+  {
+    "id": "f1_3-bm-06",
+    "band": "f1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Yang betul: 'para guru' atau 'para guru-guru'?",
+      "en": "Which is correct: 'para guru' or 'para guru-guru'?"
+    },
+    "a": {
+      "ms": "para guru-guru",
+      "en": "para guru-guru"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "para guru",
+      "en": "para guru"
+    }
+  },
+  {
+    "id": "f1_3-bm-07",
+    "band": "f1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Ejaan baku: 'kualiti' atau 'kwaliti'?",
+      "en": "Standard spelling: 'kualiti' or 'kwaliti'?"
+    },
+    "a": {
+      "ms": "kualiti",
+      "en": "kualiti"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "kualiti",
+      "en": "kualiti"
+    }
+  },
+  {
+    "id": "f1_3-bm-08",
+    "band": "f1_3",
+    "subject": "bm",
+    "q": {
+      "ms": "Ayat 'Surat itu ditulis oleh Ali.' ialah ayat…",
+      "en": "Sentence type (ragam ayat) of 'Surat itu ditulis oleh Ali.':"
+    },
+    "a": {
+      "ms": "aktif",
+      "en": "aktif"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "pasif",
+      "en": "pasif"
+    }
+  },
+  {
+    "id": "f1_3-bi-01",
+    "band": "f1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Ayat pasif bagi 'Ali wrote the letter.':",
+      "en": "Passive form of 'Ali wrote the letter.':"
+    },
+    "a": {
+      "ms": "The letter was written by Ali.",
+      "en": "The letter was written by Ali."
+    },
+    "correct": true,
+    "fix": {
+      "ms": "The letter was written by Ali.",
+      "en": "The letter was written by Ali."
+    }
+  },
+  {
+    "id": "f1_3-bi-02",
+    "band": "f1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Past participle bagi 'eat':",
+      "en": "Past participle of 'eat':"
+    },
+    "a": {
+      "ms": "ate",
+      "en": "ate"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "eaten",
+      "en": "eaten"
+    }
+  },
+  {
+    "id": "f1_3-bi-03",
+    "band": "f1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong: If it rains, we ___ stay at home.",
+      "en": "Fill in the blank: If it rains, we ___ stay at home."
+    },
+    "a": {
+      "ms": "will",
+      "en": "will"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "will",
+      "en": "will"
+    }
+  },
+  {
+    "id": "f1_3-bi-04",
+    "band": "f1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong: She has lived here ___ 2015.",
+      "en": "Fill in the blank: She has lived here ___ 2015."
+    },
+    "a": {
+      "ms": "for",
+      "en": "for"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "since",
+      "en": "since"
+    }
+  },
+  {
+    "id": "f1_3-bi-05",
+    "band": "f1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Sinonim bagi 'enormous':",
+      "en": "Synonym of 'enormous':"
+    },
+    "a": {
+      "ms": "huge",
+      "en": "huge"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "huge",
+      "en": "huge"
+    }
+  },
+  {
+    "id": "f1_3-bi-06",
+    "band": "f1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong: Everyone ___ ready. (is/are)",
+      "en": "Fill in the blank: Everyone ___ ready. (is/are)"
+    },
+    "a": {
+      "ms": "are",
+      "en": "are"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "is",
+      "en": "is"
+    }
+  },
+  {
+    "id": "f1_3-bi-07",
+    "band": "f1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Its atau it's: ___ raining now.",
+      "en": "Its or it's: ___ raining now."
+    },
+    "a": {
+      "ms": "Its",
+      "en": "Its"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "It's",
+      "en": "It's"
+    }
+  },
+  {
+    "id": "f1_3-bi-08",
+    "band": "f1_3",
+    "subject": "bi",
+    "q": {
+      "ms": "Cakap pindah: He said, “I am tired.”",
+      "en": "Reported speech: He said, “I am tired.”"
+    },
+    "a": {
+      "ms": "He said that he was tired.",
+      "en": "He said that he was tired."
+    },
+    "correct": true,
+    "fix": {
+      "ms": "He said that he was tired.",
+      "en": "He said that he was tired."
+    }
+  },
+  {
+    "id": "f1_3-math-01",
+    "band": "f1_3",
+    "subject": "math",
+    "q": {
+      "ms": "(−3) × (−4) =",
+      "en": "(−3) × (−4) ="
+    },
+    "a": {
+      "ms": "−12",
+      "en": "−12"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "12",
+      "en": "12"
+    }
+  },
+  {
+    "id": "f1_3-math-02",
+    "band": "f1_3",
+    "subject": "math",
+    "q": {
+      "ms": "√49 =",
+      "en": "√49 ="
+    },
+    "a": {
+      "ms": "7",
+      "en": "7"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "7",
+      "en": "7"
+    }
+  },
+  {
+    "id": "f1_3-math-03",
+    "band": "f1_3",
+    "subject": "math",
+    "q": {
+      "ms": "Selesaikan: 2x + 3 = 11",
+      "en": "Solve: 2x + 3 = 11"
+    },
+    "a": {
+      "ms": "x = 4",
+      "en": "x = 4"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "x = 4",
+      "en": "x = 4"
+    }
+  },
+  {
+    "id": "f1_3-math-04",
+    "band": "f1_3",
+    "subject": "math",
+    "q": {
+      "ms": "Kembangkan: 3(x + 2)",
+      "en": "Expand: 3(x + 2)"
+    },
+    "a": {
+      "ms": "3x + 2",
+      "en": "3x + 2"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "3x + 6",
+      "en": "3x + 6"
+    }
+  },
+  {
+    "id": "f1_3-math-05",
+    "band": "f1_3",
+    "subject": "math",
+    "q": {
+      "ms": "Segi tiga bersudut tegak, sisi 3 cm dan 4 cm. Hipotenus =",
+      "en": "Right-angled triangle with sides 3 cm and 4 cm. Hypotenuse ="
+    },
+    "a": {
+      "ms": "5 cm",
+      "en": "5 cm"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "5 cm",
+      "en": "5 cm"
+    }
+  },
+  {
+    "id": "f1_3-math-06",
+    "band": "f1_3",
+    "subject": "math",
+    "q": {
+      "ms": "2³ × 2⁴ =",
+      "en": "2³ × 2⁴ ="
+    },
+    "a": {
+      "ms": "2¹²",
+      "en": "2¹²"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "2⁷",
+      "en": "2⁷"
+    }
+  },
+  {
+    "id": "f1_3-math-07",
+    "band": "f1_3",
+    "subject": "math",
+    "q": {
+      "ms": "Min bagi 3, 5, 7 dan 9 ialah…",
+      "en": "The mean of 3, 5, 7 and 9 is…"
+    },
+    "a": {
+      "ms": "6",
+      "en": "6"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "6",
+      "en": "6"
+    }
+  },
+  {
+    "id": "f1_3-math-08",
+    "band": "f1_3",
+    "subject": "math",
+    "q": {
+      "ms": "45 000 dalam bentuk piawai:",
+      "en": "45 000 in standard form:"
+    },
+    "a": {
+      "ms": "45 × 10³",
+      "en": "45 × 10³"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "4.5 × 10⁴",
+      "en": "4.5 × 10⁴"
+    }
+  },
+  {
+    "id": "f1_3-sci-01",
+    "band": "f1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Struktur dalam sel tumbuhan yang tiada dalam sel haiwan:",
+      "en": "A structure found in plant cells but not in animal cells:"
+    },
+    "a": {
+      "ms": "dinding sel",
+      "en": "cell wall"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "dinding sel",
+      "en": "cell wall"
+    }
+  },
+  {
+    "id": "f1_3-sci-02",
+    "band": "f1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Larutan dengan pH 3 bersifat…",
+      "en": "A solution with pH 3 is…"
+    },
+    "a": {
+      "ms": "alkali",
+      "en": "alkaline"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "asid",
+      "en": "acidic"
+    }
+  },
+  {
+    "id": "f1_3-sci-03",
+    "band": "f1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Unit SI bagi tenaga ialah…",
+      "en": "The SI unit of energy is…"
+    },
+    "a": {
+      "ms": "joule (J)",
+      "en": "joule (J)"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "joule (J)",
+      "en": "joule (J)"
+    }
+  },
+  {
+    "id": "f1_3-sci-04",
+    "band": "f1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Gas yang paling banyak dalam udara ialah…",
+      "en": "The most abundant gas in air is…"
+    },
+    "a": {
+      "ms": "oksigen",
+      "en": "oxygen"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "nitrogen",
+      "en": "nitrogen"
+    }
+  },
+  {
+    "id": "f1_3-sci-05",
+    "band": "f1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "V = IR. Jika V = 6 V dan R = 2 Ω, maka I =",
+      "en": "V = IR. If V = 6 V and R = 2 Ω, then I ="
+    },
+    "a": {
+      "ms": "12 A",
+      "en": "12 A"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "3 A",
+      "en": "3 A"
+    }
+  },
+  {
+    "id": "f1_3-sci-06",
+    "band": "f1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Proses dalam sel yang membebaskan tenaga daripada glukosa:",
+      "en": "The process in cells that releases energy from glucose:"
+    },
+    "a": {
+      "ms": "respirasi sel",
+      "en": "cellular respiration"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "respirasi sel",
+      "en": "cellular respiration"
+    }
+  },
+  {
+    "id": "f1_3-sci-07",
+    "band": "f1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Bunyi tidak boleh merambat melalui…",
+      "en": "Sound cannot travel through…"
+    },
+    "a": {
+      "ms": "air",
+      "en": "water"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "vakum",
+      "en": "a vacuum"
+    }
+  },
+  {
+    "id": "f1_3-sci-08",
+    "band": "f1_3",
+    "subject": "sci",
+    "q": {
+      "ms": "Bahagian bunga yang menghasilkan debunga ialah…",
+      "en": "The part of a flower that produces pollen is the…"
+    },
+    "a": {
+      "ms": "anter",
+      "en": "anther"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "anter",
+      "en": "anther"
+    }
+  },
+  {
+    "id": "f4_5-bm-01",
+    "band": "f4_5",
+    "subject": "bm",
+    "q": {
+      "ms": "Ejaan baku: 'sistem' atau 'sistim'?",
+      "en": "Standard spelling: 'sistem' or 'sistim'?"
+    },
+    "a": {
+      "ms": "sistim",
+      "en": "sistim"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "sistem",
+      "en": "sistem"
+    }
+  },
+  {
+    "id": "f4_5-bm-02",
+    "band": "f4_5",
+    "subject": "bm",
+    "q": {
+      "ms": "Jenis kata ganda bagi 'sayur-mayur':",
+      "en": "Type of reduplication (kata ganda) in 'sayur-mayur':"
+    },
+    "a": {
+      "ms": "gandaan berentak",
+      "en": "gandaan berentak"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "gandaan berentak",
+      "en": "gandaan berentak"
+    }
+  },
+  {
+    "id": "f4_5-bm-03",
+    "band": "f4_5",
+    "subject": "bm",
+    "q": {
+      "ms": "Maksud peribahasa 'bagai melepaskan anjing tersepit':",
+      "en": "Meaning of the proverb 'bagai melepaskan anjing tersepit':"
+    },
+    "a": {
+      "ms": "menolong orang dalam kesusahan",
+      "en": "menolong orang dalam kesusahan"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "menolong orang yang tidak kenang budi",
+      "en": "menolong orang yang tidak kenang budi"
+    }
+  },
+  {
+    "id": "f4_5-bm-04",
+    "band": "f4_5",
+    "subject": "bm",
+    "q": {
+      "ms": "Penanda wacana untuk membuat rumusan:",
+      "en": "A discourse marker (penanda wacana) for concluding:"
+    },
+    "a": {
+      "ms": "kesimpulannya",
+      "en": "kesimpulannya"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "kesimpulannya",
+      "en": "kesimpulannya"
+    }
+  },
+  {
+    "id": "f4_5-bm-05",
+    "band": "f4_5",
+    "subject": "bm",
+    "q": {
+      "ms": "Betulkan ayat: 'Semua murid-murid hadir.'",
+      "en": "Correct the sentence: 'Semua murid-murid hadir.'"
+    },
+    "a": {
+      "ms": "Semua murid hadir.",
+      "en": "Semua murid hadir."
+    },
+    "correct": true,
+    "fix": {
+      "ms": "Semua murid hadir.",
+      "en": "Semua murid hadir."
+    }
+  },
+  {
+    "id": "f4_5-bm-06",
+    "band": "f4_5",
+    "subject": "bm",
+    "q": {
+      "ms": "meN-…-kan + 'pasti' menjadi…",
+      "en": "meN-…-kan + 'pasti' becomes…"
+    },
+    "a": {
+      "ms": "mempastikan",
+      "en": "mempastikan"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "memastikan",
+      "en": "memastikan"
+    }
+  },
+  {
+    "id": "f4_5-bm-07",
+    "band": "f4_5",
+    "subject": "bm",
+    "q": {
+      "ms": "peN-…-an + 'ambil alih' menjadi…",
+      "en": "peN-…-an + 'ambil alih' becomes…"
+    },
+    "a": {
+      "ms": "pengambil alihan",
+      "en": "pengambil alihan"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "pengambilalihan",
+      "en": "pengambilalihan"
+    }
+  },
+  {
+    "id": "f4_5-bm-08",
+    "band": "f4_5",
+    "subject": "bm",
+    "q": {
+      "ms": "Golongan kata 'yang' dalam 'Baju yang merah itu baharu.':",
+      "en": "Word class of 'yang' in 'Baju yang merah itu baharu.':"
+    },
+    "a": {
+      "ms": "kata hubung",
+      "en": "kata hubung"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "kata hubung",
+      "en": "kata hubung"
+    }
+  },
+  {
+    "id": "f4_5-bi-01",
+    "band": "f4_5",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong: I look forward to ___ you. (meet)",
+      "en": "Fill in the blank: I look forward to ___ you. (meet)"
+    },
+    "a": {
+      "ms": "meet",
+      "en": "meet"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "meeting",
+      "en": "meeting"
+    }
+  },
+  {
+    "id": "f4_5-bi-02",
+    "band": "f4_5",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong: If I ___ you, I would study harder.",
+      "en": "Fill in the blank: If I ___ you, I would study harder."
+    },
+    "a": {
+      "ms": "were",
+      "en": "were"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "were",
+      "en": "were"
+    }
+  },
+  {
+    "id": "f4_5-bi-03",
+    "band": "f4_5",
+    "subject": "bi",
+    "q": {
+      "ms": "Betulkan kesalahan: 'He is good in maths.'",
+      "en": "Correct the error: 'He is good in maths.'"
+    },
+    "a": {
+      "ms": "He is good at maths.",
+      "en": "He is good at maths."
+    },
+    "correct": true,
+    "fix": {
+      "ms": "He is good at maths.",
+      "en": "He is good at maths."
+    }
+  },
+  {
+    "id": "f4_5-bi-04",
+    "band": "f4_5",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong: The news ___ shocking. (was/were)",
+      "en": "Fill in the blank: The news ___ shocking. (was/were)"
+    },
+    "a": {
+      "ms": "were",
+      "en": "were"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "was",
+      "en": "was"
+    }
+  },
+  {
+    "id": "f4_5-bi-05",
+    "band": "f4_5",
+    "subject": "bi",
+    "q": {
+      "ms": "Maksud 'reluctant':",
+      "en": "Meaning of 'reluctant':"
+    },
+    "a": {
+      "ms": "unwilling",
+      "en": "unwilling"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "unwilling",
+      "en": "unwilling"
+    }
+  },
+  {
+    "id": "f4_5-bi-06",
+    "band": "f4_5",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong: He has ___ his homework. (do)",
+      "en": "Fill in the blank: He has ___ his homework. (do)"
+    },
+    "a": {
+      "ms": "did",
+      "en": "did"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "done",
+      "en": "done"
+    }
+  },
+  {
+    "id": "f4_5-bi-07",
+    "band": "f4_5",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong (affect/effect): The rain will ___ the match.",
+      "en": "Fill in the blank (affect/effect): The rain will ___ the match."
+    },
+    "a": {
+      "ms": "affect",
+      "en": "affect"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "affect",
+      "en": "affect"
+    }
+  },
+  {
+    "id": "f4_5-bi-08",
+    "band": "f4_5",
+    "subject": "bi",
+    "q": {
+      "ms": "Isi tempat kosong (less/fewer): There are ___ people this year.",
+      "en": "Fill in the blank (less/fewer): There are ___ people this year."
+    },
+    "a": {
+      "ms": "less",
+      "en": "less"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "fewer",
+      "en": "fewer"
+    }
+  },
+  {
+    "id": "f4_5-math-01",
+    "band": "f4_5",
+    "subject": "math",
+    "q": {
+      "ms": "Tukar 101₂ kepada nombor dalam asas 10:",
+      "en": "Convert 101₂ to a number in base 10:"
+    },
+    "a": {
+      "ms": "5",
+      "en": "5"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "5",
+      "en": "5"
+    }
+  },
+  {
+    "id": "f4_5-math-02",
+    "band": "f4_5",
+    "subject": "math",
+    "q": {
+      "ms": "Selesaikan: x² − 9 = 0",
+      "en": "Solve: x² − 9 = 0"
+    },
+    "a": {
+      "ms": "x = 3",
+      "en": "x = 3"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "x = 3 atau x = −3",
+      "en": "x = 3 or x = −3"
+    }
+  },
+  {
+    "id": "f4_5-math-03",
+    "band": "f4_5",
+    "subject": "math",
+    "q": {
+      "ms": "Sebiji dadu dilambung. Kebarangkalian mendapat nombor genap:",
+      "en": "A die is rolled. The probability of an even number:"
+    },
+    "a": {
+      "ms": "½",
+      "en": "½"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "½",
+      "en": "½"
+    }
+  },
+  {
+    "id": "f4_5-math-04",
+    "band": "f4_5",
+    "subject": "math",
+    "q": {
+      "ms": "y ∝ x. Jika y = 6 apabila x = 2, cari y apabila x = 5.",
+      "en": "y ∝ x. If y = 6 when x = 2, find y when x = 5."
+    },
+    "a": {
+      "ms": "15",
+      "en": "15"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "15",
+      "en": "15"
+    }
+  },
+  {
+    "id": "f4_5-math-05",
+    "band": "f4_5",
+    "subject": "math",
+    "q": {
+      "ms": "Akas bagi 'Jika x = 2, maka x² = 4':",
+      "en": "Converse of 'If x = 2, then x² = 4':"
+    },
+    "a": {
+      "ms": "Jika x² = 4, maka x = 2",
+      "en": "If x² = 4, then x = 2"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "Jika x² = 4, maka x = 2",
+      "en": "If x² = 4, then x = 2"
+    }
+  },
+  {
+    "id": "f4_5-math-06",
+    "band": "f4_5",
+    "subject": "math",
+    "q": {
+      "ms": "Varians suatu data ialah 9. Sisihan piawai =",
+      "en": "The variance of a data set is 9. Standard deviation ="
+    },
+    "a": {
+      "ms": "81",
+      "en": "81"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "3",
+      "en": "3"
+    }
+  },
+  {
+    "id": "f4_5-math-07",
+    "band": "f4_5",
+    "subject": "math",
+    "q": {
+      "ms": "y ∝ 1/x. Jika y = 4 apabila x = 3, cari y apabila x = 6.",
+      "en": "y ∝ 1/x. If y = 4 when x = 3, find y when x = 6."
+    },
+    "a": {
+      "ms": "8",
+      "en": "8"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "2",
+      "en": "2"
+    }
+  },
+  {
+    "id": "f4_5-math-08",
+    "band": "f4_5",
+    "subject": "math",
+    "q": {
+      "ms": "n(A) = 5, n(B) = 4, n(A ∩ B) = 2. n(A ∪ B) =",
+      "en": "n(A) = 5, n(B) = 4, n(A ∩ B) = 2. n(A ∪ B) ="
+    },
+    "a": {
+      "ms": "9",
+      "en": "9"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "7",
+      "en": "7"
+    }
+  },
+  {
+    "id": "f4_5-phy-01",
+    "band": "f4_5",
+    "subject": "phy",
+    "q": {
+      "ms": "Unit SI bagi daya ialah…",
+      "en": "The SI unit of force is…"
+    },
+    "a": {
+      "ms": "joule (J)",
+      "en": "joule (J)"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "newton (N)",
+      "en": "newton (N)"
+    }
+  },
+  {
+    "id": "f4_5-phy-02",
+    "band": "f4_5",
+    "subject": "phy",
+    "q": {
+      "ms": "F = ma. Jika m = 2 kg dan a = 3 m s⁻², F =",
+      "en": "F = ma. If m = 2 kg and a = 3 m s⁻², F ="
+    },
+    "a": {
+      "ms": "6 N",
+      "en": "6 N"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "6 N",
+      "en": "6 N"
+    }
+  },
+  {
+    "id": "f4_5-phy-03",
+    "band": "f4_5",
+    "subject": "phy",
+    "q": {
+      "ms": "Laju atau halaju: yang manakah kuantiti vektor?",
+      "en": "Speed or velocity: which is a vector quantity?"
+    },
+    "a": {
+      "ms": "laju",
+      "en": "speed"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "halaju",
+      "en": "velocity"
+    }
+  },
+  {
+    "id": "f4_5-phy-04",
+    "band": "f4_5",
+    "subject": "phy",
+    "q": {
+      "ms": "Hukum Snell: indeks biasan, n =",
+      "en": "Snell's law: refractive index, n ="
+    },
+    "a": {
+      "ms": "sin i ÷ sin r",
+      "en": "sin i ÷ sin r"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "sin i ÷ sin r",
+      "en": "sin i ÷ sin r"
+    }
+  },
+  {
+    "id": "f4_5-phy-05",
+    "band": "f4_5",
+    "subject": "phy",
+    "q": {
+      "ms": "Rumus tekanan, P =",
+      "en": "The formula for pressure, P ="
+    },
+    "a": {
+      "ms": "daya × luas",
+      "en": "force × area"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "daya ÷ luas",
+      "en": "force ÷ area"
+    }
+  },
+  {
+    "id": "f4_5-phy-06",
+    "band": "f4_5",
+    "subject": "phy",
+    "q": {
+      "ms": "Semasa air sedang mendidih, suhunya…",
+      "en": "While water is boiling, its temperature…"
+    },
+    "a": {
+      "ms": "kekal malar",
+      "en": "stays constant"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "kekal malar",
+      "en": "stays constant"
+    }
+  },
+  {
+    "id": "f4_5-phy-07",
+    "band": "f4_5",
+    "subject": "phy",
+    "q": {
+      "ms": "Cas bagi zarah alfa ialah…",
+      "en": "The charge of an alpha particle is…"
+    },
+    "a": {
+      "ms": "positif",
+      "en": "positive"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "positif",
+      "en": "positive"
+    }
+  },
+  {
+    "id": "f4_5-phy-08",
+    "band": "f4_5",
+    "subject": "phy",
+    "q": {
+      "ms": "Perintang 2 Ω dan 3 Ω disambung secara bersiri. Rintangan berkesan =",
+      "en": "2 Ω and 3 Ω resistors are connected in series. Effective resistance ="
+    },
+    "a": {
+      "ms": "1.2 Ω",
+      "en": "1.2 Ω"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "5 Ω",
+      "en": "5 Ω"
+    }
+  },
+  {
+    "id": "f4_5-chem-01",
+    "band": "f4_5",
+    "subject": "chem",
+    "q": {
+      "ms": "Atom natrium: nombor nukleon 23, nombor proton 11. Bilangan neutron =",
+      "en": "Sodium atom: nucleon number 23, proton number 11. Number of neutrons ="
+    },
+    "a": {
+      "ms": "11",
+      "en": "11"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "12",
+      "en": "12"
+    }
+  },
+  {
+    "id": "f4_5-chem-02",
+    "band": "f4_5",
+    "subject": "chem",
+    "q": {
+      "ms": "Jisim molar H₂O (H = 1, O = 16):",
+      "en": "Molar mass of H₂O (H = 1, O = 16):"
+    },
+    "a": {
+      "ms": "18 g mol⁻¹",
+      "en": "18 g mol⁻¹"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "18 g mol⁻¹",
+      "en": "18 g mol⁻¹"
+    }
+  },
+  {
+    "id": "f4_5-chem-03",
+    "band": "f4_5",
+    "subject": "chem",
+    "q": {
+      "ms": "Ion yang menyebabkan larutan bersifat asid:",
+      "en": "The ion that makes a solution acidic:"
+    },
+    "a": {
+      "ms": "OH⁻",
+      "en": "OH⁻"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "H⁺ (ion hidrogen)",
+      "en": "H⁺ (hydrogen ion)"
+    }
+  },
+  {
+    "id": "f4_5-chem-04",
+    "band": "f4_5",
+    "subject": "chem",
+    "q": {
+      "ms": "Jenis ikatan dalam natrium klorida, NaCl:",
+      "en": "Type of bond in sodium chloride, NaCl:"
+    },
+    "a": {
+      "ms": "ikatan kovalen",
+      "en": "covalent bond"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "ikatan ion",
+      "en": "ionic bond"
+    }
+  },
+  {
+    "id": "f4_5-chem-05",
+    "band": "f4_5",
+    "subject": "chem",
+    "q": {
+      "ms": "Gas adi terletak dalam Kumpulan…",
+      "en": "Noble gases are in Group…"
+    },
+    "a": {
+      "ms": "18",
+      "en": "18"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "18",
+      "en": "18"
+    }
+  },
+  {
+    "id": "f4_5-chem-06",
+    "band": "f4_5",
+    "subject": "chem",
+    "q": {
+      "ms": "Pengoksidaan dari segi pemindahan elektron ialah…",
+      "en": "Oxidation in terms of electron transfer is…"
+    },
+    "a": {
+      "ms": "kehilangan elektron",
+      "en": "loss of electrons"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "kehilangan elektron",
+      "en": "loss of electrons"
+    }
+  },
+  {
+    "id": "f4_5-chem-07",
+    "band": "f4_5",
+    "subject": "chem",
+    "q": {
+      "ms": "Formula am bagi alkana:",
+      "en": "General formula of alkanes:"
+    },
+    "a": {
+      "ms": "CₙH₂ₙ",
+      "en": "CₙH₂ₙ"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "CₙH₂ₙ₊₂",
+      "en": "CₙH₂ₙ₊₂"
+    }
+  },
+  {
+    "id": "f4_5-chem-08",
+    "band": "f4_5",
+    "subject": "chem",
+    "q": {
+      "ms": "Menaikkan suhu akan ___ kadar tindak balas.",
+      "en": "Raising the temperature ___ the rate of reaction."
+    },
+    "a": {
+      "ms": "meningkatkan",
+      "en": "increases"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "meningkatkan",
+      "en": "increases"
+    }
+  },
+  {
+    "id": "f4_5-bio-01",
+    "band": "f4_5",
+    "subject": "bio",
+    "q": {
+      "ms": "Organel tempat respirasi aerob berlaku:",
+      "en": "The organelle where aerobic respiration takes place:"
+    },
+    "a": {
+      "ms": "mitokondrion",
+      "en": "mitochondrion"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "mitokondrion",
+      "en": "mitochondrion"
+    }
+  },
+  {
+    "id": "f4_5-bio-02",
+    "band": "f4_5",
+    "subject": "bio",
+    "q": {
+      "ms": "Bilangan kromosom dalam sel somatik manusia:",
+      "en": "Number of chromosomes in a human somatic cell:"
+    },
+    "a": {
+      "ms": "46",
+      "en": "46"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "46",
+      "en": "46"
+    }
+  },
+  {
+    "id": "f4_5-bio-03",
+    "band": "f4_5",
+    "subject": "bio",
+    "q": {
+      "ms": "Mitosis menghasilkan sel anak yang…",
+      "en": "Mitosis produces daughter cells that are…"
+    },
+    "a": {
+      "ms": "berbeza secara genetik",
+      "en": "genetically different"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "seiras secara genetik",
+      "en": "genetically identical"
+    }
+  },
+  {
+    "id": "f4_5-bio-04",
+    "band": "f4_5",
+    "subject": "bio",
+    "q": {
+      "ms": "Enzim yang menghidrolisis kanji ialah…",
+      "en": "The enzyme that hydrolyses starch is…"
+    },
+    "a": {
+      "ms": "pepsin",
+      "en": "pepsin"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "amilase",
+      "en": "amylase"
+    }
+  },
+  {
+    "id": "f4_5-bio-05",
+    "band": "f4_5",
+    "subject": "bio",
+    "q": {
+      "ms": "Osmosis ialah resapan molekul ___ melalui membran separa telap.",
+      "en": "Osmosis is the diffusion of ___ molecules through a semi-permeable membrane."
+    },
+    "a": {
+      "ms": "air",
+      "en": "water"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "air",
+      "en": "water"
+    }
+  },
+  {
+    "id": "f4_5-bio-06",
+    "band": "f4_5",
+    "subject": "bio",
+    "q": {
+      "ms": "Salur darah yang membawa darah keluar dari jantung:",
+      "en": "The blood vessel that carries blood away from the heart:"
+    },
+    "a": {
+      "ms": "vena",
+      "en": "vein"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "arteri",
+      "en": "artery"
+    }
+  },
+  {
+    "id": "f4_5-bio-07",
+    "band": "f4_5",
+    "subject": "bio",
+    "q": {
+      "ms": "Respirasi anaerob dalam sel otot menghasilkan…",
+      "en": "Anaerobic respiration in muscle cells produces…"
+    },
+    "a": {
+      "ms": "asid laktik",
+      "en": "lactic acid"
+    },
+    "correct": true,
+    "fix": {
+      "ms": "asid laktik",
+      "en": "lactic acid"
+    }
+  },
+  {
+    "id": "f4_5-bio-08",
+    "band": "f4_5",
+    "subject": "bio",
+    "q": {
+      "ms": "Alel dominan T, alel resesif t. Genotip heterozigot ialah…",
+      "en": "Dominant allele T, recessive allele t. The heterozygous genotype is…"
+    },
+    "a": {
+      "ms": "TT",
+      "en": "TT"
+    },
+    "correct": false,
+    "fix": {
+      "ms": "Tt",
+      "en": "Tt"
+    }
+  }
+]
