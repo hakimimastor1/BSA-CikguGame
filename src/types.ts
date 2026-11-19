@@ -57,6 +57,9 @@ export interface PlayResult {
   strongest: SubjectKey | null
   levelUp: SubjectKey[]
   rightMarks: number
+  /** Today's leaderboard rank, once the server has scored the play. */
+  rank?: number | null
+  players?: number
 }
 
 export interface Player {

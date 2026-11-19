@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Band, Lang, Mark, PlayResult, Player, Question, Role, StoryChoice, SubjectKey } from './types'
 import bank from './content/questions.json'
 import { STORY } from './content/story'
@@ -9,12 +9,13 @@ import { SemakIntro, SemakRound } from './screens/Semak'
 import { Result } from './screens/Result'
 import { SignUp, type SignupData } from './screens/SignUp'
 import { Offer } from './screens/Offer'
-import { pickQuestions, scorePlay } from './game/scoring'
+import { fromServer, pickQuestions, scorePlay } from './game/scoring'
 import { makeReference } from './game/whatsapp'
+import { finishPlay, online, startPlay, submitSignup } from './lib/api'
 
 type Step = 'welcome' | 'role' | 'level' | 'nick' | 'intro' | 'story' | 'semakIntro' | 'semak' | 'result' | 'signup' | 'offer'
 
-const QUESTIONS = bank as Question[]
+const LOCAL_BANK = bank as Question[]
 
 const readLang = (): Lang => {
   try {
@@ -26,6 +27,9 @@ const readLang = (): Lang => {
   return 'ms'
 }
 
+/** A play the server knows about: its id and the questions it picked. */
+type ServerPlay = { playId: string; questions: Question[] }
+
 export default function App() {
   const [lang, setLang] = useState<Lang>(readLang)
   const [step, setStep] = useState<Step>('welcome')
@@ -36,6 +40,11 @@ export default function App() {
   const [result, setResult] = useState<PlayResult | null>(null)
   const [signup, setSignup] = useState<SignupData | null>(null)
   const [reference, setReference] = useState('')
+  const [existing, setExisting] = useState(false)
+
+  // The server play is requested when the story starts and used if it arrives before Semak Kerja.
+  const serverPlay = useRef<Promise<ServerPlay | null> | null>(null)
+  const activePlayId = useRef<string | null>(null)
 
   useEffect(() => {
     document.documentElement.lang = lang
@@ -53,19 +62,71 @@ export default function App() {
   const toggleLang = () => setLang((l) => (l === 'ms' ? 'en' : 'ms'))
   const storyXp = picks.reduce((s, c) => s + c.xp, 0)
 
-  const startPlay = () => {
+  const startGame = (p: Player) => {
     setScene(0)
     setPicks([])
     setResult(null)
     setSignup(null)
+    setExisting(false)
+    activePlayId.current = null
+    serverPlay.current = online
+      ? startPlay({ nickname: p.nickname, role: p.role, band: p.band, lang, teach: p.teachSubjects }).catch(() => null)
+      : Promise.resolve(null)
     setStep('intro')
+  }
+
+  const toSemak = async () => {
+    // Don't keep the player waiting: if the server hasn't answered within 2 s, play locally.
+    const timeout = new Promise<null>((r) => setTimeout(() => r(null), 2000))
+    const sp = await Promise.race([serverPlay.current ?? Promise.resolve(null), timeout])
+    if (sp && sp.questions?.length) {
+      activePlayId.current = sp.playId
+      setQuestions(sp.questions)
+    } else {
+      activePlayId.current = null
+      setQuestions(pickQuestions(LOCAL_BANK, player.band, player.teachSubjects))
+    }
+    setStep('semakIntro')
+  }
+
+  const onSemakDone = (marks: Mark[]) => {
+    const local = scorePlay(picks, questions, marks)
+    setResult(local)
+    setStep('result')
+    const id = activePlayId.current
+    if (id) {
+      finishPlay(
+        id,
+        picks.map((c) => c.id),
+        marks.map((m) => ({ id: m.questionId, verdict: m.verdict, ms: m.ms })),
+      )
+        .then((r) => setResult(fromServer(r, local)))
+        .catch(() => {
+          /* keep the local result; the play just won't reach the leaderboard */
+        })
+    }
+  }
+
+  const onSignup = async (d: SignupData) => {
+    const res = await submitSignup(activePlayId.current, { ...d, role: player.role, lang })
+    setSignup(d)
+    setReference(res.ref)
+    setExisting(res.existing)
+    setStep('offer')
+  }
+
+  const onSignupSkip = (d: SignupData) => {
+    setSignup(d)
+    setReference(makeReference())
+    setExisting(false)
+    setStep('offer')
   }
 
   const back: Partial<Record<Step, Step>> = { role: 'welcome', level: 'role', nick: 'level' }
 
   return (
     <>
-      <PreviewBanner lang={lang} />
+      {!online && <PreviewBanner lang={lang} />}
       <Screen>
         <Header lang={lang} onLang={toggleLang} onBack={back[step] ? () => setStep(back[step]!) : undefined} />
 
@@ -97,8 +158,9 @@ export default function App() {
             lang={lang}
             initial={player.nickname}
             onDone={(nickname) => {
-              setPlayer((p) => ({ ...p, nickname }))
-              startPlay()
+              const p = { ...player, nickname }
+              setPlayer(p)
+              startGame(p)
             }}
           />
         )}
@@ -114,45 +176,24 @@ export default function App() {
             onPicked={(c) => setPicks((p) => [...p, c])}
             onNext={() => {
               if (scene + 1 < STORY.length) setScene(scene + 1)
-              else {
-                setQuestions(pickQuestions(QUESTIONS, player.band, player.teachSubjects))
-                setStep('semakIntro')
-              }
+              else void toSemak()
             }}
           />
         )}
 
         {step === 'semakIntro' && <SemakIntro lang={lang} onStart={() => setStep('semak')} />}
 
-        {step === 'semak' && (
-          <SemakRound
-            lang={lang}
-            questions={questions}
-            onDone={(marks: Mark[]) => {
-              setResult(scorePlay(picks, questions, marks))
-              setStep('result')
-            }}
-          />
-        )}
+        {step === 'semak' && <SemakRound lang={lang} questions={questions} onDone={onSemakDone} />}
 
         {step === 'result' && result && (
-          <Result lang={lang} player={player} result={result} onClaim={() => setStep('signup')} onAgain={startPlay} />
+          <Result lang={lang} player={player} result={result} onClaim={() => setStep('signup')} onAgain={() => startGame(player)} />
         )}
 
         {step === 'signup' && result && (
-          <SignUp
-            lang={lang}
-            player={player}
-            result={result}
-            onDone={(d) => {
-              setSignup(d)
-              setReference(makeReference())
-              setStep('offer')
-            }}
-          />
+          <SignUp lang={lang} player={player} result={result} onSubmit={online ? onSignup : async (d) => onSignupSkip(d)} onSkip={onSignupSkip} />
         )}
 
-        {step === 'offer' && signup && <Offer lang={lang} player={player} data={signup} reference={reference} />}
+        {step === 'offer' && signup && <Offer lang={lang} player={player} data={signup} reference={reference} existing={existing} />}
       </Screen>
     </>
   )

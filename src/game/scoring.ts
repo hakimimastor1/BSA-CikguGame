@@ -1,6 +1,7 @@
 import type { Band, Mark, PlayResult, Question, StoryChoice, SubjectKey, SubjectResult, Trait } from '../types'
 import { BAND_SUBJECTS } from '../content/subjects'
 import { TRAIT_ORDER } from '../content/story'
+import type { ServerResult } from '../lib/api'
 
 export const SEMAK_ITEMS = 8
 export const SEMAK_SECONDS = 45
@@ -89,12 +90,7 @@ export function scorePlay(
     bySubject.set(q.subject, entry)
   }
   const subjects = [...bySubject.values()]
-  const ranked = [...subjects].sort((a, b) => b.right / b.total - a.right / a.total)
-  const strongest = ranked.length && ranked[0].right > 0 ? ranked[0].subject : null
-  const levelUp = subjects
-    .filter((s) => s.right < s.total)
-    .sort((a, b) => a.right / a.total - b.right / b.total)
-    .map((s) => s.subject)
+  const { strongest, levelUp } = subjectSummary(subjects)
 
   return {
     storyXp,
@@ -106,5 +102,33 @@ export function scorePlay(
     strongest,
     levelUp,
     rightMarks,
+  }
+}
+
+export function subjectSummary(subjects: SubjectResult[]): { strongest: SubjectKey | null; levelUp: SubjectKey[] } {
+  const ranked = [...subjects].sort((a, b) => b.right / b.total - a.right / a.total)
+  const strongest = ranked.length && ranked[0].right > 0 ? ranked[0].subject : null
+  const levelUp = subjects
+    .filter((s) => s.right < s.total)
+    .sort((a, b) => a.right / a.total - b.right / b.total)
+    .map((s) => s.subject)
+  return { strongest, levelUp }
+}
+
+/** The server's scoring is the one that counts; keep the subject order the phone showed. */
+export function fromServer(r: ServerResult, local: PlayResult): PlayResult {
+  const order = local.subjects.map((s) => s.subject)
+  const subjects = [...r.subjects].sort((a, b) => order.indexOf(a.subject) - order.indexOf(b.subject))
+  return {
+    storyXp: r.storyXp,
+    semakXp: r.semakXp,
+    totalXp: r.totalXp,
+    personality: r.personality,
+    traitCounts: r.traitCounts,
+    subjects,
+    ...subjectSummary(subjects),
+    rightMarks: r.rightMarks,
+    rank: r.rank,
+    players: r.players,
   }
 }

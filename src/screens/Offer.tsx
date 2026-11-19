@@ -9,7 +9,19 @@ import { Confetti } from '../components/ui'
 import { waLink } from '../game/whatsapp'
 import type { SignupData } from './SignUp'
 
-export function Offer({ lang, player, data, reference }: { lang: Lang; player: Player; data: SignupData; reference: string }) {
+export function Offer({
+  lang,
+  player,
+  data,
+  reference,
+  existing = false,
+}: {
+  lang: Lang
+  player: Player
+  data: SignupData
+  reference: string
+  existing?: boolean
+}) {
   const [copied, setCopied] = useState(false)
   const isTutor = player.role === 'cikgu'
   const band = BANDS.find((b) => b.id === player.band)!
@@ -33,6 +45,7 @@ export function Offer({ lang, player, data, reference }: { lang: Lang; player: P
         <p className="text-center text-muted">
           {t(S.offerRef, lang)}: <span className="font-display text-xl font-extrabold text-navy">{reference}</span>
         </p>
+        {existing && <p className="text-center text-sm font-bold text-muted">{t(S.offerExisting, lang)}</p>}
         <a className="clay-btn w-full bg-yellow" href={EVENT.tutorRegisterUrl} target="_blank" rel="noreferrer">
           <ExternalLink size={20} strokeWidth={2.5} />
           {t(S.offerTutorRegister, lang)}
@@ -76,6 +89,7 @@ export function Offer({ lang, player, data, reference }: { lang: Lang; player: P
         </div>
       </section>
 
+      {existing && <p className="text-center text-sm font-bold text-muted">{t(S.offerExisting, lang)}</p>}
       <a className="clay-btn w-full bg-yellow text-xl" href={waLink(EVENT.whatsapp, msg)} target="_blank" rel="noreferrer">
         <MessageCircle size={22} strokeWidth={2.5} />
         {t(S.offerClaim, lang)}
