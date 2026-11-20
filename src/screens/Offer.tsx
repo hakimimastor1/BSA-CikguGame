@@ -54,6 +54,10 @@ export function Offer({
           <MessageCircle size={20} strokeWidth={2.5} />
           {t(S.offerTutorWhatsapp, lang)}
         </a>
+        <p className="flex items-center justify-center gap-2 text-center font-bold text-muted">
+          <Store size={18} strokeWidth={2.5} />
+          {t(S.offerTutorBooth, lang)}
+        </p>
       </div>
     )
   }

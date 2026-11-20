@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowRight, Backpack, BriefcaseBusiness, Dices, Gift, Presentation, Users } from 'lucide-react'
+import { ArrowRight, Backpack, BriefcaseBusiness, Dices, Gift, Presentation, Sticker, Users } from 'lucide-react'
 import type { Band, Lang, Role, SubjectKey } from '../types'
 import { S, t } from '../content/strings'
 import { BAND_SUBJECTS, BANDS, SUBJECT_NAMES } from '../content/subjects'
@@ -24,6 +24,10 @@ export function Welcome({ lang, onStart }: { lang: Lang; onStart: () => void }) 
         <li className="flex items-center gap-2.5 rounded-2xl border-[3px] border-navy bg-white px-3.5 py-2 font-display font-bold leading-snug">
           <Gift size={20} strokeWidth={2.5} className="shrink-0" />
           {t(S.welcomePerkTrial, lang)}
+        </li>
+        <li className="flex items-center justify-center gap-2 font-display font-bold text-muted">
+          <Sticker size={18} strokeWidth={2.5} className="shrink-0" />
+          {t(S.welcomePerkAll, lang)}
         </li>
       </ul>
       <button type="button" className="clay-btn w-full bg-yellow text-xl" onClick={onStart}>

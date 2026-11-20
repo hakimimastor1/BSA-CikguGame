@@ -16,8 +16,13 @@
 - **Pelajar / graduan UPSI** → pilih *Pelajar / graduan UPSI* → hadiah: **peluang jadi tutor BSA** (RM25–40/jam).
 - **Adik-adik sekolah dan keluarga** → *Pelajar sekolah* atau *Ibu bapa / keluarga* → **trial percuma 3 subjek**,
   kod **PESKON UPSI 2026**.
-- Selepas daftar, pemain tunjuk skrin **"Tahniah"**. Hadiah kecil (stiker, beg) ikut budi bicara staf.
-  Cadangan: beg untuk **3 teratas** di projektor setiap hari.
+- **Hadiah** (ikut stok, tidak direkod dalam sistem; semak skrin pemain):
+  - **Semua pemain:** sticker ringkas.
+  - **Adik-adik / keluarga yang daftar trial** (skrin *"Tahniah! Trial anda sedia"*): **beg anyaman BSA** (sticker cikgu +
+    flyer) dan **buku nota kecil** selagi ada (lebih kurang 10 sahaja).
+  - **Pelajar / graduan UPSI yang daftar tutor:** sticker sahaja (tiada beg).
+  - **Ibu bapa yang terus daftarkan anak di booth:** beg. Stok beg (lebih kurang 120) dikongsi untuk semua ini.
+  - Satu beg untuk satu keluarga. Kalau skrin tunjuk *"Nombor ini sudah didaftarkan"*, beg sudah diambil.
 - Papan skor bermula semula setiap hari pada tengah malam.
 
 ## 3. Susulan (laman admin)

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BriefcaseBusiness, Gift, Printer, ScanLine, Smartphone, Trophy } from 'lucide-react'
+import { BriefcaseBusiness, Gift, Printer, ScanLine, Smartphone, Sticker, Trophy } from 'lucide-react'
 import { Mentol } from '../components/Mentol'
 import { Qr, gameUrl } from '../components/Qr'
 import { EVENT } from '../content/event'
@@ -59,7 +59,10 @@ export default function Poster() {
           </ol>
         </div>
 
-        <div className="w-full bg-yellow px-[5%] pb-[3%] pt-[3.5%]">
+        <div className="w-full bg-yellow px-[5%] pb-[3%] pt-[2.5%]">
+          <p className="mb-2 flex items-center justify-center gap-2 font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold">
+            <Sticker size={24} strokeWidth={2.5} /> Semua pemain dapat sticker!
+          </p>
           <div className="grid grid-cols-2 gap-3 text-left">
             <div className="rounded-2xl border-[3px] border-navy bg-white p-3">
               <p className="flex items-center gap-1.5 text-sm font-bold text-muted">
@@ -72,9 +75,9 @@ export default function Poster() {
               <p className="flex items-center gap-1.5 text-sm font-bold text-muted">
                 <Gift size={18} strokeWidth={2.5} /> Adik-adik sekolah
               </p>
-              <p className="font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold leading-tight">Trial percuma 3 subjek</p>
+              <p className="font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold leading-tight">Trial percuma + beg BSA</p>
               <p className="font-bold">
-                Kod <span className="font-display font-extrabold">{EVENT.offerCode}</span>
+                3 subjek · kod <span className="font-display font-extrabold">{EVENT.offerCode}</span>
               </p>
             </div>
           </div>

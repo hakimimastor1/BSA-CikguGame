@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowRight, HeartHandshake, Palette, RotateCcw, Share2, Sparkles, Target, TrendingUp, Trophy } from 'lucide-react'
+import { ArrowRight, HeartHandshake, Palette, RotateCcw, Share2, Sparkles, Sticker, Target, TrendingUp, Trophy } from 'lucide-react'
 import type { Lang, PlayResult, Player, Trait } from '../types'
 import { S, fill, t } from '../content/strings'
 import { PERSONALITIES } from '../content/story'
@@ -122,6 +122,10 @@ export function Result({
           <Share2 size={20} strokeWidth={2.5} />
           {sharing ? t(S.resultSharing, lang) : t(S.resultShare, lang)}
         </button>
+        <p className="flex items-center justify-center gap-2 text-center font-bold">
+          <Sticker size={18} strokeWidth={2.5} className="shrink-0" />
+          {t(S.resultSticker, lang)}
+        </p>
         <button type="button" className="mx-auto inline-flex min-h-11 cursor-pointer items-center gap-1.5 font-bold text-muted underline" onClick={onAgain}>
           <RotateCcw size={16} strokeWidth={2.5} />
           {t(S.resultPlayAgain, lang)}

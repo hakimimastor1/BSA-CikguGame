@@ -39,8 +39,10 @@ PESKON (**M**) and what comes after (**S**, **C**).
   CGPA 3.3+, and practicum done or in progress. Graduates need a degree (education preferred).
   Apply at `brightscholaracademy.com.my/register` or on WhatsApp.
 - Brand: yellow `#F9C414`, navy `#023E86`; logo files in `assets/brand/`.
-- **Gifts** (bags, stickers) are handed out by booth staff at their own discretion. They are **not part of
-  the system**.
+- **Gifts** are handed out by booth staff and **not recorded in the system** (staff check the player's screen):
+  every player gets a simple sticker; children and families who sign up for the trial get a woven BSA bag
+  (cikgu stickers and flyers) and, while about 10 last, a small notebook; UPSI students who apply as tutors get a
+  sticker only. About 120 bags are shared with parents who enrol a child at the booth. No top-score prizes.
 
 ## 3. Who uses it
 

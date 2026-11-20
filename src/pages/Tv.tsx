@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { BriefcaseBusiness, Gift, Users, WifiOff } from 'lucide-react'
+import { BriefcaseBusiness, Gift, Sticker, Users, WifiOff } from 'lucide-react'
 import { Mentol } from '../components/Mentol'
 import { Qr, gameUrl } from '../components/Qr'
 import { PERSONALITIES } from '../content/story'
@@ -117,10 +117,13 @@ export default function Tv() {
             <p className="flex items-center gap-[0.5vw] text-[1.05vw] font-bold text-sky">
               <Gift className="h-[1.3vw] w-[1.3vw] text-yellow" strokeWidth={2.5} /> Adik-adik sekolah
             </p>
-            <p className="text-[1.3vw] font-extrabold">Trial percuma 3 subjek</p>
+            <p className="text-[1.3vw] font-extrabold">Trial percuma + beg</p>
             <p className="text-[1.05vw] font-bold text-yellow">Kod {board?.event.offerCode ?? EVENT.offerCode}</p>
           </div>
         </div>
+        <p className="flex items-center gap-[0.5vw] font-display text-[1.25vw] font-bold text-yellow">
+          <Sticker className="h-[1.4vw] w-[1.4vw]" strokeWidth={2.5} /> Semua pemain dapat sticker!
+        </p>
         <p className="text-[1vw] text-sky/80">{url.replace(/^https?:\/\//, '')}</p>
       </section>
 

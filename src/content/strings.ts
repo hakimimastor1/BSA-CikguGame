@@ -23,14 +23,15 @@ export const S = {
   },
   welcomeStart: { ms: 'Mula main', en: 'Start playing' },
   welcomePerkTutor: { ms: 'Graduan UPSI: jadi tutor BSA · RM25–40/jam', en: 'UPSI grads: tutor with BSA · RM25–40/hr' },
-  welcomePerkTrial: { ms: 'Adik-adik sekolah: trial percuma 3 subjek', en: 'School kids: free trial for 3 subjects' },
+  welcomePerkTrial: { ms: 'Adik-adik sekolah: trial percuma 3 subjek + beg BSA', en: 'School kids: free 3-subject trial + BSA bag' },
+  welcomePerkAll: { ms: 'Semua pemain dapat sticker!', en: 'Every player gets a sticker!' },
 
   // Role
   roleTitle: { ms: 'Saya…', en: 'I am…' },
   rolePelajar: { ms: 'Pelajar sekolah', en: 'A school student' },
-  rolePelajarHint: { ms: 'Tahun 1 – Tingkatan 5 · trial percuma', en: 'Standard 1 – Form 5 · free trial' },
+  rolePelajarHint: { ms: 'Tahun 1 – Tingkatan 5 · trial percuma + beg', en: 'Standard 1 – Form 5 · free trial + bag' },
   roleIbubapa: { ms: 'Ibu bapa / keluarga', en: 'A parent / family' },
-  roleIbubapaHint: { ms: 'Untuk anak, adik atau saudara · trial percuma', en: 'For your child, sibling or relative · free trial' },
+  roleIbubapaHint: { ms: 'Untuk anak, adik atau saudara · trial percuma + beg', en: 'For your child, sibling or relative · free trial + bag' },
   roleCikgu: { ms: 'Pelajar / graduan UPSI', en: 'A UPSI student / graduate' },
   roleCikguHint: { ms: 'Nak jadi cikgu? Jadi tutor BSA · RM25–40/jam', en: 'Want to teach? Tutor with BSA · RM25–40/hr' },
 
@@ -89,6 +90,7 @@ export const S = {
   resultSharing: { ms: 'Menyediakan kad…', en: 'Preparing card…' },
   resultClaim: { ms: 'Tuntut trial percuma 3 subjek', en: 'Claim free trial for 3 subjects' },
   resultJoin: { ms: 'Jom jadi cikgu BSA', en: 'Become a BSA cikgu' },
+  resultSticker: { ms: 'Tunjuk skrin ini di booth BSA untuk sticker percuma!', en: 'Show this screen at the BSA booth for a free sticker!' },
   resultPlayAgain: { ms: 'Main semula', en: 'Play again' },
   shareText: {
     ms: 'Saya {name} dengan {xp} XP dalam Cikgu Sehari! Main di booth Bright Scholar Academy, {event}.',
@@ -171,7 +173,14 @@ export const S = {
   offerCopy: { ms: 'Salin kod', en: 'Copy code' },
   offerCopied: { ms: 'Disalin!', en: 'Copied!' },
   offerClaim: { ms: 'Tuntut di WhatsApp', en: 'Claim on WhatsApp' },
-  offerBooth: { ms: 'Tunjukkan skrin ini kepada staf di booth BSA.', en: 'Show this screen to the staff at the BSA booth.' },
+  offerBooth: {
+    ms: 'Tunjukkan skrin ini di booth BSA untuk ambil beg BSA dan sticker (selagi stok ada).',
+    en: 'Show this screen at the BSA booth to collect your BSA bag and sticker (while stocks last).',
+  },
+  offerTutorBooth: {
+    ms: 'Tunjukkan skrin ini di booth BSA untuk ambil sticker percuma.',
+    en: 'Show this screen at the BSA booth for a free sticker.',
+  },
   offerTutorTitle: { ms: 'Terima kasih, bakal cikgu!', en: 'Thank you, future cikgu!' },
   offerTutorBody: {
     ms: 'Pasukan BSA akan WhatsApp anda. Untuk lebih cepat, lengkapkan pendaftaran tutor di laman web BSA.',
