@@ -58,11 +58,13 @@ export function Result({
             </div>
           </div>
           {result.rank != null && (
-            <p className="mt-3 inline-flex items-center gap-2 rounded-full border-[3px] border-navy bg-yellow px-4 py-1 font-display text-lg font-extrabold anim-pop">
-              <Trophy size={18} strokeWidth={2.5} />
-              {fill(t(S.resultRank, lang), { rank: result.rank })}
-              {result.players ? <span className="font-body text-sm font-bold">{fill(t(S.resultRankOf, lang), { n: result.players })}</span> : null}
-            </p>
+            <div className="mx-auto mt-3 inline-flex items-center gap-2.5 rounded-2xl border-[3px] border-navy bg-yellow px-4 py-1.5 text-left anim-pop">
+              <Trophy size={22} strokeWidth={2.5} className="shrink-0" />
+              <div className="leading-tight">
+                <p className="font-display text-lg font-extrabold">{fill(t(S.resultRank, lang), { rank: result.rank })}</p>
+                {result.players ? <p className="text-sm font-bold">{fill(t(S.resultRankOf, lang), { n: result.players })}</p> : null}
+              </div>
+            </div>
           )}
         </div>
       </section>
