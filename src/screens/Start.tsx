@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowRight, Backpack, Dices, Gift, Presentation, Users } from 'lucide-react'
+import { ArrowRight, Backpack, BriefcaseBusiness, Dices, Gift, Presentation, Users } from 'lucide-react'
 import type { Band, Lang, Role, SubjectKey } from '../types'
 import { S, t } from '../content/strings'
 import { BAND_SUBJECTS, BANDS, SUBJECT_NAMES } from '../content/subjects'
@@ -16,10 +16,16 @@ export function Welcome({ lang, onStart }: { lang: Lang; onStart: () => void }) 
         <h1 className="font-display text-[2.6rem] font-extrabold leading-[1.05]">{t(S.welcomeTitle, lang)}</h1>
       </div>
       <p className="max-w-xs text-[1.05rem] leading-relaxed text-muted">{t(S.welcomeBody, lang)}</p>
-      <p className="inline-flex items-center gap-2 rounded-full border-[3px] border-navy bg-white px-4 py-1.5 font-display font-bold">
-        <Gift size={18} strokeWidth={2.5} className="text-navy" />
-        {t(S.welcomePerk, lang)}
-      </p>
+      <ul className="flex w-full flex-col gap-2 text-left">
+        <li className="flex items-center gap-2.5 rounded-2xl border-[3px] border-navy bg-white px-3.5 py-2 font-display font-bold leading-snug">
+          <BriefcaseBusiness size={20} strokeWidth={2.5} className="shrink-0" />
+          {t(S.welcomePerkTutor, lang)}
+        </li>
+        <li className="flex items-center gap-2.5 rounded-2xl border-[3px] border-navy bg-white px-3.5 py-2 font-display font-bold leading-snug">
+          <Gift size={20} strokeWidth={2.5} className="shrink-0" />
+          {t(S.welcomePerkTrial, lang)}
+        </li>
+      </ul>
       <button type="button" className="clay-btn w-full bg-yellow text-xl" onClick={onStart}>
         {t(S.welcomeStart, lang)}
         <ArrowRight size={22} strokeWidth={3} />
@@ -30,9 +36,9 @@ export function Welcome({ lang, onStart }: { lang: Lang; onStart: () => void }) 
 }
 
 const ROLE_OPTIONS: { id: Role; icon: typeof Backpack; label: keyof typeof S; hint: keyof typeof S }[] = [
+  { id: 'cikgu', icon: Presentation, label: 'roleCikgu', hint: 'roleCikguHint' },
   { id: 'pelajar', icon: Backpack, label: 'rolePelajar', hint: 'rolePelajarHint' },
   { id: 'ibubapa', icon: Users, label: 'roleIbubapa', hint: 'roleIbubapaHint' },
-  { id: 'cikgu', icon: Presentation, label: 'roleCikgu', hint: 'roleCikguHint' },
 ]
 
 export function RolePick({ lang, onPick }: { lang: Lang; onPick: (r: Role) => void }) {

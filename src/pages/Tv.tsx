@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Gift, Users, WifiOff } from 'lucide-react'
+import { BriefcaseBusiness, Gift, Users, WifiOff } from 'lucide-react'
 import { Mentol } from '../components/Mentol'
 import { Qr, gameUrl } from '../components/Qr'
 import { PERSONALITIES } from '../content/story'
@@ -55,7 +55,7 @@ export default function Tv() {
       />
 
       {/* Left: call to action */}
-      <section className="relative z-10 flex w-[38%] flex-col items-center justify-between gap-[1.5vh] px-[2.5vw] py-[3vh] text-center">
+      <section className="relative z-10 flex w-[38%] shrink-0 flex-col items-center justify-between gap-[1.5vh] px-[2.5vw] py-[3vh] text-center">
         <img src="/bsa-wordmark-on-navy.png" alt="Bright Scholar Academy" className="w-[80%]" />
         <div>
           <h1 className="font-display text-[4.6vw] font-extrabold leading-none text-yellow">Jadi Cikgu Sehari!</h1>
@@ -69,20 +69,27 @@ export default function Tv() {
         <p className="font-display text-[2.4vw] font-extrabold leading-tight">
           Imbas &amp; main! <span className="text-sky">· Scan &amp; play!</span>
         </p>
-        <div className="flex items-center gap-[1vw] rounded-[1.4vw] border-[0.25vw] border-yellow px-[1.4vw] py-[0.9vh] text-left">
-          <Gift className="h-[2.4vw] w-[2.4vw] shrink-0 text-yellow" strokeWidth={2.5} />
-          <div className="font-display leading-tight">
-            <p className="text-[1.5vw] font-bold">Trial percuma 3 subjek!</p>
-            <p className="text-[1.25vw] font-bold text-sky">
-              Kod <span className="text-yellow">{board?.event.offerCode ?? EVENT.offerCode}</span>
+        <div className="grid w-full grid-cols-2 gap-[0.8vw] text-left font-display leading-tight">
+          <div className="rounded-[1.2vw] border-[0.22vw] border-yellow px-[1vw] py-[0.8vh]">
+            <p className="flex items-center gap-[0.5vw] text-[1.05vw] font-bold text-sky">
+              <BriefcaseBusiness className="h-[1.3vw] w-[1.3vw] text-yellow" strokeWidth={2.5} /> Graduan UPSI
             </p>
+            <p className="text-[1.3vw] font-extrabold">Jadi tutor BSA</p>
+            <p className="text-[1.05vw] font-bold text-yellow">RM25–40/jam</p>
+          </div>
+          <div className="rounded-[1.2vw] border-[0.22vw] border-yellow px-[1vw] py-[0.8vh]">
+            <p className="flex items-center gap-[0.5vw] text-[1.05vw] font-bold text-sky">
+              <Gift className="h-[1.3vw] w-[1.3vw] text-yellow" strokeWidth={2.5} /> Adik-adik sekolah
+            </p>
+            <p className="text-[1.3vw] font-extrabold">Trial percuma 3 subjek</p>
+            <p className="text-[1.05vw] font-bold text-yellow">Kod {board?.event.offerCode ?? EVENT.offerCode}</p>
           </div>
         </div>
         <p className="text-[1vw] text-sky/80">{url.replace(/^https?:\/\//, '')}</p>
       </section>
 
       {/* Right: leaderboard */}
-      <section className="relative z-10 flex flex-1 flex-col py-[3vh] pr-[2.5vw]">
+      <section className="relative z-10 flex min-w-0 flex-1 flex-col py-[3vh] pr-[2.5vw]">
         <div className="flex items-end justify-between">
           <h2 className="font-display text-[2.8vw] font-extrabold leading-none">
             Papan Skor Hari Ini <span className="text-[1.6vw] text-sky">· Today's Top 10</span>

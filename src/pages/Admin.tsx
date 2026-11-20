@@ -67,7 +67,7 @@ interface Stats {
   byRole: Record<string, { plays: number; signups: number }>
 }
 
-const ROLE_LABEL: Record<SignupRow['role'], string> = { pelajar: 'Pelajar', ibubapa: 'Ibu bapa', cikgu: 'Bakal cikgu' }
+const ROLE_LABEL: Record<SignupRow['role'], string> = { pelajar: 'Pelajar sekolah', ibubapa: 'Ibu bapa / keluarga', cikgu: 'Bakal tutor (UPSI)' }
 const LEARNER_STATUS: [string, string][] = [
   ['new', 'Baru'],
   ['contacted', 'Dihubungi'],
@@ -343,9 +343,9 @@ function Signups({ me }: { me: Me }) {
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           <select className="field text-sm" value={role} onChange={(e) => setRole(e.target.value)} aria-label="Peranan">
             <option value="all">Semua peranan</option>
-            <option value="pelajar">Pelajar</option>
-            <option value="ibubapa">Ibu bapa</option>
-            <option value="cikgu">Bakal cikgu</option>
+            <option value="pelajar">Pelajar sekolah</option>
+            <option value="ibubapa">Ibu bapa / keluarga</option>
+            <option value="cikgu">Bakal tutor (UPSI)</option>
           </select>
           <select className="field text-sm" value={status} onChange={(e) => setStatus(e.target.value)} aria-label="Status">
             <option value="all">Semua status</option>
@@ -418,7 +418,7 @@ function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupR
     if (r.teach_subjects.length) details.push(`Boleh ajar: ${r.teach_subjects.join(', ')}`)
     if (r.availability.length) details.push(`Masa lapang: ${r.availability.map((a) => AVAIL_LABEL[a] ?? a).join(', ')}`)
   } else {
-    if (r.child_name) details.push(`Anak: ${r.child_name}`)
+    if (r.child_name) details.push(`Anak/adik: ${r.child_name}`)
     if (r.level) details.push(r.level)
     if (r.school) details.push(r.school)
     if (r.trial_subjects.length) details.push(`Trial: ${r.trial_subjects.join(', ')}`)

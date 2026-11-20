@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Gift, Printer, ScanLine, Smartphone, Trophy } from 'lucide-react'
+import { BriefcaseBusiness, Gift, Printer, ScanLine, Smartphone, Trophy } from 'lucide-react'
 import { Mentol } from '../components/Mentol'
 import { Qr, gameUrl } from '../components/Qr'
 import { EVENT } from '../content/event'
@@ -59,15 +59,26 @@ export default function Poster() {
           </ol>
         </div>
 
-        <div className="flex w-full flex-col items-center gap-1 bg-yellow px-[6%] py-[4%]">
-          <p className="flex items-center gap-2 font-display text-[clamp(1.2rem,4.4vw,2rem)] font-extrabold">
-            <Gift size={28} strokeWidth={2.5} />
-            Trial percuma 3 subjek!
-          </p>
-          <p className="font-bold">
-            Kod <span className="font-display text-xl font-extrabold">{EVENT.offerCode}</span> · Free trial for 3 subjects
-          </p>
-          <p className="mt-1 text-sm font-bold">{url.replace(/^https?:\/\//, '')} · WhatsApp {EVENT.whatsappDisplay}</p>
+        <div className="w-full bg-yellow px-[5%] pb-[3%] pt-[3.5%]">
+          <div className="grid grid-cols-2 gap-3 text-left">
+            <div className="rounded-2xl border-[3px] border-navy bg-white p-3">
+              <p className="flex items-center gap-1.5 text-sm font-bold text-muted">
+                <BriefcaseBusiness size={18} strokeWidth={2.5} /> Pelajar &amp; graduan UPSI
+              </p>
+              <p className="font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold leading-tight">Jadi tutor BSA</p>
+              <p className="font-bold">RM25–40/jam · bayaran mingguan</p>
+            </div>
+            <div className="rounded-2xl border-[3px] border-navy bg-white p-3">
+              <p className="flex items-center gap-1.5 text-sm font-bold text-muted">
+                <Gift size={18} strokeWidth={2.5} /> Adik-adik sekolah
+              </p>
+              <p className="font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold leading-tight">Trial percuma 3 subjek</p>
+              <p className="font-bold">
+                Kod <span className="font-display font-extrabold">{EVENT.offerCode}</span>
+              </p>
+            </div>
+          </div>
+          <p className="mt-2 text-center text-sm font-bold">{url.replace(/^https?:\/\//, '')} · WhatsApp {EVENT.whatsappDisplay}</p>
         </div>
       </article>
     </div>

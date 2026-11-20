@@ -54,6 +54,18 @@ PESKON (**M**) and what comes after (**S**, **C**).
 
 ## 4. How the game serves each visitor
 
+At PESKON most players are **UPSI students and graduates**; their families bring **school-age children**.
+So the game shows two different prizes, and the role screen makes clear which is which:
+
+| Role on screen (in this order) | Who | Prize |
+|---|---|---|
+| **Pelajar / graduan UPSI** | Future cikgu | Tutor application: *Jadi tutor BSA*, RM25–40/hour |
+| **Pelajar sekolah** | Std 1 – Form 5 students | Free trial, 3 subjects |
+| **Ibu bapa / keluarga** | Parents, or older siblings and relatives playing for a child | Free trial, 3 subjects, for the child |
+
+The welcome screen, projector and poster show both prizes side by side.
+
+
 ### 4.1 School students (pelajar)
 
 Kids love being the teacher, so students play the same *Cikgu Sehari* story, but tuned to **their own level**:

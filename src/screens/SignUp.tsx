@@ -141,7 +141,7 @@ export function SignUp({
   const ok = Object.keys(errors).length === 0
   const err = (k: keyof SignupData) => (tried ? errors[k] : undefined)
 
-  const nameLabel = role === 'ibubapa' ? t(S.fParentName, lang) : t(S.fName, lang)
+  const nameLabel = role === 'ibubapa' ? t(S.fYourName, lang) : t(S.fName, lang)
   const phoneLabel = needsParent ? t(S.fParentWhatsapp, lang) : t(S.fWhatsapp, lang)
 
   return (
