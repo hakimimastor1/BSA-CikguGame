@@ -72,8 +72,8 @@ supported.
 
 Navy background. On the left: a large QR code and *"Imbas & main! / Scan & play!"*. On the right: **Today's
 top 10** (nickname, personality, XP), with the top 3 highlighted in yellow. Along the bottom: a ticker of
-the latest results (*"Cikgu Ceria 27 is a Cikgu Kreatif!"*) and the number of players today. Updates
-live, with no refresh needed.
+the latest results (*"Cikgu Ceria 27 is a Cikgu Kreatif!"*) and the number of players today. Refreshes
+every 5 seconds by itself.
 
 ### Admin (staff phone or laptop)
 
@@ -131,8 +131,8 @@ The personality is the trait the player picked most (ties go to the order below)
 
 - Total XP is up to about 400 (150 from the story and up to 240 from Semak Kerja).
 - The leaderboard is **per day** (today's top 10) and shows a nickname's best score.
-- The phone only sends the player's answers. The server looks up the right answers and works out the XP,
-  so scores can't be faked.
+- The phone only sends the player's answers and timings. The server works out the XP, so scores can't be
+  inflated.
 
 ## 4. How it's built
 
@@ -142,13 +142,13 @@ The personality is the trait the player picked most (ties go to the order below)
  Visitor phone ──► Web app (Netlify) ──► Supabase
  TV browser ─────►   /, /tv, /admin       ├─ Postgres database (+ row-level security)
  Staff phone ────►                        ├─ Auth (3 staff logins)
-                                          └─ Realtime (live leaderboard)
 ```
 
 - **Web app**: React + TypeScript (Vite), Tailwind CSS. One site with three parts: the game (`/`, with the
   event in the QR link, e.g. `/?e=peskon26`), the TV screen (`/tv/peskon26`) and the admin pages (`/admin`).
   Static files on Netlify's CDN, so it loads fast on mobile data.
-- **Supabase**: database, staff logins and live updates for the TV.
+- **Supabase** (project `bsa-cikgu-game`): database, server functions and staff logins. Tables are in a
+  private `cs` schema; the app only calls functions. The TV page asks for the leaderboard every 5 seconds.
 
 ### Data
 
@@ -166,7 +166,10 @@ The personality is the trait the player picked most (ties go to the order below)
   and submit a sign-up, through server functions that check the input.
 - The leaderboard only exposes nickname, personality and XP.
 - Sign-ups are visible only to logged-in staff (row-level security). Only the admin can export.
-- Question answers stay on the server until the play is submitted.
+- The round's answer keys are sent to the phone when the round starts, so right/wrong feedback is instant even
+  on weak signal. The score is still worked out on the server from the answers and their timings, so someone
+  reading the keys can't score more than a perfect, honest round. Taps under 250 ms score 0, and rounds finished
+  in under 20 seconds are kept off the leaderboard.
 - PDPA notice and consent on the sign-up form, with a link to the full notice.
 
 ### WhatsApp
