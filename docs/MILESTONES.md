@@ -7,9 +7,9 @@ Each milestone ends with a live link BSA can try on a phone.
 
 | # | Milestone | Target | What BSA gets | BSA's part |
 |---|---|---|---|---|
-| M0 | **Plan sign-off** | Wed 18 Nov | Approved requirements, design and plan | Answers to the open questions ✅ |
-| M1 | **Playable game** | Thu 19 Nov | Live link: welcome, role, level, nickname, 5 story scenes, Semak Kerja, result and share card, BM/EN | Play it on a few phones and send feedback |
-| M2 | **Full flow** | Sat 21 Nov | Supabase and Netlify set up on BSA's accounts; sign-up with PDPA consent, offer screen and WhatsApp claim, tutor path, live projector leaderboard, admin sign-ups list with WhatsApp buttons, status and CSV export, 3 staff logins | Check the story and question texts (BM/EN); give the 3 staff emails |
+| M0 ✅ | **Plan sign-off** | Wed 18 Nov | Approved requirements, design and plan | Answers to the open questions ✅ |
+| M1 ✅ | **Playable game** | Thu 19 Nov | Live link: welcome, role, level, nickname, 5 story scenes, Semak Kerja, result and share card, BM/EN | Play it on a few phones and send feedback |
+| M2 ✅ | **Full flow** | Sat 21 Nov (done Fri 20 Nov) | Supabase and Netlify set up on BSA's accounts; sign-up with PDPA consent, offer screen and WhatsApp claim, tutor path, live projector leaderboard, admin sign-ups list with WhatsApp buttons, status and CSV export, 3 staff logins | Check the story and question texts (BM/EN); give the 3 staff emails |
 | M3 | **Content and test** | Mon 23 Nov | Full question bank (~140 items, checked); test with 10+ people on different phones and fixes; printable QR poster (A4 and A3); one-page staff guide | Run the trial with students or tutors; print the QR poster |
 | ✅ | **Ready** | Tue 24 Nov | Final fixes; projector and staff logins checked | Set up the booth |
 | 🚀 | **Live at PESKON** | 25 Nov – 2 Dec | Game running at the booth; I watch for problems and fix them during the event | Projector shows the leaderboard link; follow up sign-ups on WhatsApp |

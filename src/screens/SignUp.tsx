@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, LoaderCircle, RotateCcw, WifiOff } from 'lucide-react'
 import type { Lang, PlayResult, Player, Txt } from '../types'
 import { S, t } from '../content/strings'
 import { BSA_SUBJECTS, LEVELS_BY_BAND, SUBJECT_TO_BSA } from '../content/subjects'
@@ -83,12 +83,16 @@ export function SignUp({
   lang,
   player,
   result,
-  onDone,
+  onSubmit,
+  onSkip,
 }: {
   lang: Lang
   player: Player
   result: PlayResult
-  onDone: (d: SignupData) => void
+  /** Saves the sign-up; rejects when it couldn't be saved. */
+  onSubmit: (d: SignupData) => Promise<void>
+  /** Carry on without saving (weak signal): the WhatsApp message still reaches BSA. */
+  onSkip: (d: SignupData) => void
 }) {
   const role = player.role
   const isTutor = role === 'cikgu'
@@ -123,6 +127,8 @@ export function SignUp({
     marketing: false,
   })
   const [tried, setTried] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [failed, setFailed] = useState(false)
   const set = <K extends keyof SignupData>(k: K, v: SignupData[K]) => setD((cur) => ({ ...cur, [k]: v }))
 
   const needsParent = role === 'pelajar' && d.under18
@@ -142,10 +148,18 @@ export function SignUp({
     <form
       noValidate
       className="flex flex-col gap-4 anim-slide"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault()
         setTried(true)
-        if (ok) onDone({ ...d, whatsapp: normaliseMyPhone(d.whatsapp)! })
+        if (!ok || saving) return
+        setSaving(true)
+        setFailed(false)
+        try {
+          await onSubmit({ ...d, whatsapp: normaliseMyPhone(d.whatsapp)! })
+        } catch {
+          setFailed(true)
+          setSaving(false)
+        }
       }}
     >
       <div>
@@ -278,9 +292,35 @@ export function SignUp({
         </label>
       </div>
 
-      <button type="submit" className="clay-btn w-full bg-yellow text-xl">
-        {isTutor ? t(S.submitTutor, lang) : t(S.submitLearner, lang)}
-        <ArrowRight size={22} strokeWidth={3} />
+      {failed && (
+        <div className="clay-card flex flex-col gap-3 bg-wrong-soft p-4" role="alert">
+          <p className="flex items-start gap-2 font-bold">
+            <WifiOff size={20} strokeWidth={2.5} className="mt-0.5 shrink-0" />
+            {t(S.signupError, lang)}
+          </p>
+          <button type="button" className="clay-btn w-full bg-white" onClick={() => onSkip({ ...d, whatsapp: normaliseMyPhone(d.whatsapp)! })}>
+            {t(S.signupSkip, lang)}
+          </button>
+        </div>
+      )}
+
+      <button type="submit" className="clay-btn w-full bg-yellow text-xl" disabled={saving}>
+        {saving ? (
+          <>
+            <LoaderCircle size={22} strokeWidth={3} className="animate-spin" />
+            {t(S.signupSaving, lang)}
+          </>
+        ) : failed ? (
+          <>
+            <RotateCcw size={20} strokeWidth={3} />
+            {t(S.signupRetry, lang)}
+          </>
+        ) : (
+          <>
+            {isTutor ? t(S.submitTutor, lang) : t(S.submitLearner, lang)}
+            <ArrowRight size={22} strokeWidth={3} />
+          </>
+        )}
       </button>
     </form>
   )

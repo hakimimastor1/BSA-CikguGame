@@ -82,6 +82,8 @@ export const S = {
     ms: 'Tutor BSA untuk {level} dibayar RM{pay}/jam, dibayar setiap minggu.',
     en: 'BSA tutors for {level} earn RM{pay}/hour, paid weekly.',
   },
+  resultRank: { ms: 'No. {rank} hari ini', en: 'No. {rank} today' },
+  resultRankOf: { ms: 'daripada {n} pemain', en: 'of {n} players' },
   resultShare: { ms: 'Kongsi kad saya', en: 'Share my card' },
   resultSharing: { ms: 'Menyediakan kad…', en: 'Preparing card…' },
   resultClaim: { ms: 'Tuntut trial percuma 3 subjek', en: 'Claim free trial for 3 subjects' },
@@ -144,11 +146,22 @@ export const S = {
   fPick3: { ms: 'Pilih 3 subjek', en: 'Pick 3 subjects' },
   fPickAtLeast1: { ms: 'Pilih sekurang-kurangnya 1 subjek', en: 'Pick at least 1 subject' },
   fConsentNeeded: { ms: 'Sila tandakan persetujuan untuk teruskan', en: 'Please tick the consent box to continue' },
+  signupSaving: { ms: 'Menyimpan…', en: 'Saving…' },
+  signupError: {
+    ms: 'Talian lemah, maklumat belum disimpan. Cuba lagi, atau teruskan dan tuntut terus di WhatsApp.',
+    en: "Weak signal, your details aren't saved yet. Try again, or carry on and claim straight on WhatsApp.",
+  },
+  signupRetry: { ms: 'Cuba lagi', en: 'Try again' },
+  signupSkip: { ms: 'Teruskan ke WhatsApp', en: 'Continue to WhatsApp' },
   submitLearner: { ms: 'Dapatkan kod trial', en: 'Get my trial code' },
   submitTutor: { ms: 'Hantar permohonan', en: 'Send my application' },
 
   // Offer
   offerTitle: { ms: 'Tahniah! Trial anda sedia', en: 'Congrats! Your trial is ready' },
+  offerExisting: {
+    ms: 'Nombor ini sudah didaftarkan untuk acara ini, jadi kami guna rujukan yang sama.',
+    en: 'This number is already registered for this event, so we kept the same reference.',
+  },
   offerCodeLabel: { ms: 'Kod promosi', en: 'Promo code' },
   offerWhat: { ms: 'Trial percuma 3 subjek · kelas online 1-ke-1', en: 'Free trial for 3 subjects · 1-to-1 online classes' },
   offerValid: { ms: 'Sah sehingga {date}', en: 'Valid until {date}' },

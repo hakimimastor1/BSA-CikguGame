@@ -57,6 +57,13 @@ export function Result({
               <p className="font-display text-[2.6rem] font-extrabold leading-none tabular-nums">{shown} XP</p>
             </div>
           </div>
+          {result.rank != null && (
+            <p className="mt-3 inline-flex items-center gap-2 rounded-full border-[3px] border-navy bg-yellow px-4 py-1 font-display text-lg font-extrabold anim-pop">
+              <Trophy size={18} strokeWidth={2.5} />
+              {fill(t(S.resultRank, lang), { rank: result.rank })}
+              {result.players ? <span className="font-body text-sm font-bold">{fill(t(S.resultRankOf, lang), { n: result.players })}</span> : null}
+            </p>
+          )}
         </div>
       </section>
 
