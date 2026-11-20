@@ -10,7 +10,7 @@ Each milestone ends with a live link BSA can try on a phone.
 | M0 ✅ | **Plan sign-off** | Wed 18 Nov | Approved requirements, design and plan | Answers to the open questions ✅ |
 | M1 ✅ | **Playable game** | Thu 19 Nov | Live link: welcome, role, level, nickname, 5 story scenes, Semak Kerja, result and share card, BM/EN | Play it on a few phones and send feedback |
 | M2 ✅ | **Full flow** | Sat 21 Nov (done Fri 20 Nov) | Supabase and Netlify set up on BSA's accounts; sign-up with PDPA consent, offer screen and WhatsApp claim, tutor path, live projector leaderboard, admin sign-ups list with WhatsApp buttons, status and CSV export, 3 staff logins | Check the story and question texts (BM/EN); give the 3 staff emails |
-| M3 | **Content and test** | Mon 23 Nov | Full question bank (~140 items, checked); test with 10+ people on different phones and fixes; printable QR poster (A4 and A3); one-page staff guide | Run the trial with students or tutors; print the QR poster |
+| M3 ✅ | **Content and test** | Mon 23 Nov (done Fri 20 Nov) | Full question bank (~140 items, checked); test with 10+ people on different phones and fixes; printable QR poster (A4 and A3); one-page staff guide | Run the trial with students or tutors; print the QR poster |
 | ✅ | **Ready** | Tue 24 Nov | Final fixes; projector and staff logins checked | Set up the booth |
 | 🚀 | **Live at PESKON** | 25 Nov – 2 Dec | Game running at the booth; I watch for problems and fix them during the event | Projector shows the leaderboard link; follow up sign-ups on WhatsApp |
 | M4 | **After PESKON** | from 3 Dec | Results summary (players, sign-ups, tutor applications), data export, and a v2 plan (admin editing, stats, events, sound) | Share what worked and what didn't at the booth |
@@ -33,3 +33,16 @@ Each milestone ends with a live link BSA can try on a phone.
 | Weak mobile signal at the booth | Small, fast-loading app that only talks to the server when a play starts, when it ends and at sign-up; a dropped request retries instead of losing the play |
 | Kids enter rude nicknames | Word filter, plus admin can hide a name from the TV |
 | Too many people at once | Static site on a CDN and a light database; tested with 50 players at once in M3 |
+
+## M3 results (20 Nov)
+
+- **Phones:** every screen checked on Galaxy S8 (360 px), iPhone SE, Pixel 7, iPhone 14 Pro Max and iPad Mini:
+  no sideways scrolling, no tap target under 40 px, and the Betul/Salah buttons are always on screen.
+- **Speed** (phone CPU slowed 4×): start button shows after 0.8 s on slow 4G, 1.5 s on 3G and 2.3 s on weak 3G.
+- **Load:** 50 and then 150 players at once, plus the projector: 0 errors; each step answered in about 0.3–1 s.
+- **Questions:** 3 flagged items fixed; BSA tutors still to check the rest.
+- **Prizes:** the role screen, welcome screen, projector and poster now separate the tutor job (UPSI) from the
+  free trial (school children and their families).
+- **Booth:** projector stays awake; one-page staff guide (`assets/print/staff-guide-peskon26.pdf`).
+- **Still open:** booth staff logins (emails), turning off public sign-ups in Supabase, and a test with real
+  people on real phones.
