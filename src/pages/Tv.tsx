@@ -41,11 +41,47 @@ export default function Tv() {
     }
   }, [])
 
+  // Keep the projector laptop from sleeping or dimming while this page is open.
+  useEffect(() => {
+    let lock: { release: () => Promise<void> } | null = null
+    const nav = navigator as Navigator & { wakeLock?: { request: (t: 'screen') => Promise<{ release: () => Promise<void> }> } }
+    const request = () => {
+      if (document.visibilityState !== 'visible' || !nav.wakeLock) return
+      nav.wakeLock
+        .request('screen')
+        .then((l) => (lock = l))
+        .catch(() => undefined)
+    }
+    request()
+    document.addEventListener('visibilitychange', request)
+    return () => {
+      document.removeEventListener('visibilitychange', request)
+      void lock?.release().catch(() => undefined)
+    }
+  }, [])
+
+  const [fullscreen, setFullscreen] = useState(false)
+  useEffect(() => {
+    const on = () => setFullscreen(!!document.fullscreenElement)
+    document.addEventListener('fullscreenchange', on)
+    return () => document.removeEventListener('fullscreenchange', on)
+  }, [])
+
   const url = gameUrl(eventSlug)
   const top = board?.top ?? []
 
   return (
-    <div className="relative flex h-dvh w-full overflow-hidden bg-navy-deep font-body text-white">
+    <div
+      className="relative flex h-dvh w-full overflow-hidden bg-navy-deep font-body text-white"
+      onClick={() => {
+        if (!document.fullscreenElement) void document.documentElement.requestFullscreen?.().catch(() => undefined)
+      }}
+    >
+      {!fullscreen && (
+        <p className="absolute left-1/2 top-[0.6vh] z-20 -translate-x-1/2 rounded-full bg-white/15 px-[1vw] py-[0.4vh] text-[0.9vw] font-bold text-sky">
+          Klik di mana-mana untuk skrin penuh
+        </p>
+      )}
       <div
         className="pointer-events-none absolute inset-0 opacity-60"
         style={{
