@@ -34,10 +34,10 @@ export default function Poster() {
           <p className="mt-[1.5%] font-display text-[clamp(1rem,3.4vw,1.7rem)] font-bold text-sky">2 permainan · 3 minit · Let's play!</p>
         </div>
 
-        <div className="flex w-full flex-1 flex-col items-center justify-center gap-[2.2%] px-[8%] py-[3%]">
+        <div className="flex w-full flex-1 flex-col items-center justify-center gap-[2%] px-[8%] py-[2%]">
           <div className="relative">
             <div className="rounded-[2rem] border-[6px] border-navy bg-white p-3 shadow-[0_8px_0_#023E86]">
-              <Qr value={url} className="h-[min(52vw,88mm)] w-[min(52vw,88mm)]" />
+              <Qr value={url} className="h-[min(52vw,78mm)] w-[min(52vw,78mm)]" />
             </div>
             <div className="absolute -right-[22%] -top-[12%] rotate-12">
               <Mentol size={96} mood="cheer" glow={1} />
