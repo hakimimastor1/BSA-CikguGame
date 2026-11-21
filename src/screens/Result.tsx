@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { ArrowRight, HeartHandshake, Palette, RotateCcw, Share2, ShieldCheck, Sparkles, Sticker, Target, TrendingUp, Trophy } from 'lucide-react'
+import { Activity, ArrowRight, BookOpen, Eye, Headphones, HeartHandshake, Users, Palette, RotateCcw, Share2, ShieldCheck, Sparkles, Sticker, Target, TrendingUp, Trophy } from 'lucide-react'
 import type { Lang, Mark, PlayResult, Player, Question, Trait } from '../types'
 import { S, fill, t } from '../content/strings'
-import { PERSONALITIES } from '../content/story'
+import { PERSONALITY_INFO } from '../content/personalities'
 import { BANDS, SUBJECT_NAMES } from '../content/subjects'
 import { eventOver } from '../content/event'
 import { AnswerReview, MiniReport } from './LearnerExtras'
@@ -16,6 +16,11 @@ export const TRAIT_ICON: Record<Trait, typeof Palette> = {
   strategik: Target,
   inspirasi: Sparkles,
   disiplin: ShieldCheck,
+  visual: Eye,
+  pendengar: Headphones,
+  aktif: Activity,
+  pemikir: BookOpen,
+  sosial: Users,
 }
 
 export function Result({
@@ -38,7 +43,7 @@ export function Result({
   const [shown, setShown] = useState(0)
   const [sharing, setSharing] = useState(false)
   useCountUp(result.totalXp, 1100, setShown)
-  const p = PERSONALITIES[result.personality]
+  const p = PERSONALITY_INFO[result.personality]
   const Icon = TRAIT_ICON[result.personality]
   const band = BANDS.find((b) => b.id === player.band)!
   const isTutor = player.role === 'cikgu'
@@ -102,7 +107,7 @@ export function Result({
         </div>
       </section>
 
-      {!isTutor && <MiniReport lang={lang} result={result} />}
+      {!isTutor && <MiniReport lang={lang} result={result} game={player.game} />}
 
       {isTutor && (
         <p className="clay-card bg-yellow-soft p-4 font-bold anim-slide">
@@ -122,7 +127,7 @@ export function Result({
           onClick={async () => {
             setSharing(true)
             try {
-              await shareCard(result, player.nickname, lang)
+              await shareCard(result, player.nickname, lang, player.game)
             } finally {
               setSharing(false)
             }
@@ -141,7 +146,7 @@ export function Result({
           <RotateCcw size={16} strokeWidth={2.5} />
           {t(S.resultPlayAgain, lang)}
         </button>
-        {!isTutor && questions.length > 0 && <AnswerReview lang={lang} questions={questions} marks={marks} />}
+        {!isTutor && questions.length > 0 && <AnswerReview lang={lang} questions={questions} marks={marks} game={player.game} />}
       </div>
     </div>
   )

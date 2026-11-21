@@ -1,6 +1,6 @@
-import type { Band, Mark, PlayResult, Question, StoryChoice, SubjectKey, SubjectResult, Trait } from '../types'
+import type { Band, Game, Mark, PlayResult, Question, StoryChoice, SubjectKey, SubjectResult, Trait } from '../types'
 import { BAND_SUBJECTS } from '../content/subjects'
-import { TRAIT_ORDER } from '../content/story'
+import { TRAIT_ORDER_BY_GAME } from '../content/personalities'
 import type { ServerResult } from '../lib/api'
 
 export const SEMAK_ITEMS = 8
@@ -52,8 +52,11 @@ export function pickQuestions(bank: Question[], band: Band, teachSubjects: Subje
 }
 
 /** XP for one mark, given the streak of right marks before it. */
-export function markXp(right: boolean, ms: number, streakBefore: number): number {
+export const HINT_XP = 10
+
+export function markXp(right: boolean, ms: number, streakBefore: number, hint = false): number {
   if (!right || ms < MIN_MARK_MS) return 0
+  if (hint) return HINT_XP
   const speed = Math.max(0, Math.round(SPEED_XP_MAX * (1 - ms / 5000)))
   const streak = streakBefore >= 2 ? STREAK_XP : 0
   return MARK_XP + speed + streak
@@ -63,14 +66,16 @@ export function scorePlay(
   storyPicks: StoryChoice[],
   questions: Question[],
   marks: Mark[],
+  game: Game = 'cikgu',
 ): PlayResult {
-  const traitCounts: Record<Trait, number> = { kreatif: 0, penyayang: 0, strategik: 0, inspirasi: 0, disiplin: 0 }
+  const order = TRAIT_ORDER_BY_GAME[game]
+  const traitCounts = Object.fromEntries([...TRAIT_ORDER_BY_GAME.cikgu, ...TRAIT_ORDER_BY_GAME.pelajar].map((t) => [t, 0])) as Record<Trait, number>
   let storyXp = 0
   for (const c of storyPicks) {
     storyXp += c.xp
     if (c.trait) traitCounts[c.trait] += 1
   }
-  const personality = TRAIT_ORDER.reduce((best, tr) => (traitCounts[tr] > traitCounts[best] ? tr : best), TRAIT_ORDER[0])
+  const personality = order.reduce((best, tr) => (traitCounts[tr] > traitCounts[best] ? tr : best), order[0])
 
   let semakXp = 0
   let streak = 0
@@ -82,7 +87,7 @@ export function scorePlay(
     const m = marks.find((x) => x.questionId === q.id)
     const right = m != null && m.verdict === q.correct && m.ms >= MIN_MARK_MS
     if (right) {
-      semakXp += markXp(true, m!.ms, streak)
+      semakXp += markXp(true, m!.ms, streak, m!.hint)
       streak += 1
       rightMarks += 1
       entry.right += 1

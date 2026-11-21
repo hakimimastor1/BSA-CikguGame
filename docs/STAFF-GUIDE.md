@@ -1,10 +1,11 @@
-# Panduan Staf Booth · Cikgu Sehari · PESKON UPSI 2026
+# Panduan Staf Booth · Cikgu Sehari & Misi Pelajar Bijak · PESKON UPSI 2026
 
 *(Sumber untuk `assets/print/staff-guide-peskon26.pdf`.)*
 
 ## 1. Sebelum booth dibuka
 
 1. **Projektor:** buka Chrome di laptop → `bsa-cikgu-sehari.netlify.app/tv?e=peskon26` → klik sekali untuk skrin penuh.
+   Skrin ada dua papan: **Top Cikgu Sehari** dan **Top Pelajar Bijak** (5 teratas setiap satu).
    Sambung internet (hotspot telefon pun boleh) dan cas laptop.
 2. **Poster QR:** tampal di meja dan di banner (cetak A4 atau A3).
 3. **Telefon staf:** log masuk `bsa-cikgu-sehari.netlify.app/admin`.
@@ -12,10 +13,12 @@
 
 ## 2. Semasa booth
 
-- **Ajak:** *"Nak cuba jadi Cikgu Sehari? 3 minit je. Imbas QR ni!"*
-- **Pelajar / graduan UPSI** → pilih *Pelajar / graduan UPSI* → hadiah: **peluang jadi tutor BSA** (RM25–40/jam).
-- **Adik-adik sekolah dan keluarga** → *Pelajar sekolah* atau *Ibu bapa / keluarga* → **trial percuma 3 subjek**,
-  kod **PESKON UPSI 2026**.
+- **Ajak:** *"Jom main, 3 minit je! Imbas QR ni."* Satu QR, dua permainan.
+- **Pelajar / graduan UPSI** → pilih *Pelajar / graduan UPSI* → main **Cikgu Sehari** (semak kerja murid, dapat jenis
+  cikgu) → **peluang jadi tutor BSA** (RM25–40/jam).
+- **Adik-adik sekolah** → pilih *Pelajar sekolah* → main **Misi Pelajar Bijak** (Kuiz Kilat dengan satu bantuan
+  *"Tanya Cikgu BSA"*, dapat jenis pelajar dan cara belajar terbaik) → **trial percuma 3 subjek**, kod **PESKON UPSI 2026**.
+- **Ibu bapa / keluarga** → pilih sendiri permainan mana → trial percuma 3 subjek untuk anak.
 - **Hadiah** (ikut stok, tidak direkod dalam sistem; semak skrin pemain):
   - **Semua pemain:** sticker ringkas.
   - **Adik-adik / keluarga yang daftar trial** (skrin *"Tahniah! Trial anda sedia"*): **beg anyaman BSA** (sticker cikgu +

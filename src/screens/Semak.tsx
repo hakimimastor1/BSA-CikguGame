@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ArrowRight, Check, Flame, Timer, X } from 'lucide-react'
-import type { Lang, Mark, Question } from '../types'
+import { ArrowRight, Check, Flame, LifeBuoy, Timer, X } from 'lucide-react'
+import type { Game, Lang, Mark, Question } from '../types'
 import { S, fill, t } from '../content/strings'
 import { SUBJECT_NAMES } from '../content/subjects'
 import { Mentol } from '../components/Mentol'
 import { SEMAK_SECONDS, markXp } from '../game/scoring'
 
-export function SemakIntro({ lang, onStart }: { lang: Lang; onStart: () => void }) {
+export function SemakIntro({ lang, game = 'cikgu', onStart }: { lang: Lang; game?: Game; onStart: () => void }) {
+  const quiz = game === 'pelajar'
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center anim-pop">
       <Mentol size={120} mood="wow" bob />
-      <h1 className="font-display text-[2.2rem] font-extrabold leading-tight">{t(S.semakTitle, lang)}</h1>
-      <p className="max-w-xs text-lg text-muted">{t(S.semakBody, lang)}</p>
+      <h1 className="font-display text-[2.2rem] font-extrabold leading-tight">{t(quiz ? S.quizTitle : S.semakTitle, lang)}</h1>
+      <p className="max-w-xs text-lg text-muted">{t(quiz ? S.quizBody : S.semakBody, lang)}</p>
       <div className="flex gap-3" aria-hidden="true">
         <span className="flex h-16 w-16 items-center justify-center rounded-2xl border-[3px] border-navy bg-wrong-soft text-wrong">
           <X size={36} strokeWidth={4} />
@@ -25,7 +26,7 @@ export function SemakIntro({ lang, onStart }: { lang: Lang; onStart: () => void 
         {fill(t(S.semakSeconds, lang), { s: SEMAK_SECONDS })}
       </p>
       <button type="button" className="clay-btn w-full bg-yellow text-xl" onClick={onStart}>
-        {t(S.semakStart, lang)}
+        {t(quiz ? S.quizStart : S.semakStart, lang)}
         <ArrowRight size={22} strokeWidth={3} />
       </button>
     </div>
@@ -36,13 +37,19 @@ type Feedback = { right: boolean; xp: number; q: Question } | null
 
 export function SemakRound({
   lang,
+  game = 'cikgu',
   questions,
   onDone,
 }: {
   lang: Lang
+  game?: Game
   questions: Question[]
   onDone: (marks: Mark[]) => void
 }) {
+  // Game B: the player answers for themselves and has one "Tanya Cikgu BSA" hint.
+  const quiz = game === 'pelajar'
+  const [hintUsed, setHintUsed] = useState(false)
+  const [hintOn, setHintOn] = useState<string | null>(null)
   const [idx, setIdx] = useState(0)
   const [marks, setMarks] = useState<Mark[]>([])
   const [left, setLeft] = useState(SEMAK_SECONDS * 1000)
@@ -77,8 +84,9 @@ export function SemakRound({
       if (!q || feedback || finished) return
       const ms = Math.round(performance.now() - shownAt.current)
       const right = verdict === q.correct
-      const gained = markXp(right, ms, streak)
-      setMarks((m) => [...m, { questionId: q.id, verdict, ms }])
+      const hint = hintOn === q.id
+      const gained = markXp(right, ms, streak, hint)
+      setMarks((m) => [...m, { questionId: q.id, verdict, ms, hint }])
       setXp((x) => x + gained)
       setStreak((s) => (right ? s + 1 : 0))
       setFeedback({ right, xp: gained, q })
@@ -95,7 +103,7 @@ export function SemakRound({
         right ? 650 : 1500,
       )
     },
-    [q, feedback, finished, streak, idx, questions.length],
+    [q, feedback, finished, streak, idx, questions.length, hintOn],
   )
 
   const rightCount = marks.filter((m) => questions.find((x) => x.id === m.questionId)?.correct === m.verdict).length
@@ -105,10 +113,10 @@ export function SemakRound({
       <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center anim-pop">
         <Mentol size={120} mood={rightCount >= questions.length / 2 ? 'cheer' : 'happy'} />
         <h1 className="font-display text-[2.2rem] font-extrabold">
-          {finished === 'timeup' ? t(S.semakTimeUp, lang) : t(S.semakDone, lang)}
+          {finished === 'timeup' ? t(S.semakTimeUp, lang) : t(quiz ? S.quizDone : S.semakDone, lang)}
         </h1>
         <p className="font-display text-2xl font-bold">
-          {fill(t(S.semakCorrectMarks, lang), { n: rightCount, total: questions.length })}
+          {fill(t(quiz ? S.quizCorrect : S.semakCorrectMarks, lang), { n: rightCount, total: questions.length })}
         </p>
         <p className="font-display text-3xl font-extrabold">+{xp} XP</p>
         <button type="button" className="clay-btn w-full bg-yellow text-xl" onClick={() => onDone(marksRef.current)} autoFocus>
@@ -158,8 +166,13 @@ export function SemakRound({
               {t(SUBJECT_NAMES[q.subject], lang)}
             </span>
             <p className="mt-3 font-display text-[1.45rem] font-bold leading-snug">{t(q.q, lang)}</p>
-            <p className="mt-4 text-sm font-bold uppercase tracking-wide text-muted">{t(S.semakPupilAnswer, lang)}</p>
+            <p className="mt-4 text-sm font-bold uppercase tracking-wide text-muted">{t(quiz ? S.quizAnswer : S.semakPupilAnswer, lang)}</p>
             <p className="font-display text-[1.7rem] font-extrabold leading-tight text-[#1d4ed8]">{t(q.a, lang)}</p>
+            {quiz && hintOn === q.id && (
+              <p className="mt-3 rounded-xl bg-yellow-soft px-3 py-2 font-bold anim-pop" role="status">
+                {fill(t(S.hintText, lang), { fix: t(q.fix, lang) })}
+              </p>
+            )}
           </div>
 
           {feedback && (
@@ -177,9 +190,11 @@ export function SemakRound({
                   <X size={56} strokeWidth={4} className="text-wrong" />
                   <p className="font-display text-xl font-bold text-navy">
                     {feedback.q.correct
-                      ? lang === 'ms'
-                        ? 'Jawapan murid sebenarnya betul!'
-                        : "The pupil's answer was actually right!"
+                      ? quiz
+                        ? t(S.quizActuallyRight, lang)
+                        : lang === 'ms'
+                          ? 'Jawapan murid sebenarnya betul!'
+                          : "The pupil's answer was actually right!"
                       : `${lang === 'ms' ? 'Jawapan sebenar' : 'Correct answer'}: ${t(feedback.q.fix, lang)}`}
                   </p>
                 </>
@@ -187,6 +202,22 @@ export function SemakRound({
             </div>
           )}
         </section>
+      )}
+
+      {quiz && (
+        <button
+          type="button"
+          className="clay-btn min-h-12 bg-white text-base"
+          disabled={hintUsed || !!feedback || !q}
+          onClick={() => {
+            if (!q) return
+            setHintUsed(true)
+            setHintOn(q.id)
+          }}
+        >
+          <LifeBuoy size={20} strokeWidth={2.5} />
+          {hintUsed ? t(S.hintUsed, lang) : t(S.hintBtn, lang)}
+        </button>
       )}
 
       <div className="mt-auto grid grid-cols-2 gap-3 pt-2">

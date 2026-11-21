@@ -277,7 +277,7 @@ export const STORY: StoryScene[] = [
 
 export const TRAIT_ORDER: Trait[] = ['kreatif', 'penyayang', 'strategik', 'inspirasi', 'disiplin']
 
-export const PERSONALITIES: Record<Trait, { name: string; tagline: Txt; description: Txt }> = {
+export const PERSONALITIES: Record<'kreatif' | 'penyayang' | 'strategik' | 'inspirasi' | 'disiplin', { name: string; tagline: Txt; description: Txt }> = {
   kreatif: {
     name: 'Cikgu Kreatif',
     tagline: { ms: 'Setiap pelajaran jadi permainan', en: 'Every lesson becomes a game' },

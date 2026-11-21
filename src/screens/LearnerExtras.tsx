@@ -1,11 +1,13 @@
-import { Check, ChevronDown, Clock, Lightbulb, X } from 'lucide-react'
-import type { Lang, Mark, PlayResult, Question } from '../types'
+import { Check, ChevronDown, Clock, Lightbulb, Sparkles, X } from 'lucide-react'
+import type { Game, Lang, Mark, PlayResult, Question } from '../types'
 import { S, t } from '../content/strings'
 import { STUDY_TIPS, SUBJECT_NAMES } from '../content/subjects'
+import { STYLE_TIPS } from '../content/storyB'
 
 /** Marks per subject and a study tip for each weak one, for students to show their parents. */
-export function MiniReport({ lang, result }: { lang: Lang; result: PlayResult }) {
+export function MiniReport({ lang, result, game = 'cikgu' }: { lang: Lang; result: PlayResult; game?: Game }) {
   const weak = result.levelUp.slice(0, 2)
+  const styleTips = game === 'pelajar' ? STYLE_TIPS[result.personality as keyof typeof STYLE_TIPS] : undefined
   return (
     <section className="clay-card p-4 anim-slide" aria-labelledby="report-h">
       <div className="flex flex-wrap items-baseline justify-between gap-x-2">
@@ -30,6 +32,19 @@ export function MiniReport({ lang, result }: { lang: Lang; result: PlayResult })
           </li>
         ))}
       </ul>
+      {styleTips && (
+        <div className="mt-3 rounded-2xl bg-sky p-3">
+          <p className="flex items-center gap-1.5 font-display font-bold">
+            <Sparkles size={18} strokeWidth={2.5} />
+            {t(S.styleTipsTitle, lang)}
+          </p>
+          <ul className="mt-1 flex list-disc flex-col gap-1 pl-5 text-[0.95rem] leading-snug">
+            {styleTips.map((tip, i) => (
+              <li key={i}>{t(tip, lang)}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="mt-3 rounded-2xl bg-yellow-soft p-3">
         <p className="flex items-center gap-1.5 font-display font-bold">
           <Lightbulb size={18} strokeWidth={2.5} />
@@ -52,7 +67,8 @@ export function MiniReport({ lang, result }: { lang: Lang; result: PlayResult })
 }
 
 /** All 8 Semak Kerja items with the right answer, so the round teaches something. */
-export function AnswerReview({ lang, questions, marks }: { lang: Lang; questions: Question[]; marks: Mark[] }) {
+export function AnswerReview({ lang, questions, marks, game = 'cikgu' }: { lang: Lang; questions: Question[]; marks: Mark[]; game?: Game }) {
+  const quiz = game === 'pelajar'
   return (
     <details className="clay-card group p-4 anim-slide">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-2 font-display text-xl font-extrabold">
@@ -70,10 +86,10 @@ export function AnswerReview({ lang, questions, marks }: { lang: Lang; questions
               </p>
               <p className="font-bold leading-snug">{t(q.q, lang)}</p>
               <p className="mt-1 text-[0.95rem]">
-                {t(S.reviewPupil, lang)}: <b>{t(q.a, lang)}</b>
+                {t(quiz ? S.reviewAnswer : S.reviewPupil, lang)}: <b>{t(q.a, lang)}</b>
               </p>
               <p className="text-[0.95rem]">
-                {q.correct ? t(S.reviewPupilRight, lang) : `${t(S.reviewCorrect, lang)}: `}
+                {q.correct ? t(quiz ? S.reviewAnswerRight : S.reviewPupilRight, lang) : `${t(S.reviewCorrect, lang)}: `}
                 {!q.correct && <b className="text-correct">{t(q.fix, lang)}</b>}
               </p>
               <p
@@ -82,7 +98,12 @@ export function AnswerReview({ lang, questions, marks }: { lang: Lang; questions
                 }`}
               >
                 {status === 'right' ? <Check size={15} strokeWidth={3} /> : status === 'wrong' ? <X size={15} strokeWidth={3} /> : <Clock size={15} strokeWidth={3} />}
-                {status === 'right' ? t(S.reviewYouRight, lang) : status === 'wrong' ? t(S.reviewYouWrong, lang) : t(S.reviewNoTime, lang)}
+                {status === 'right'
+                  ? t(quiz ? S.reviewYouAnsweredRight : S.reviewYouRight, lang)
+                  : status === 'wrong'
+                    ? t(quiz ? S.reviewYouAnsweredWrong : S.reviewYouWrong, lang)
+                    : t(S.reviewNoTime, lang)}
+                {m?.hint ? ` (${t(S.reviewHinted, lang)})` : ''}
               </p>
             </li>
           )

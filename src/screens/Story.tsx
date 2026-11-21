@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { ArrowRight, Lightbulb } from 'lucide-react'
-import type { Lang, Role, StoryChoice } from '../types'
+import type { Game, Lang, Role, StoryChoice, StoryScene as Scene } from '../types'
 import { S, fill, t } from '../content/strings'
-import { STORY, introFor } from '../content/story'
+import { introFor } from '../content/story'
+import { INTRO_B } from '../content/storyB'
 import { Mentol } from '../components/Mentol'
 import { Progress, XpPill } from '../components/ui'
 
-export function StoryIntro({ lang, role, onStart }: { lang: Lang; role: Role; onStart: () => void }) {
-  const intro = introFor(role)
+export function StoryIntro({ lang, role, game, onStart }: { lang: Lang; role: Role; game: Game; onStart: () => void }) {
+  const intro = game === 'pelajar' ? INTRO_B : introFor(role)
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center anim-pop">
       <Mentol size={130} mood="wow" bob />
@@ -23,18 +24,20 @@ export function StoryIntro({ lang, role, onStart }: { lang: Lang; role: Role; on
 
 export function StoryScene({
   lang,
+  scenes,
   index,
   xp,
   onPicked,
   onNext,
 }: {
   lang: Lang
+  scenes: Scene[]
   index: number
   xp: number
   onPicked: (c: StoryChoice) => void
   onNext: () => void
 }) {
-  const scene = STORY[index]
+  const scene = scenes[index]
   const [picked, setPicked] = useState<StoryChoice | null>(null)
   const good = picked?.trait != null
   // Five options must still fit on a small phone without scrolling.
@@ -44,11 +47,11 @@ export function StoryScene({
     <div key={scene.id} className="flex flex-1 flex-col gap-4 anim-slide">
       <div className="flex items-center justify-between gap-3">
         <span className="font-display text-lg font-bold text-muted">
-          {fill(t(S.sceneOf, lang), { n: index + 1, total: STORY.length })}
+          {fill(t(S.sceneOf, lang), { n: index + 1, total: scenes.length })}
         </span>
         <XpPill xp={xp} />
       </div>
-      <Progress step={index + (picked ? 1 : 0)} total={STORY.length} />
+      <Progress step={index + (picked ? 1 : 0)} total={scenes.length} />
 
       <section className="clay-card relative p-5 pr-24">
         <h1 className="font-display text-2xl font-extrabold leading-tight">{t(scene.title, lang)}</h1>

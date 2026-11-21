@@ -16,10 +16,10 @@ import {
   Trophy,
 } from 'lucide-react'
 import { eventSlug, supabase } from '../lib/api'
-import { PERSONALITIES } from '../content/story'
+import { GAME_NAME, PERSONALITY_INFO } from '../content/personalities'
 import { EVENT } from '../content/event'
 import { waLink } from '../game/whatsapp'
-import type { Trait } from '../types'
+import type { Game, Trait } from '../types'
 
 type StaffRole = 'admin' | 'booth'
 type Me = { email: string; role: StaffRole; name: string | null }
@@ -49,6 +49,8 @@ interface SignupRow {
   personality: Trait | null
   total_xp: number | null
   subjects?: { subject: string; right: number; total: number }[] | null
+  /** Game played before signing up; null when they signed up without playing. */
+  game?: Game | null
   status: string
   notes: string | null
   created_at: string
@@ -61,11 +63,13 @@ interface BoardRow {
   hidden: boolean
   suspicious: boolean
   role: string
+  game?: Game
 }
 
 interface Stats {
   days: { day: string; plays: number; signups: number }[]
   byRole: Record<string, { plays: number; signups: number }>
+  byGame?: Partial<Record<Game, number>>
 }
 
 const ROLE_LABEL: Record<SignupRow['role'], string> = { pelajar: 'Pelajar sekolah', ibubapa: 'Ibu bapa / keluarga', cikgu: 'Bakal tutor (UPSI)' }
@@ -92,6 +96,10 @@ const myTime = (iso: string) =>
 const prettyPhone = (n: string) => `+${n.slice(0, 2)} ${n.slice(2, 4)}-${n.slice(4, 7)} ${n.slice(7)}`
 
 const SUBJECT_BM: Record<string, string> = { bm: 'BM', bi: 'BI', math: 'Matematik', sci: 'Sains', phy: 'Fizik', chem: 'Kimia', bio: 'Biologi' }
+const GAMES: Game[] = ['cikgu', 'pelajar']
+const gameName = (g: Game | null | undefined) => (g ? GAME_NAME[g].ms : '')
+/** What the question round is called in each game. */
+const roundName = (g: Game | null | undefined) => (g === 'pelajar' ? 'Kuiz Kilat' : 'Semak Kerja')
 
 function followUpMessage(s: SignupRow): string {
   if (s.role === 'cikgu') {
@@ -102,8 +110,9 @@ function followUpMessage(s: SignupRow): string {
   const results = (s.subjects ?? [])
     .map((x) => `${SUBJECT_BM[x.subject] ?? x.subject} ${x.right}/${x.total}`)
     .join(', ')
-  const report = results ? ` Keputusan Semak Kerja ${learner}: ${results}.` : ''
-  return `Hai ${greet}! Ini Bright Scholar Academy. Terima kasih kerana bermain Cikgu Sehari di booth kami di ${EVENT.name}.${report} Jom tetapkan masa untuk trial percuma 3 subjek (${s.trial_subjects.join(', ')}) untuk ${learner}. Bila masa yang sesuai? Rujukan: ${s.ref}`
+  const report = results ? ` Keputusan ${roundName(s.game)} ${learner}: ${results}.` : ''
+  const played = s.game ? ` bermain ${gameName(s.game)}` : ' singgah'
+  return `Hai ${greet}! Ini Bright Scholar Academy. Terima kasih kerana${played} di booth kami di ${EVENT.name}.${report} Jom tetapkan masa untuk trial percuma 3 subjek (${s.trial_subjects.join(', ')}) untuk ${learner}. Bila masa yang sesuai? Rujukan: ${s.ref}`
 }
 
 function toCsv(rows: SignupRow[]): string {
@@ -128,8 +137,9 @@ function toCsv(rows: SignupRow[]): string {
     ['Subjek diajar', (r) => r.teach_subjects.join('; ')],
     ['Masa lapang', (r) => r.availability.map((a) => AVAIL_LABEL[a] ?? a).join('; ')],
     ['Setuju pemasaran', (r) => (r.marketing ? 'Ya' : 'Tidak')],
+    ['Permainan', (r) => gameName(r.game)],
     ['Nama gelaran', (r) => r.nickname],
-    ['Personaliti', (r) => (r.personality ? PERSONALITIES[r.personality].name : '')],
+    ['Personaliti', (r) => (r.personality ? PERSONALITY_INFO[r.personality].name : '')],
     ['XP', (r) => r.total_xp],
     ['Status', (r) => ALL_STATUS.get(r.status) ?? r.status],
     ['Nota', (r) => r.notes],
@@ -429,7 +439,7 @@ function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupR
     if (r.level) details.push(r.level)
     if (r.school) details.push(r.school)
     if (r.trial_subjects.length) details.push(`Trial: ${r.trial_subjects.join(', ')}`)
-    if (r.subjects?.length) details.push(`Semak Kerja: ${r.subjects.map((x) => `${SUBJECT_BM[x.subject] ?? x.subject} ${x.right}/${x.total}`).join(', ')}`)
+    if (r.subjects?.length) details.push(`${roundName(r.game)}: ${r.subjects.map((x) => `${SUBJECT_BM[x.subject] ?? x.subject} ${x.right}/${x.total}`).join(', ')}`)
   }
   if (r.area) details.push(r.area)
 
@@ -451,7 +461,7 @@ function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupR
       <p className="text-[0.95rem] leading-snug">{details.join(' · ')}</p>
       <p className="text-xs text-muted">
         {myTime(r.created_at)}
-        {r.personality ? ` · ${r.nickname} · ${PERSONALITIES[r.personality].name} · ${r.total_xp} XP` : ''}
+        {r.personality ? ` · ${gameName(r.game) || 'Main'}: ${r.nickname} · ${PERSONALITY_INFO[r.personality].name} · ${r.total_xp} XP` : ''}
         {r.marketing ? ' · setuju terima tawaran' : ''}
       </p>
       <div className="grid grid-cols-[1fr_auto] gap-2">
@@ -520,29 +530,43 @@ function BoardTab() {
         <Trophy size={18} /> Buka skrin projektor
       </a>
       {rows?.length === 0 && <p className="text-center text-muted">Belum ada pemain hari ini.</p>}
-      <ol className="flex flex-col gap-2">
-        {rows?.map((r, i) => (
-          <li key={r.nickname} className={`clay-card flex items-center gap-3 p-3 ${r.hidden ? 'opacity-55' : ''}`}>
-            <span className="w-7 text-center font-display text-lg font-extrabold">{i + 1}</span>
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-bold">{r.nickname}</p>
-              <p className="text-xs text-muted">
-                {PERSONALITIES[r.personality]?.name} · {ROLE_LABEL[r.role as SignupRow['role']] ?? r.role}
-                {r.suspicious ? ' · terlalu pantas' : ''}
-              </p>
-            </div>
-            <span className="font-display text-xl font-extrabold tabular-nums">{r.xp}</span>
-            <button
-              type="button"
-              className="clay-btn min-h-11 bg-white px-3 text-sm"
-              onClick={() => toggle(r)}
-              aria-label={r.hidden ? `Papar ${r.nickname}` : `Sembunyi ${r.nickname}`}
-            >
-              {r.hidden ? <Eye size={18} /> : <EyeOff size={18} />}
-            </button>
-          </li>
-        ))}
-      </ol>
+      {rows != null &&
+        rows.length > 0 &&
+        GAMES.map((g) => {
+          const list = rows.filter((r) => (r.game ?? 'cikgu') === g)
+          return (
+            <section key={g} className="flex flex-col gap-2">
+              <h3 className="mt-2 font-display text-xl font-extrabold">
+                {g === 'cikgu' ? 'Top Cikgu Sehari' : 'Top Pelajar Bijak'}{' '}
+                <span className="text-sm font-bold text-muted">· {list.length} nama · 5 teratas di projektor</span>
+              </h3>
+              {list.length === 0 && <p className="text-sm text-muted">Belum ada pemain {gameName(g)} hari ini.</p>}
+              <ol className="flex flex-col gap-2">
+                {list.map((r, i) => (
+                  <li key={`${g}:${r.nickname}`} className={`clay-card flex items-center gap-3 p-3 ${r.hidden ? 'opacity-55' : ''}`}>
+                    <span className="w-7 text-center font-display text-lg font-extrabold">{i + 1}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-bold">{r.nickname}</p>
+                      <p className="text-xs text-muted">
+                        {PERSONALITY_INFO[r.personality]?.name} · {ROLE_LABEL[r.role as SignupRow['role']] ?? r.role}
+                        {r.suspicious ? ' · terlalu pantas' : ''}
+                      </p>
+                    </div>
+                    <span className="font-display text-xl font-extrabold tabular-nums">{r.xp}</span>
+                    <button
+                      type="button"
+                      className="clay-btn min-h-11 bg-white px-3 text-sm"
+                      onClick={() => toggle(r)}
+                      aria-label={r.hidden ? `Papar ${r.nickname}` : `Sembunyi ${r.nickname}`}
+                    >
+                      {r.hidden ? <Eye size={18} /> : <EyeOff size={18} />}
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )
+        })}
     </div>
   )
 }
@@ -569,6 +593,16 @@ function StatsTab() {
           </div>
         ))}
       </div>
+      {s.byGame && (
+        <div className="grid grid-cols-2 gap-2">
+          {GAMES.map((g) => (
+            <div key={g} className="clay-card p-3 text-center">
+              <p className="font-display text-2xl font-extrabold tabular-nums">{s.byGame?.[g] ?? 0}</p>
+              <p className="text-sm font-bold text-muted">main {gameName(g)}</p>
+            </div>
+          ))}
+        </div>
+      )}
       <table className="clay-card w-full overflow-hidden text-left text-sm">
         <thead className="bg-sky">
           <tr>

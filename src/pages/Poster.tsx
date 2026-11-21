@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BriefcaseBusiness, Gift, Printer, ScanLine, Smartphone, Sticker, Trophy } from 'lucide-react'
+import { BriefcaseBusiness, Gift, Printer, ScanLine, Shuffle, Sticker, Trophy } from 'lucide-react'
 import { Mentol } from '../components/Mentol'
 import { Qr, gameUrl } from '../components/Qr'
 import { EVENT } from '../content/event'
@@ -8,12 +8,12 @@ import { eventSlug } from '../lib/api'
 /** Printable QR poster (A4 or A3 portrait). Open /poster?e=peskon26 and print. */
 export default function Poster() {
   useEffect(() => {
-    document.title = 'Cikgu Sehari · Poster QR'
+    document.title = 'BSA · Poster QR'
   }, [])
   const url = gameUrl(eventSlug)
   const steps = [
     { icon: ScanLine, ms: 'Imbas kod QR', en: 'Scan the QR code' },
-    { icon: Smartphone, ms: 'Main 3 minit', en: 'Play for 3 minutes' },
+    { icon: Shuffle, ms: 'Pilih permainan', en: 'Pick your game' },
     { icon: Trophy, ms: 'Masuk papan skor!', en: 'Get on the leaderboard!' },
   ]
 
@@ -30,8 +30,8 @@ export default function Poster() {
       <article className="mx-auto flex aspect-[210/297] w-full max-w-[210mm] flex-col items-center overflow-hidden bg-white text-center text-navy shadow-xl print:shadow-none">
         <div className="relative flex w-full flex-col items-center bg-navy px-[6%] pb-[4%] pt-[5%] text-white">
           <img src="/bsa-wordmark-on-navy.png" alt="Bright Scholar Academy" className="w-[70%]" />
-          <h1 className="mt-[4%] font-display text-[clamp(2rem,9vw,4.4rem)] font-extrabold leading-none text-yellow">Jadi Cikgu Sehari!</h1>
-          <p className="mt-[1.5%] font-display text-[clamp(1rem,3.4vw,1.7rem)] font-bold text-sky">Be a Cikgu for a Day!</p>
+          <h1 className="mt-[4%] font-display text-[clamp(2rem,9vw,4.4rem)] font-extrabold leading-none text-yellow">Jom Main!</h1>
+          <p className="mt-[1.5%] font-display text-[clamp(1rem,3.4vw,1.7rem)] font-bold text-sky">2 permainan · 3 minit · Let's play!</p>
         </div>
 
         <div className="flex w-full flex-1 flex-col items-center justify-center gap-[2.2%] px-[8%] py-[3%]">
@@ -68,16 +68,16 @@ export default function Poster() {
               <p className="flex items-center gap-1.5 text-sm font-bold text-muted">
                 <BriefcaseBusiness size={18} strokeWidth={2.5} /> Pelajar &amp; graduan UPSI
               </p>
-              <p className="font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold leading-tight">Jadi tutor BSA</p>
-              <p className="font-bold">RM25–40/jam · bayaran mingguan</p>
+              <p className="font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold leading-tight">Cikgu Sehari</p>
+              <p className="font-bold">Jadi tutor BSA · RM25–40/jam</p>
             </div>
             <div className="rounded-2xl border-[3px] border-navy bg-white p-3">
               <p className="flex items-center gap-1.5 text-sm font-bold text-muted">
                 <Gift size={18} strokeWidth={2.5} /> Adik-adik sekolah
               </p>
-              <p className="font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold leading-tight">Trial percuma + beg BSA</p>
+              <p className="font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold leading-tight">Misi Pelajar Bijak</p>
               <p className="font-bold">
-                3 subjek · kod <span className="font-display font-extrabold">{EVENT.offerCode}</span>
+                Trial 3 subjek percuma + beg · kod <span className="font-display font-extrabold">{EVENT.offerCode}</span>
               </p>
             </div>
           </div>

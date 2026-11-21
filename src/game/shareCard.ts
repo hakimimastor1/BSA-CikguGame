@@ -1,5 +1,5 @@
-import type { Lang, PlayResult } from '../types'
-import { PERSONALITIES } from '../content/story'
+import type { Game, Lang, PlayResult } from '../types'
+import { PERSONALITY_INFO } from '../content/personalities'
 import { EVENT } from '../content/event'
 import { S, fill, t } from '../content/strings'
 
@@ -77,7 +77,7 @@ export async function drawShareCard(result: PlayResult, nickname: string, lang: 
   const wmW = 760
   ctx.drawImage(wordmark, (W - wmW) / 2, 110, wmW, (wmW * wordmark.height) / wordmark.width)
 
-  const p = PERSONALITIES[result.personality]
+  const p = PERSONALITY_INFO[result.personality]
   ctx.textAlign = 'center'
   ctx.fillStyle = '#FFFFFF'
   ctx.font = '700 56px "Baloo 2", sans-serif'
@@ -111,17 +111,17 @@ export async function drawShareCard(result: PlayResult, nickname: string, lang: 
 
   ctx.font = '400 38px Lato, sans-serif'
   ctx.fillStyle = '#DCEBFF'
-  ctx.fillText(lang === 'ms' ? `Main Cikgu Sehari di booth BSA · ${EVENT.name}` : `Play Cikgu Sehari at the BSA booth · ${EVENT.name}`, W / 2, 1760)
+  ctx.fillText(lang === 'ms' ? `Main di booth BSA · ${EVENT.name}` : `Play at the BSA booth · ${EVENT.name}`, W / 2, 1760)
   ctx.fillText('brightscholaracademy.com.my', W / 2, 1815)
 
   return await new Promise<Blob>((resolve, reject) => c.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png'))
 }
 
 /** Share with the phone's share sheet, or download the image if sharing files isn't supported. */
-export async function shareCard(result: PlayResult, nickname: string, lang: Lang) {
+export async function shareCard(result: PlayResult, nickname: string, lang: Lang, game: Game = 'cikgu') {
   const blob = await drawShareCard(result, nickname, lang)
   const file = new File([blob], 'cikgu-sehari.png', { type: 'image/png' })
-  const text = fill(t(S.shareText, lang), { name: PERSONALITIES[result.personality].name, xp: result.totalXp, event: EVENT.name })
+  const text = fill(t(game === 'pelajar' ? S.shareTextB : S.shareText, lang), { name: PERSONALITY_INFO[result.personality].name, xp: result.totalXp, event: EVENT.name })
   if (navigator.canShare?.({ files: [file] })) {
     try {
       await navigator.share({ files: [file], text })

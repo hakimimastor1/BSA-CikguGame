@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { ArrowRight, Backpack, BriefcaseBusiness, Dices, Gift, Presentation, Sticker, Users } from 'lucide-react'
-import type { Band, Lang, Role, SubjectKey } from '../types'
+import { ArrowRight, Backpack, BriefcaseBusiness, Dices, Gift, GraduationCap, Presentation, Sticker, Users } from 'lucide-react'
+import type { Band, Game, Lang, Role, SubjectKey } from '../types'
 import { S, t } from '../content/strings'
 import { BAND_SUBJECTS, BANDS, SUBJECT_NAMES } from '../content/subjects'
 import { EVENT, eventOver } from '../content/event'
@@ -15,7 +15,7 @@ export function Welcome({ lang, onStart }: { lang: Lang; onStart: () => void }) 
         <p className="font-display text-lg font-bold text-muted">{t(S.welcomeKicker, lang)}</p>
         <h1 className="font-display text-[2.6rem] font-extrabold leading-[1.05]">{t(S.welcomeTitle, lang)}</h1>
       </div>
-      <p className="max-w-xs text-[1.05rem] leading-relaxed text-muted">{t(S.welcomeBody, lang)}</p>
+      <p className="max-w-xs text-[1.05rem] leading-relaxed text-muted">{t(S.welcomeGames, lang)}</p>
       <ul className="flex w-full flex-col gap-2 text-left">
         <li className="flex items-center gap-2.5 rounded-2xl border-[3px] border-navy bg-white px-3.5 py-2 font-display font-bold leading-snug">
           <BriefcaseBusiness size={20} strokeWidth={2.5} className="shrink-0" />
@@ -61,6 +61,29 @@ export function RolePick({ lang, onPick }: { lang: Lang; onPick: (r: Role) => vo
             <span className="text-muted">
               {t(S[eventOver() && hint === 'rolePelajarHint' ? 'rolePelajarHintAfter' : eventOver() && hint === 'roleIbubapaHint' ? 'roleIbubapaHintAfter' : hint], lang)}
             </span>
+          </span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+export function GamePick({ lang, onPick }: { lang: Lang; onPick: (g: Game) => void }) {
+  const options: { id: Game; icon: typeof Backpack; label: keyof typeof S; hint: keyof typeof S }[] = [
+    { id: 'cikgu', icon: Presentation, label: 'gamePickCikgu', hint: 'gamePickCikguHint' },
+    { id: 'pelajar', icon: GraduationCap, label: 'gamePickPelajar', hint: 'gamePickPelajarHint' },
+  ]
+  return (
+    <div className="flex flex-1 flex-col gap-4 anim-slide">
+      <h1 className="font-display text-4xl font-extrabold">{t(S.gamePickTitle, lang)}</h1>
+      {options.map(({ id, icon: Icon, label, hint }) => (
+        <button key={id} type="button" className="clay-option flex items-center gap-4" onClick={() => onPick(id)}>
+          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-[3px] border-navy bg-yellow">
+            <Icon size={28} strokeWidth={2.5} />
+          </span>
+          <span className="flex flex-col">
+            <span className="font-display text-2xl font-bold leading-tight">{t(S[label], lang)}</span>
+            <span className="text-muted">{t(S[hint], lang)}</span>
           </span>
         </button>
       ))}
