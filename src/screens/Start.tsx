@@ -3,7 +3,7 @@ import { ArrowRight, Backpack, BriefcaseBusiness, Dices, Gift, Presentation, Sti
 import type { Band, Lang, Role, SubjectKey } from '../types'
 import { S, t } from '../content/strings'
 import { BAND_SUBJECTS, BANDS, SUBJECT_NAMES } from '../content/subjects'
-import { EVENT } from '../content/event'
+import { EVENT, eventOver } from '../content/event'
 import { Mentol } from '../components/Mentol'
 import { NICK_MAX, NICK_MIN, cleanNicknameInput, isCleanNickname, suggestNickname } from '../game/nickname'
 
@@ -23,18 +23,20 @@ export function Welcome({ lang, onStart }: { lang: Lang; onStart: () => void }) 
         </li>
         <li className="flex items-center gap-2.5 rounded-2xl border-[3px] border-navy bg-white px-3.5 py-2 font-display font-bold leading-snug">
           <Gift size={20} strokeWidth={2.5} className="shrink-0" />
-          {t(S.welcomePerkTrial, lang)}
+          {t(eventOver() ? S.welcomePerkTrialAfter : S.welcomePerkTrial, lang)}
         </li>
-        <li className="flex items-center justify-center gap-2 font-display font-bold text-muted">
-          <Sticker size={18} strokeWidth={2.5} className="shrink-0" />
-          {t(S.welcomePerkAll, lang)}
-        </li>
+        {!eventOver() && (
+          <li className="flex items-center justify-center gap-2 font-display font-bold text-muted">
+            <Sticker size={18} strokeWidth={2.5} className="shrink-0" />
+            {t(S.welcomePerkAll, lang)}
+          </li>
+        )}
       </ul>
       <button type="button" className="clay-btn w-full bg-yellow text-xl" onClick={onStart}>
         {t(S.welcomeStart, lang)}
         <ArrowRight size={22} strokeWidth={3} />
       </button>
-      <p className="text-sm font-bold tracking-wide text-muted">{EVENT.name}</p>
+      {!eventOver() && <p className="text-sm font-bold tracking-wide text-muted">{EVENT.name}</p>}
     </div>
   )
 }
@@ -56,7 +58,9 @@ export function RolePick({ lang, onPick }: { lang: Lang; onPick: (r: Role) => vo
           </span>
           <span className="flex flex-col">
             <span className="font-display text-2xl font-bold leading-tight">{t(S[label], lang)}</span>
-            <span className="text-muted">{t(S[hint], lang)}</span>
+            <span className="text-muted">
+              {t(S[eventOver() && hint === 'rolePelajarHint' ? 'rolePelajarHintAfter' : eventOver() && hint === 'roleIbubapaHint' ? 'roleIbubapaHintAfter' : hint], lang)}
+            </span>
           </span>
         </button>
       ))}

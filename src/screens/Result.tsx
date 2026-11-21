@@ -4,6 +4,7 @@ import type { Lang, PlayResult, Player, Trait } from '../types'
 import { S, fill, t } from '../content/strings'
 import { PERSONALITIES } from '../content/story'
 import { BANDS, SUBJECT_NAMES } from '../content/subjects'
+import { eventOver } from '../content/event'
 import { Mentol } from '../components/Mentol'
 import { Confetti, useCountUp } from '../components/ui'
 import { shareCard } from '../game/shareCard'
@@ -122,10 +123,12 @@ export function Result({
           <Share2 size={20} strokeWidth={2.5} />
           {sharing ? t(S.resultSharing, lang) : t(S.resultShare, lang)}
         </button>
-        <p className="flex items-center justify-center gap-2 text-center font-bold">
-          <Sticker size={18} strokeWidth={2.5} className="shrink-0" />
-          {t(S.resultSticker, lang)}
-        </p>
+        {!eventOver() && (
+          <p className="flex items-center justify-center gap-2 text-center font-bold">
+            <Sticker size={18} strokeWidth={2.5} className="shrink-0" />
+            {t(S.resultSticker, lang)}
+          </p>
+        )}
         <button type="button" className="mx-auto inline-flex min-h-11 cursor-pointer items-center gap-1.5 font-bold text-muted underline" onClick={onAgain}>
           <RotateCcw size={16} strokeWidth={2.5} />
           {t(S.resultPlayAgain, lang)}

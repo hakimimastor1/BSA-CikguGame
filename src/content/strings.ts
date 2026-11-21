@@ -24,6 +24,9 @@ export const S = {
   welcomeStart: { ms: 'Mula main', en: 'Start playing' },
   welcomePerkTutor: { ms: 'Graduan UPSI: jadi tutor BSA · RM25–40/jam', en: 'UPSI grads: tutor with BSA · RM25–40/hr' },
   welcomePerkTrial: { ms: 'Adik-adik sekolah: trial percuma 3 subjek + beg BSA', en: 'School kids: free 3-subject trial + BSA bag' },
+  welcomePerkTrialAfter: { ms: 'Pelajar sekolah: kelas trial percuma', en: 'School students: free trial class' },
+  rolePelajarHintAfter: { ms: 'Tahun 1 – Tingkatan 5 · trial percuma', en: 'Standard 1 – Form 5 · free trial' },
+  roleIbubapaHintAfter: { ms: 'Untuk anak, adik atau saudara · trial percuma', en: 'For your child, sibling or relative · free trial' },
   welcomePerkAll: { ms: 'Semua pemain dapat sticker!', en: 'Every player gets a sticker!' },
 
   // Role
@@ -161,6 +164,16 @@ export const S = {
   submitTutor: { ms: 'Hantar permohonan', en: 'Send my application' },
 
   // Offer
+  offerEndedTitle: { ms: 'Terima kasih kerana bermain!', en: 'Thanks for playing!' },
+  offerEnded: {
+    ms: 'Tawaran PESKON UPSI 2026 telah tamat pada 2 Disember 2026. Anda masih boleh cuba kelas trial percuma BSA: WhatsApp kami untuk tetapkan masa.',
+    en: 'The PESKON UPSI 2026 offer ended on 2 December 2026. You can still try a free BSA trial class: WhatsApp us to set a time.',
+  },
+  offerEndedClaim: { ms: 'WhatsApp BSA untuk trial', en: 'WhatsApp BSA for a trial' },
+  waLearnerAfter: {
+    ms: 'Hi BSA! Saya nak cuba kelas trial percuma.\nNama: {name}\nTahap: {level}\nSubjek: {subjects}\nRujukan: {ref}',
+    en: "Hi BSA! I'd like to try a free trial class.\nName: {name}\nLevel: {level}\nSubjects: {subjects}\nReference: {ref}",
+  },
   offerTitle: { ms: 'Tahniah! Trial anda sedia', en: 'Congrats! Your trial is ready' },
   offerExisting: {
     ms: 'Nombor ini sudah didaftarkan untuk acara ini, jadi kami guna rujukan yang sama.',
