@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowRight, HeartHandshake, Palette, RotateCcw, Share2, Sparkles, Sticker, Target, TrendingUp, Trophy } from 'lucide-react'
+import { ArrowRight, HeartHandshake, Palette, RotateCcw, Share2, ShieldCheck, Sparkles, Sticker, Target, TrendingUp, Trophy } from 'lucide-react'
 import type { Lang, PlayResult, Player, Trait } from '../types'
 import { S, fill, t } from '../content/strings'
 import { PERSONALITIES } from '../content/story'
@@ -14,6 +14,7 @@ export const TRAIT_ICON: Record<Trait, typeof Palette> = {
   penyayang: HeartHandshake,
   strategik: Target,
   inspirasi: Sparkles,
+  disiplin: ShieldCheck,
 }
 
 export function Result({

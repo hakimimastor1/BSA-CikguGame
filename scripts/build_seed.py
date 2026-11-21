@@ -29,7 +29,7 @@ def story_choices():
         scene, letter, _, trait, xp = m.groups()
         rows.append((scene + letter, scene, trait, good if xp == "GOOD_XP" else okay))
     scenes = {r[1] for r in rows}
-    assert len(scenes) == 5 and len(rows) == 16, (len(scenes), len(rows))
+    assert len(scenes) == 5 and len(rows) == 20, (len(scenes), len(rows))
     return rows
 
 

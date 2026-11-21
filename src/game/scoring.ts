@@ -64,7 +64,7 @@ export function scorePlay(
   questions: Question[],
   marks: Mark[],
 ): PlayResult {
-  const traitCounts: Record<Trait, number> = { kreatif: 0, penyayang: 0, strategik: 0, inspirasi: 0 }
+  const traitCounts: Record<Trait, number> = { kreatif: 0, penyayang: 0, strategik: 0, inspirasi: 0, disiplin: 0 }
   let storyXp = 0
   for (const c of storyPicks) {
     storyXp += c.xp

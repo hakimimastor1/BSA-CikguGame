@@ -42,6 +42,16 @@ export const STORY: StoryScene[] = [
         },
       },
       {
+        id: 's1d',
+        trait: 'disiplin',
+        xp: GOOD_XP,
+        text: { ms: 'Tetapkan peraturan kelas: kamera buka, jawab bila dipanggil', en: 'Set class rules: cameras on, answer when called' },
+        reaction: {
+          ms: 'Aiman buka kamera dan duduk tegak! Peraturan yang jelas dari awal buat kelas tersusun.',
+          en: 'Aiman turns his camera on and sits up! Clear rules from the start keep class on track.',
+        },
+      },
+      {
         id: 's1b',
         trait: null,
         xp: OKAY_XP,
@@ -141,6 +151,16 @@ export const STORY: StoryScene[] = [
           en: 'Turns out Siti just changed classes. Understanding the pupil is the first step to helping.',
         },
       },
+      {
+        id: 's3d',
+        trait: 'disiplin',
+        xp: GOOD_XP,
+        text: { ms: 'Buat jadual latihan harian dan semak kerja Siti setiap minggu', en: "Set a daily practice timetable and check Siti's work every week" },
+        reaction: {
+          ms: 'Ibu Siti suka! Rutin yang konsisten ialah kunci markah naik.',
+          en: "Siti's mum loves it! A steady routine is the key to better marks.",
+        },
+      },
     ],
   },
   {
@@ -172,6 +192,16 @@ export const STORY: StoryScene[] = [
         },
       },
       {
+        id: 's4d',
+        trait: 'disiplin',
+        xp: GOOD_XP,
+        text: { ms: 'Tetapkan sasaran: siapkan 5 soalan dulu, baru rehat', en: 'Set a target: finish 5 questions first, then a break' },
+        reaction: {
+          ms: 'Danish fokus untuk capai sasaran, dan rasa bangga bila siap!',
+          en: "Danish focuses to hit the target, and feels proud when he's done!",
+        },
+      },
+      {
         id: 's4c',
         trait: null,
         xp: OKAY_XP,
@@ -187,8 +217,8 @@ export const STORY: StoryScene[] = [
     id: 's5',
     title: { ms: 'Selepas kelas', en: 'After class' },
     situation: {
-      ms: 'Hari pertama hampir tamat! Apa anda buat sebelum kelas seterusnya? (Tiada jawapan salah di sini!)',
-      en: 'Your first day is almost done! What do you do before the next class? (No wrong answer here!)',
+      ms: 'Hari pertama hampir tamat! Apa anda buat sebelum kelas seterusnya?',
+      en: 'Your first day is almost done! What do you do before the next class?',
     },
     choices: [
       {
@@ -231,11 +261,21 @@ export const STORY: StoryScene[] = [
           en: 'Pupils arrive full of questions. Curiosity is where learning begins.',
         },
       },
+      {
+        id: 's5e',
+        trait: 'disiplin',
+        xp: GOOD_XP,
+        text: { ms: 'Beri kerja rumah ringkas dan semak esok', en: 'Give short homework and check it tomorrow' },
+        reaction: {
+          ms: 'Murid tahu cikgu akan semak, jadi semua siap! Disiplin kecil, hasil besar.',
+          en: "Pupils know you'll check, so everyone finishes! Small habits, big results.",
+        },
+      },
     ],
   },
 ]
 
-export const TRAIT_ORDER: Trait[] = ['kreatif', 'penyayang', 'strategik', 'inspirasi']
+export const TRAIT_ORDER: Trait[] = ['kreatif', 'penyayang', 'strategik', 'inspirasi', 'disiplin']
 
 export const PERSONALITIES: Record<Trait, { name: string; tagline: Txt; description: Txt }> = {
   kreatif: {
@@ -260,6 +300,14 @@ export const PERSONALITIES: Record<Trait, { name: string; tagline: Txt; descript
     description: {
       ms: 'Sasaran jelas, pelan jelas, keputusan jelas. Murid tahu ke mana mereka menuju.',
       en: "Clear goals, clear plan, clear results. Pupils know exactly where they're heading.",
+    },
+  },
+  disiplin: {
+    name: 'Cikgu Disiplin',
+    tagline: { ms: 'Garang sikit, tapi adil', en: 'A bit fierce, always fair' },
+    description: {
+      ms: 'Kelas anda tersusun: peraturan jelas, kerja rumah sentiasa siap. Murid hormat, dan mereka lulus!',
+      en: 'Your class runs like clockwork: clear rules, homework always done. Pupils respect you, and they pass!',
     },
   },
   inspirasi: {

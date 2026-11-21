@@ -103,7 +103,8 @@ Good choices give 30 XP, okay ones 10 XP. Each scene's reaction shows a one-line
 
 ### Personalities
 
-The personality is the trait the player picked most (ties go to the order below).
+The personality is the trait the player picked most (ties go to the order below). Cikgu Disiplin was added on
+21 Nov with a firm choice in situations 1, 3, 4 and 5.
 
 | Personality | One-liner |
 |---|---|
@@ -111,6 +112,7 @@ The personality is the trait the player picked most (ties go to the order below)
 | **Cikgu Penyayang** | Every pupil feels seen and safe to ask. |
 | **Cikgu Strategik** | Clear goals, clear plan, clear results. |
 | **Cikgu Inspirasi** | Makes pupils curious about the world. |
+| **Cikgu Disiplin** | *Garang sikit, tapi adil*: clear rules, homework always done. |
 
 ### Semak Kerja (mark the work)
 

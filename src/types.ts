@@ -6,7 +6,7 @@ export type Txt = { ms: string; en: string }
 export type Role = 'pelajar' | 'ibubapa' | 'cikgu'
 export type Band = 'std1_3' | 'std4_6' | 'f1_3' | 'f4_5'
 export type SubjectKey = 'bm' | 'bi' | 'math' | 'sci' | 'phy' | 'chem' | 'bio'
-export type Trait = 'kreatif' | 'penyayang' | 'strategik' | 'inspirasi'
+export type Trait = 'kreatif' | 'penyayang' | 'strategik' | 'inspirasi' | 'disiplin'
 
 export interface Question {
   id: string

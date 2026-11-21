@@ -37,6 +37,8 @@ export function StoryScene({
   const scene = STORY[index]
   const [picked, setPicked] = useState<StoryChoice | null>(null)
   const good = picked?.trait != null
+  // Five options must still fit on a small phone without scrolling.
+  const compact = scene.choices.length > 4
 
   return (
     <div key={scene.id} className="flex flex-1 flex-col gap-4 anim-slide">
@@ -57,22 +59,22 @@ export function StoryScene({
       </section>
 
       {!picked ? (
-        <div className="flex flex-col gap-3">
+        <div className={`flex flex-col ${compact ? 'gap-2.5' : 'gap-3'}`}>
           {scene.choices.map((c, i) => (
             <button
               key={c.id}
               type="button"
               className="clay-option flex items-center gap-3 anim-slide"
-              style={{ animationDelay: `${i * 60}ms` }}
+              style={{ animationDelay: `${i * 60}ms`, paddingBlock: compact ? '0.55rem' : undefined }}
               onClick={() => {
                 setPicked(c)
                 onPicked(c)
               }}
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-[3px] border-navy bg-sky font-display font-extrabold">
+              <span className={`flex shrink-0 items-center justify-center rounded-full border-[3px] border-navy bg-sky font-display font-extrabold ${compact ? 'h-8 w-8' : 'h-9 w-9'}`}>
                 {String.fromCharCode(65 + i)}
               </span>
-              <span className="text-[1.05rem] font-bold leading-snug">{t(c.text, lang)}</span>
+              <span className={`font-bold leading-snug ${compact ? 'text-base' : 'text-[1.05rem]'}`}>{t(c.text, lang)}</span>
             </button>
           ))}
         </div>
