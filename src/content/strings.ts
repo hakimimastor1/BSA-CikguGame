@@ -16,7 +16,7 @@ export const S = {
 
   // Welcome
   welcomeKicker: { ms: 'Bright Scholar Academy', en: 'Bright Scholar Academy' },
-  welcomeTitle: { ms: 'Jadi Cikgu Sehari!', en: 'Be a Cikgu for a Day!' },
+  welcomeTitle: { ms: 'Jom Main!', en: "Let's Play!" },
   welcomeGames: {
     ms: '2 permainan, 3 minit: bakal cikgu main Cikgu Sehari, pelajar sekolah main Misi Pelajar Bijak. Skor tertinggi masuk skrin!',
     en: '2 games, 3 minutes: future teachers play Cikgu Sehari, school students play Smart Student Mission. Top scores go on the big screen!',
@@ -114,7 +114,7 @@ export const S = {
     en: 'BSA tutors for {level} earn RM{pay}/hour, paid weekly.',
   },
   resultRank: { ms: 'No. {rank} hari ini', en: 'No. {rank} today' },
-  resultRankOf: { ms: 'daripada {n} pemain', en: 'of {n} players' },
+  resultRankOf: { ms: 'daripada {n} pemain {game}', en: 'of {n} {game} players' },
   resultShare: { ms: 'Kongsi kad saya', en: 'Share my card' },
   resultSharing: { ms: 'Menyediakan kad…', en: 'Preparing card…' },
   resultClaim: { ms: 'Tuntut trial percuma 3 subjek', en: 'Claim free trial for 3 subjects' },

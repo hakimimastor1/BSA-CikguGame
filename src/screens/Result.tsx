@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Activity, ArrowRight, BookOpen, Eye, Headphones, HeartHandshake, Users, Palette, RotateCcw, Share2, ShieldCheck, Sparkles, Sticker, Target, TrendingUp, Trophy } from 'lucide-react'
 import type { Lang, Mark, PlayResult, Player, Question, Trait } from '../types'
 import { S, fill, t } from '../content/strings'
-import { PERSONALITY_INFO } from '../content/personalities'
+import { GAME_NAME, PERSONALITY_INFO } from '../content/personalities'
 import { BANDS, SUBJECT_NAMES } from '../content/subjects'
 import { eventOver } from '../content/event'
 import { AnswerReview, MiniReport } from './LearnerExtras'
@@ -74,7 +74,7 @@ export function Result({
               <Trophy size={22} strokeWidth={2.5} className="shrink-0" />
               <div className="leading-tight">
                 <p className="font-display text-lg font-extrabold">{fill(t(S.resultRank, lang), { rank: result.rank })}</p>
-                {result.players ? <p className="text-sm font-bold">{fill(t(S.resultRankOf, lang), { n: result.players })}</p> : null}
+                {result.players ? <p className="text-sm font-bold">{fill(t(S.resultRankOf, lang), { n: result.players, game: t(GAME_NAME[player.game], lang) })}</p> : null}
               </div>
             </div>
           )}

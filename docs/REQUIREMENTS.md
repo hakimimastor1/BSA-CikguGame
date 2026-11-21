@@ -59,13 +59,20 @@ PESKON (**M**) and what comes after (**S**, **C**).
 At PESKON most players are **UPSI students and graduates**; their families bring **school-age children**.
 So the game shows two different prizes, and the role screen makes clear which is which:
 
-| Role on screen (in this order) | Who | Prize |
-|---|---|---|
-| **Pelajar / graduan UPSI** | Future cikgu | Tutor application: *Jadi tutor BSA*, RM25–40/hour |
-| **Pelajar sekolah** | Std 1 – Form 5 students | Free trial, 3 subjects |
-| **Ibu bapa / keluarga** | Parents, or older siblings and relatives playing for a child | Free trial, 3 subjects, for the child |
+| Role on screen (in this order) | Who | Game | Prize |
+|---|---|---|---|
+| **Pelajar / graduan UPSI** | Future cikgu | **Game A: Cikgu Sehari** | Tutor application: *Jadi tutor BSA*, RM25–40/hour |
+| **Pelajar sekolah** | Std 1 – Form 5 students | **Game B: Misi Pelajar Bijak** | Free trial, 3 subjects |
+| **Ibu bapa / keluarga** | Parents, or older siblings and relatives playing for a child | **They choose** A or B | Free trial, 3 subjects, for the child |
 
-The welcome screen, projector and poster show both prizes side by side.
+One QR code and one system: the role decides the game. The welcome screen, projector and poster show both games
+and both prizes side by side.
+
+- **Game A, Cikgu Sehari:** five first-day-as-a-tutor situations (personality: Kreatif, Penyayang, Strategik,
+  Inspirasi, Disiplin), then *Semak Kerja*: mark pupils' answers right or wrong.
+- **Game B, Misi Pelajar Bijak:** five study-life situations (learner type: Visual, Pendengar, Aktif, Pemikir,
+  Sosial), then *Kuiz Kilat*: say whether the shown answer is right, with one *Tanya Cikgu BSA* hint (a right
+  answer with the hint earns 10 XP instead of 20–30). The result adds study-style tips to the mini report.
 
 
 ### 4.1 School students (pelajar)
@@ -150,10 +157,10 @@ Priority: **M** = must have for PESKON, **S** = should have (after PESKON), **C*
 
 | # | Requirement | Pri |
 |---|---|---|
-| T1 | Leaderboard for today, updating live: top 10 nicknames, XP and personality | M |
+| T1 | Two leaderboards for today, updating live: **Top Cikgu Sehari** and **Top Pelajar Bijak**, top 5 each, with nickname, XP and personality | M |
 | T2 | QR code and "Scan to play" call to action always visible | M |
 | T3 | Live counts: players today, personality mix | S |
-| T4 | Animation when someone enters the top 10 | S |
+| T4 | Animation when someone enters a top 5 | S |
 
 ### 6.4 Admin page (BSA staff)
 

@@ -85,6 +85,14 @@ every 5 seconds by itself.
 
 ## 3. The game
 
+There are two games in one system (added 21 Nov 2026). **Game A, Cikgu Sehari**, is described below.
+**Game B, Misi Pelajar Bijak**, is for school students (and families who pick it): five study-life situations
+(`src/content/storyB.ts`) give a learner type (Visual, Pendengar, Aktif, Pemikir, Sosial), then *Kuiz Kilat*
+uses the same question bank but the player answers for themselves, with one *Tanya Cikgu BSA* hint. A right
+answer with the hint scores a flat 10 XP. Each play stores its `game`; the server checks that story choices
+belong to that game, ranks within that game, and `leaderboard` returns `boards.cikgu` and `boards.pelajar`
+for the projector's two top-5 boards.
+
 ### Story: *"Hari pertama di BSA"* (First day at BSA)
 
 Five situations, the same for everyone. The intro changes with the role (students and parents: *"Imagine

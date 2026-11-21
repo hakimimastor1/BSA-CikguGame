@@ -167,7 +167,7 @@ export default function Admin() {
   const [me, setMe] = useState<Me | null | 'checking'>('checking')
 
   useEffect(() => {
-    document.title = 'Cikgu Sehari · Admin'
+    document.title = 'BSA Booth · Admin'
     if (!supabase) return
     supabase.auth.getSession().then(({ data }) => setSession(data.session))
     const { data } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
@@ -197,7 +197,7 @@ export default function Admin() {
       <Shell>
         <div className="clay-card flex flex-col gap-3 p-5">
           <p className="flex items-center gap-2 font-bold">
-            <ShieldAlert size={20} /> Akaun {session.user.email} bukan akaun staf Cikgu Sehari.
+            <ShieldAlert size={20} /> Akaun {session.user.email} bukan akaun staf booth BSA.
           </p>
           <button type="button" className="clay-btn bg-white" onClick={() => supabase!.auth.signOut()}>
             <LogOut size={18} /> Log keluar
@@ -216,7 +216,7 @@ function Shell({ children, right }: { children: React.ReactNode; right?: React.R
         <div className="flex items-center gap-3">
           <img src="/bsa-mark.png" alt="" className="h-10 w-auto" />
           <div>
-            <p className="font-display text-xl font-extrabold leading-none">Cikgu Sehari · Admin</p>
+            <p className="font-display text-xl font-extrabold leading-none">BSA Booth · Admin</p>
             <p className="text-sm text-muted">{EVENT.name}</p>
           </div>
         </div>
