@@ -85,6 +85,14 @@ every 5 seconds by itself.
 
 ## 3. The game
 
+There are two games in one system (added 21 Nov 2026). **Game A, Cikgu Sehari**, is described below.
+**Game B, Misi Pelajar Bijak**, is for school students (and families who pick it): five study-life situations
+(`src/content/storyB.ts`) give a learner type (Visual, Pendengar, Aktif, Pemikir, Sosial), then *Kuiz Kilat*
+uses the same question bank but the player answers for themselves, with one *Tanya Cikgu BSA* hint. A right
+answer with the hint scores a flat 10 XP. Each play stores its `game`; the server checks that story choices
+belong to that game, ranks within that game, and `leaderboard` returns `boards.cikgu` and `boards.pelajar`
+for the projector's two top-5 boards.
+
 ### Story: *"Hari pertama di BSA"* (First day at BSA)
 
 Five situations, the same for everyone. The intro changes with the role (students and parents: *"Imagine
@@ -103,7 +111,8 @@ Good choices give 30 XP, okay ones 10 XP. Each scene's reaction shows a one-line
 
 ### Personalities
 
-The personality is the trait the player picked most (ties go to the order below).
+The personality is the trait the player picked most (ties go to the order below). Cikgu Disiplin was added on
+21 Nov with a firm choice in situations 1, 3, 4 and 5.
 
 | Personality | One-liner |
 |---|---|
@@ -111,6 +120,7 @@ The personality is the trait the player picked most (ties go to the order below)
 | **Cikgu Penyayang** | Every pupil feels seen and safe to ask. |
 | **Cikgu Strategik** | Clear goals, clear plan, clear results. |
 | **Cikgu Inspirasi** | Makes pupils curious about the world. |
+| **Cikgu Disiplin** | *Garang sikit, tapi adil*: clear rules, homework always done. |
 
 ### Semak Kerja (mark the work)
 

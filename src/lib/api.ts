@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import type { Band, Lang, Question, Role, SubjectKey, SubjectResult, Trait } from '../types'
+import type { Band, Game, Lang, Question, Role, SubjectKey, SubjectResult, Trait } from '../types'
 
 // The project's API address and publishable key are public by design: visitors can only call the
 // game functions, never read tables. Set VITE_SUPABASE_URL to an empty string for a local-only build.
@@ -56,11 +56,13 @@ async function rpc<T>(fn: string, args: Record<string, unknown>, tries = 3): Pro
 export async function startPlay(args: {
   nickname: string
   role: Role
+  game: Game
   band: Band
   lang: Lang
   teach: SubjectKey[]
 }): Promise<{ playId: string; questions: Question[] }> {
-  const r = await rpc<{ play_id: string; questions: Question[] }>('start_play', {
+  const r = await rpc<{ play_id: string; questions: Question[] }>('begin_play', {
+    p_game: args.game,
     p_event: eventSlug,
     p_nickname: args.nickname,
     p_role: args.role,
@@ -83,18 +85,23 @@ export interface ServerResult {
   players: number
 }
 
-export const finishPlay = (playId: string, choices: string[], marks: { id: string; verdict: boolean | null; ms: number }[]) =>
+export const finishPlay = (playId: string, choices: string[], marks: { id: string; verdict: boolean | null; ms: number; hint: boolean }[]) =>
   rpc<ServerResult>('finish_play', { p_play: playId, p_choices: choices, p_marks: marks })
 
 export const submitSignup = (playId: string | null, data: Record<string, unknown>) =>
   rpc<{ ref: string; existing: boolean }>('submit_signup', { p_event: eventSlug, p_play: playId, p: data })
 
+type BoardRow = { nickname: string; xp: number; personality: Trait }
+
 export interface Board {
   event: { name: string; offerCode: string; offerValidUntil: string | null }
   day: string
-  top: { nickname: string; xp: number; personality: Trait }[]
-  latest: { nickname: string; xp: number; personality: Trait }[]
+  top: BoardRow[]
+  /** Top 5 per game: cikgu = Cikgu Sehari, pelajar = Misi Pelajar Bijak. */
+  boards?: Record<Game, BoardRow[]>
+  latest: (BoardRow & { game?: Game })[]
   players: number
+  playersByGame?: Record<Game, number>
   mix: Partial<Record<Trait, number>>
 }
 

@@ -1066,7 +1066,7 @@
     "band": "std4_6",
     "subject": "sci",
     "q": {
-      "ms": "Rumus kelajuan ialah…",
+      "ms": "Rumus laju ialah…",
       "en": "The formula for speed is…"
     },
     "a": {
@@ -1772,8 +1772,8 @@
       "en": "Meaning of the proverb 'bagai melepaskan anjing tersepit':"
     },
     "a": {
-      "ms": "menolong orang dalam kesusahan",
-      "en": "menolong orang dalam kesusahan"
+      "ms": "membuat kerja yang sia-sia",
+      "en": "membuat kerja yang sia-sia"
     },
     "correct": false,
     "fix": {
@@ -2420,13 +2420,13 @@
       "en": "General formula of alkanes:"
     },
     "a": {
-      "ms": "CₙH₂ₙ",
-      "en": "CₙH₂ₙ"
+      "ms": "CnH2n",
+      "en": "CnH2n"
     },
     "correct": false,
     "fix": {
-      "ms": "CₙH₂ₙ₊₂",
-      "en": "CₙH₂ₙ₊₂"
+      "ms": "CnH2n+2",
+      "en": "CnH2n+2"
     }
   },
   {

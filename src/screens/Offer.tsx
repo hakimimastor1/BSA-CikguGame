@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Check, Copy, ExternalLink, MessageCircle, Store } from 'lucide-react'
 import type { Lang, Player } from '../types'
 import { S, fill, t } from '../content/strings'
-import { EVENT } from '../content/event'
-import { BANDS } from '../content/subjects'
+import { EVENT, eventOver } from '../content/event'
+import { BANDS, trialValue } from '../content/subjects'
 import { Mentol } from '../components/Mentol'
 import { Confetti } from '../components/ui'
 import { waLink } from '../game/whatsapp'
@@ -54,17 +54,43 @@ export function Offer({
           <MessageCircle size={20} strokeWidth={2.5} />
           {t(S.offerTutorWhatsapp, lang)}
         </a>
+        {!eventOver() && (
+          <p className="flex items-center justify-center gap-2 text-center font-bold text-muted">
+            <Store size={18} strokeWidth={2.5} />
+            {t(S.offerTutorBooth, lang)}
+          </p>
+        )}
       </div>
     )
   }
 
-  const msg = fill(t(S.waLearner, lang), {
+  const over = eventOver()
+  const msg = fill(t(over ? S.waLearnerAfter : S.waLearner, lang), {
     code: EVENT.offerCode,
     name: player.role === 'ibubapa' && data.childName ? `${data.childName} (${data.name})` : data.name,
     level: data.level,
     subjects: data.trialSubjects.join(', '),
     ref: reference,
   })
+
+  if (over) {
+    return (
+      <div className="flex flex-1 flex-col gap-4 anim-pop">
+        <div className="flex flex-col items-center gap-2 text-center">
+          <Mentol size={110} mood="happy" bob />
+          <h1 className="font-display text-[2.1rem] font-extrabold leading-tight">{t(S.offerEndedTitle, lang)}</h1>
+        </div>
+        <p className="clay-card p-5 text-center text-[1.05rem] leading-relaxed">{t(S.offerEnded, lang)}</p>
+        <p className="text-center text-muted">
+          {t(S.offerRef, lang)}: <span className="font-display text-xl font-extrabold text-navy">{reference}</span>
+        </p>
+        <a className="clay-btn w-full bg-yellow text-xl" href={waLink(EVENT.whatsapp, msg)} target="_blank" rel="noreferrer">
+          <MessageCircle size={22} strokeWidth={2.5} />
+          {t(S.offerEndedClaim, lang)}
+        </a>
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-1 flex-col gap-4 anim-pop">
@@ -81,6 +107,9 @@ export function Offer({
         </div>
         <div className="relative border-t-[3px] border-dashed border-navy px-5 py-4 text-center">
           <p className="font-display text-xl font-bold">{t(S.offerWhat, lang)}</p>
+          <p className="mt-1 inline-flex rounded-full bg-yellow px-3 py-0.5 font-display font-extrabold">
+            {fill(t(S.trialWorth, lang), { value: trialValue(player.band) })}
+          </p>
           <p className="mt-1 text-muted">{data.trialSubjects.join(' · ')}</p>
           <p className="mt-1 font-bold">{fill(t(S.offerValid, lang), { date: t(EVENT.offerValidUntil, lang) })}</p>
           <p className="mt-3 text-sm text-muted">

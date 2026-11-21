@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { ArrowRight, HeartHandshake, Palette, RotateCcw, Share2, Sparkles, Target, TrendingUp, Trophy } from 'lucide-react'
-import type { Lang, PlayResult, Player, Trait } from '../types'
+import { Activity, ArrowRight, BookOpen, Eye, Headphones, HeartHandshake, Users, Palette, RotateCcw, Share2, ShieldCheck, Sparkles, Sticker, Target, TrendingUp, Trophy } from 'lucide-react'
+import type { Lang, Mark, PlayResult, Player, Question, Trait } from '../types'
 import { S, fill, t } from '../content/strings'
-import { PERSONALITIES } from '../content/story'
+import { GAME_NAME, PERSONALITY_INFO } from '../content/personalities'
 import { BANDS, SUBJECT_NAMES } from '../content/subjects'
+import { eventOver } from '../content/event'
+import { AnswerReview, MiniReport } from './LearnerExtras'
 import { Mentol } from '../components/Mentol'
 import { Confetti, useCountUp } from '../components/ui'
 import { shareCard } from '../game/shareCard'
@@ -13,25 +15,35 @@ export const TRAIT_ICON: Record<Trait, typeof Palette> = {
   penyayang: HeartHandshake,
   strategik: Target,
   inspirasi: Sparkles,
+  disiplin: ShieldCheck,
+  visual: Eye,
+  pendengar: Headphones,
+  aktif: Activity,
+  pemikir: BookOpen,
+  sosial: Users,
 }
 
 export function Result({
   lang,
   player,
   result,
+  questions = [],
+  marks = [],
   onClaim,
   onAgain,
 }: {
   lang: Lang
   player: Player
   result: PlayResult
+  questions?: Question[]
+  marks?: Mark[]
   onClaim: () => void
   onAgain: () => void
 }) {
   const [shown, setShown] = useState(0)
   const [sharing, setSharing] = useState(false)
   useCountUp(result.totalXp, 1100, setShown)
-  const p = PERSONALITIES[result.personality]
+  const p = PERSONALITY_INFO[result.personality]
   const Icon = TRAIT_ICON[result.personality]
   const band = BANDS.find((b) => b.id === player.band)!
   const isTutor = player.role === 'cikgu'
@@ -58,11 +70,13 @@ export function Result({
             </div>
           </div>
           {result.rank != null && (
-            <p className="mt-3 inline-flex items-center gap-2 rounded-full border-[3px] border-navy bg-yellow px-4 py-1 font-display text-lg font-extrabold anim-pop">
-              <Trophy size={18} strokeWidth={2.5} />
-              {fill(t(S.resultRank, lang), { rank: result.rank })}
-              {result.players ? <span className="font-body text-sm font-bold">{fill(t(S.resultRankOf, lang), { n: result.players })}</span> : null}
-            </p>
+            <div className="mx-auto mt-3 inline-flex items-center gap-2.5 rounded-2xl border-[3px] border-navy bg-yellow px-4 py-1.5 text-left anim-pop">
+              <Trophy size={22} strokeWidth={2.5} className="shrink-0" />
+              <div className="leading-tight">
+                <p className="font-display text-lg font-extrabold">{fill(t(S.resultRank, lang), { rank: result.rank })}</p>
+                {result.players ? <p className="text-sm font-bold">{fill(t(S.resultRankOf, lang), { n: result.players, game: t(GAME_NAME[player.game], lang) })}</p> : null}
+              </div>
+            </div>
           )}
         </div>
       </section>
@@ -93,6 +107,8 @@ export function Result({
         </div>
       </section>
 
+      {!isTutor && <MiniReport lang={lang} result={result} game={player.game} />}
+
       {isTutor && (
         <p className="clay-card bg-yellow-soft p-4 font-bold anim-slide">
           {fill(t(S.resultTutorPay, lang), { level: t(band.label, lang), pay: band.price })}
@@ -111,7 +127,7 @@ export function Result({
           onClick={async () => {
             setSharing(true)
             try {
-              await shareCard(result, player.nickname, lang)
+              await shareCard(result, player.nickname, lang, player.game)
             } finally {
               setSharing(false)
             }
@@ -120,10 +136,17 @@ export function Result({
           <Share2 size={20} strokeWidth={2.5} />
           {sharing ? t(S.resultSharing, lang) : t(S.resultShare, lang)}
         </button>
+        {!eventOver() && (
+          <p className="flex items-center justify-center gap-2 text-center font-bold">
+            <Sticker size={18} strokeWidth={2.5} className="shrink-0" />
+            {t(S.resultSticker, lang)}
+          </p>
+        )}
         <button type="button" className="mx-auto inline-flex min-h-11 cursor-pointer items-center gap-1.5 font-bold text-muted underline" onClick={onAgain}>
           <RotateCcw size={16} strokeWidth={2.5} />
           {t(S.resultPlayAgain, lang)}
         </button>
+        {!isTutor && questions.length > 0 && <AnswerReview lang={lang} questions={questions} marks={marks} game={player.game} />}
       </div>
     </div>
   )

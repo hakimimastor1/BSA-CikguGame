@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Band, Lang, Mark, PlayResult, Player, Question, Role, StoryChoice, SubjectKey } from './types'
+import type { Band, Game, Lang, Mark, PlayResult, Player, Question, Role, StoryChoice, SubjectKey } from './types'
 import bank from './content/questions.json'
 import { STORY } from './content/story'
+import { STORY_B } from './content/storyB'
 import { Header, PreviewBanner, Screen } from './components/ui'
-import { LevelPick, NicknamePick, RolePick, Welcome } from './screens/Start'
+import { GamePick, LevelPick, NicknamePick, RolePick, Welcome } from './screens/Start'
 import { StoryIntro, StoryScene } from './screens/Story'
 import { SemakIntro, SemakRound } from './screens/Semak'
 import { Result } from './screens/Result'
@@ -13,7 +14,7 @@ import { fromServer, pickQuestions, scorePlay } from './game/scoring'
 import { makeReference } from './game/whatsapp'
 import { finishPlay, online, startPlay, submitSignup } from './lib/api'
 
-type Step = 'welcome' | 'role' | 'level' | 'nick' | 'intro' | 'story' | 'semakIntro' | 'semak' | 'result' | 'signup' | 'offer'
+type Step = 'welcome' | 'role' | 'gamePick' | 'level' | 'nick' | 'intro' | 'story' | 'semakIntro' | 'semak' | 'result' | 'signup' | 'offer'
 
 const LOCAL_BANK = bank as Question[]
 
@@ -33,11 +34,12 @@ type ServerPlay = { playId: string; questions: Question[] }
 export default function App() {
   const [lang, setLang] = useState<Lang>(readLang)
   const [step, setStep] = useState<Step>('welcome')
-  const [player, setPlayer] = useState<Player>({ role: 'pelajar', band: 'std4_6', teachSubjects: [], nickname: '' })
+  const [player, setPlayer] = useState<Player>({ role: 'pelajar', game: 'pelajar', band: 'std4_6', teachSubjects: [], nickname: '' })
   const [scene, setScene] = useState(0)
   const [picks, setPicks] = useState<StoryChoice[]>([])
   const [questions, setQuestions] = useState<Question[]>([])
   const [result, setResult] = useState<PlayResult | null>(null)
+  const [marks, setMarks] = useState<Mark[]>([])
   const [signup, setSignup] = useState<SignupData | null>(null)
   const [reference, setReference] = useState('')
   const [existing, setExisting] = useState(false)
@@ -70,7 +72,7 @@ export default function App() {
     setExisting(false)
     activePlayId.current = null
     serverPlay.current = online
-      ? startPlay({ nickname: p.nickname, role: p.role, band: p.band, lang, teach: p.teachSubjects }).catch(() => null)
+      ? startPlay({ nickname: p.nickname, role: p.role, game: p.game, band: p.band, lang, teach: p.teachSubjects }).catch(() => null)
       : Promise.resolve(null)
     setStep('intro')
   }
@@ -90,7 +92,8 @@ export default function App() {
   }
 
   const onSemakDone = (marks: Mark[]) => {
-    const local = scorePlay(picks, questions, marks)
+    setMarks(marks)
+    const local = scorePlay(picks, questions, marks, player.game)
     setResult(local)
     setStep('result')
     const id = activePlayId.current
@@ -98,7 +101,7 @@ export default function App() {
       finishPlay(
         id,
         picks.map((c) => c.id),
-        marks.map((m) => ({ id: m.questionId, verdict: m.verdict, ms: m.ms })),
+        marks.map((m) => ({ id: m.questionId, verdict: m.verdict, ms: m.ms, hint: m.hint ?? false })),
       )
         .then((r) => setResult(fromServer(r, local)))
         .catch(() => {
@@ -122,7 +125,8 @@ export default function App() {
     setStep('offer')
   }
 
-  const back: Partial<Record<Step, Step>> = { role: 'welcome', level: 'role', nick: 'level' }
+  const scenes = player.game === 'pelajar' ? STORY_B : STORY
+  const back: Partial<Record<Step, Step>> = { role: 'welcome', gamePick: 'role', level: player.role === 'ibubapa' ? 'gamePick' : 'role', nick: 'level' }
 
   return (
     <>
@@ -136,7 +140,19 @@ export default function App() {
           <RolePick
             lang={lang}
             onPick={(role: Role) => {
-              setPlayer((p) => ({ ...p, role }))
+              // School students play Game B, future tutors Game A; families choose.
+              const game: Game = role === 'pelajar' ? 'pelajar' : 'cikgu'
+              setPlayer((p) => ({ ...p, role, game }))
+              setStep(role === 'ibubapa' ? 'gamePick' : 'level')
+            }}
+          />
+        )}
+
+        {step === 'gamePick' && (
+          <GamePick
+            lang={lang}
+            onPick={(game: Game) => {
+              setPlayer((p) => ({ ...p, game }))
               setStep('level')
             }}
           />
@@ -165,28 +181,37 @@ export default function App() {
           />
         )}
 
-        {step === 'intro' && <StoryIntro lang={lang} role={player.role} onStart={() => setStep('story')} />}
+        {step === 'intro' && <StoryIntro lang={lang} role={player.role} game={player.game} onStart={() => setStep('story')} />}
 
         {step === 'story' && (
           <StoryScene
             key={scene}
             lang={lang}
+            scenes={scenes}
             index={scene}
             xp={storyXp}
             onPicked={(c) => setPicks((p) => [...p, c])}
             onNext={() => {
-              if (scene + 1 < STORY.length) setScene(scene + 1)
+              if (scene + 1 < scenes.length) setScene(scene + 1)
               else void toSemak()
             }}
           />
         )}
 
-        {step === 'semakIntro' && <SemakIntro lang={lang} onStart={() => setStep('semak')} />}
+        {step === 'semakIntro' && <SemakIntro lang={lang} game={player.game} onStart={() => setStep('semak')} />}
 
-        {step === 'semak' && <SemakRound lang={lang} questions={questions} onDone={onSemakDone} />}
+        {step === 'semak' && <SemakRound lang={lang} game={player.game} questions={questions} onDone={onSemakDone} />}
 
         {step === 'result' && result && (
-          <Result lang={lang} player={player} result={result} onClaim={() => setStep('signup')} onAgain={() => startGame(player)} />
+          <Result
+            lang={lang}
+            player={player}
+            result={result}
+            questions={questions}
+            marks={marks}
+            onClaim={() => setStep('signup')}
+            onAgain={() => startGame(player)}
+          />
         )}
 
         {step === 'signup' && result && (

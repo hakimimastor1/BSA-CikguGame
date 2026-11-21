@@ -16,26 +16,42 @@ export const S = {
 
   // Welcome
   welcomeKicker: { ms: 'Bright Scholar Academy', en: 'Bright Scholar Academy' },
-  welcomeTitle: { ms: 'Jadi Cikgu Sehari!', en: 'Be a Cikgu for a Day!' },
+  welcomeTitle: { ms: 'Jom Main!', en: "Let's Play!" },
+  welcomeGames: {
+    ms: '2 permainan, 3 minit: bakal cikgu main Cikgu Sehari, pelajar sekolah main Misi Pelajar Bijak. Skor tertinggi masuk skrin!',
+    en: '2 games, 3 minutes: future teachers play Cikgu Sehari, school students play Smart Student Mission. Top scores go on the big screen!',
+  },
   welcomeBody: {
     ms: 'Ajar, semak kerja murid dan kenali jenis cikgu anda dalam 3 minit. Skor tertinggi masuk skrin!',
     en: 'Teach, mark your pupil\'s work and discover your cikgu type in 3 minutes. Top scores go on the big screen!',
   },
   welcomeStart: { ms: 'Mula main', en: 'Start playing' },
-  welcomePerk: { ms: 'Hadiah: trial percuma 3 subjek', en: 'Prize: free trial for 3 subjects' },
+  welcomePerkTutor: { ms: 'Graduan UPSI: jadi tutor BSA · RM25–40/jam', en: 'UPSI grads: tutor with BSA · RM25–40/hr' },
+  welcomePerkTrial: { ms: 'Adik-adik sekolah: trial percuma 3 subjek + beg BSA', en: 'School kids: free 3-subject trial + BSA bag' },
+  welcomePerkTrialAfter: { ms: 'Pelajar sekolah: kelas trial percuma', en: 'School students: free trial class' },
+  rolePelajarHintAfter: { ms: 'Main Misi Pelajar Bijak · trial percuma', en: 'Play Smart Student Mission · free trial' },
+  roleIbubapaHintAfter: { ms: 'Untuk anak atau adik · pilih permainan · trial percuma', en: 'For your child or sibling · pick a game · free trial' },
+  welcomePerkAll: { ms: 'Semua pemain dapat sticker!', en: 'Every player gets a sticker!' },
 
   // Role
   roleTitle: { ms: 'Saya…', en: 'I am…' },
-  rolePelajar: { ms: 'Pelajar', en: 'A student' },
-  rolePelajarHint: { ms: 'Tahun 1 – Tingkatan 5', en: 'Standard 1 – Form 5' },
-  roleIbubapa: { ms: 'Ibu bapa', en: 'A parent' },
-  roleIbubapaHint: { ms: 'Main untuk anak anda', en: 'Play for your child' },
-  roleCikgu: { ms: 'Nak jadi cikgu', en: 'A future cikgu' },
-  roleCikguHint: { ms: 'Pelajar UPSI, graduan, pencari kerja', en: 'UPSI student, graduate, job-seeker' },
+  rolePelajar: { ms: 'Pelajar sekolah', en: 'A school student' },
+  rolePelajarHint: { ms: 'Main Misi Pelajar Bijak · trial percuma + beg', en: 'Play Smart Student Mission · free trial + bag' },
+  roleIbubapa: { ms: 'Ibu bapa / keluarga', en: 'A parent / family' },
+  roleIbubapaHint: { ms: 'Untuk anak atau adik · pilih permainan · trial percuma + beg', en: 'For your child or sibling · pick a game · free trial + bag' },
+  roleCikgu: { ms: 'Pelajar / graduan UPSI', en: 'A UPSI student / graduate' },
+  roleCikguHint: { ms: 'Main Cikgu Sehari · jadi tutor BSA, RM25–40/jam', en: 'Play Cikgu Sehari · tutor with BSA, RM25–40/hr' },
+
+  // Game choice (families)
+  gamePickTitle: { ms: 'Nak main sebagai…', en: 'Play as…' },
+  gamePickCikgu: { ms: 'Cikgu', en: 'The cikgu' },
+  gamePickCikguHint: { ms: 'Cikgu Sehari: uji diri, boleh ajar anak anda?', en: 'Cikgu Sehari: could you teach your child?' },
+  gamePickPelajar: { ms: 'Pelajar', en: 'The student' },
+  gamePickPelajarHint: { ms: 'Misi Pelajar Bijak: cuba soalan tahap anak anda', en: "Smart Student Mission: try your child's questions" },
 
   // Level
   levelTitlePelajar: { ms: 'Anda di tahap mana?', en: 'Which level are you in?' },
-  levelTitleIbubapa: { ms: 'Anak anda di tahap mana?', en: "What level is your child in?" },
+  levelTitleIbubapa: { ms: 'Anak atau adik anda di tahap mana?', en: 'What level is your child or sibling in?' },
   levelTitleCikgu: { ms: 'Tahap mana anda nak ajar?', en: 'Which level would you teach?' },
   teachSubjectsTitle: { ms: 'Pilih subjek yang anda boleh ajar (sehingga 3)', en: 'Pick subjects you could teach (up to 3)' },
 
@@ -53,6 +69,21 @@ export const S = {
   tipCikgu: { ms: 'Tip cikgu', en: 'Cikgu tip' },
   continue: { ms: 'Teruskan', en: 'Continue' },
   xpGained: { ms: '+{xp} XP', en: '+{xp} XP' },
+
+  // Kuiz Kilat (Game B)
+  quizTitle: { ms: 'Kuiz Kilat!', en: 'Quick Quiz!' },
+  quizBody: {
+    ms: 'Betul atau salah? Jawab sendiri. Cepat dan tepat dapat lebih XP. Ada satu bantuan: Tanya Cikgu BSA!',
+    en: 'Right or wrong? Answer it yourself. Fast and accurate earns more XP. You get one help: Ask a BSA tutor!',
+  },
+  quizStart: { ms: 'Mula kuiz', en: 'Start the quiz' },
+  quizAnswer: { ms: 'Jawapan', en: 'Answer' },
+  quizActuallyRight: { ms: 'Jawapan itu sebenarnya betul!', en: 'That answer was actually right!' },
+  hintBtn: { ms: 'Tanya Cikgu BSA', en: 'Ask a BSA tutor' },
+  hintText: { ms: 'Cikgu BSA: jawapan yang betul ialah "{fix}".', en: 'BSA tutor: the right answer is "{fix}".' },
+  hintUsed: { ms: 'Bantuan sudah digunakan', en: 'Help used' },
+  quizDone: { ms: 'Kuiz selesai!', en: 'Quiz done!' },
+  quizCorrect: { ms: '{n} daripada {total} betul', en: '{n} of {total} correct' },
 
   // Semak Kerja
   semakTitle: { ms: 'Cabaran Semak Kerja!', en: 'Marking Challenge!' },
@@ -83,12 +114,35 @@ export const S = {
     en: 'BSA tutors for {level} earn RM{pay}/hour, paid weekly.',
   },
   resultRank: { ms: 'No. {rank} hari ini', en: 'No. {rank} today' },
-  resultRankOf: { ms: 'daripada {n} pemain', en: 'of {n} players' },
+  resultRankOf: { ms: 'daripada {n} pemain {game}', en: 'of {n} {game} players' },
   resultShare: { ms: 'Kongsi kad saya', en: 'Share my card' },
   resultSharing: { ms: 'Menyediakan kad…', en: 'Preparing card…' },
   resultClaim: { ms: 'Tuntut trial percuma 3 subjek', en: 'Claim free trial for 3 subjects' },
   resultJoin: { ms: 'Jom jadi cikgu BSA', en: 'Become a BSA cikgu' },
+  styleTipsTitle: { ms: 'Cara belajar terbaik untuk anda', en: 'How you learn best' },
+  reviewYouAnsweredRight: { ms: 'Anda jawab betul', en: 'You got it right' },
+  reviewYouAnsweredWrong: { ms: 'Anda tersilap', en: 'You got it wrong' },
+  reviewAnswer: { ms: 'Jawapan', en: 'Answer' },
+  reviewAnswerRight: { ms: 'Jawapan itu memang betul', en: 'That answer was right' },
+  reviewHinted: { ms: 'dengan bantuan Cikgu BSA', en: 'with help from a BSA tutor' },
+  reportTitle: { ms: 'Laporan mini', en: 'Mini report' },
+  reportBody: { ms: 'Tunjukkan kepada ibu bapa anda!', en: 'Show this to your parents!' },
+  reportTips: { ms: 'Tip untuk naik level', en: 'Tips to level up' },
+  reportAllRight: { ms: 'Semua betul! Teruskan usaha.', en: 'All correct! Keep it up.' },
+  reviewTitle: { ms: 'Semak semula jawapan', en: 'Review the answers' },
+  reviewPupil: { ms: 'Jawapan murid', en: "Pupil's answer" },
+  reviewCorrect: { ms: 'Jawapan betul', en: 'Correct answer' },
+  reviewYouRight: { ms: 'Anda tanda dengan betul', en: 'You marked it right' },
+  reviewYouWrong: { ms: 'Anda tersilap tanda', en: 'You marked it wrong' },
+  reviewNoTime: { ms: 'Tidak sempat ditanda', en: 'Not marked in time' },
+  reviewPupilRight: { ms: 'Jawapan murid memang betul', en: "The pupil's answer was right" },
+  trialWorth: { ms: 'bernilai RM{value}', en: 'worth RM{value}' },
+  resultSticker: { ms: 'Tunjuk skrin ini di booth BSA untuk sticker percuma!', en: 'Show this screen at the BSA booth for a free sticker!' },
   resultPlayAgain: { ms: 'Main semula', en: 'Play again' },
+  shareTextB: {
+    ms: 'Saya {name} dengan {xp} XP dalam Misi Pelajar Bijak! Main di booth Bright Scholar Academy, {event}.',
+    en: "I'm a {name} with {xp} XP in Smart Student Mission! Play at the Bright Scholar Academy booth, {event}.",
+  },
   shareText: {
     ms: 'Saya {name} dengan {xp} XP dalam Cikgu Sehari! Main di booth Bright Scholar Academy, {event}.',
     en: "I'm {name} with {xp} XP in Cikgu Sehari! Play at the Bright Scholar Academy booth, {event}.",
@@ -106,8 +160,9 @@ export const S = {
     en: 'Share a few details and the BSA team will contact you on WhatsApp.',
   },
   fName: { ms: 'Nama penuh', en: 'Full name' },
-  fNameChild: { ms: 'Nama anak', en: "Child's name" },
+  fNameChild: { ms: 'Nama anak / adik', en: "Child or sibling's name" },
   fParentName: { ms: 'Nama ibu bapa / penjaga', en: "Parent / guardian's name" },
+  fYourName: { ms: 'Nama anda', en: 'Your name' },
   fWhatsapp: { ms: 'No. WhatsApp', en: 'WhatsApp number' },
   fParentWhatsapp: { ms: 'No. WhatsApp ibu bapa / penjaga', en: "Parent / guardian's WhatsApp" },
   fParentWhatsappHint: {
@@ -116,7 +171,7 @@ export const S = {
   },
   fUnder18: { ms: 'Saya berumur bawah 18 tahun', en: "I'm under 18" },
   fLevel: { ms: 'Tahap', en: 'Level' },
-  fChildLevel: { ms: 'Tahap anak', en: "Child's level" },
+  fChildLevel: { ms: 'Tahap anak / adik', en: "Child or sibling's level" },
   fSchool: { ms: 'Sekolah', en: 'School' },
   fArea: { ms: 'Kawasan (bandar / negeri)', en: 'Area (town / state)' },
   fTrialSubjects: { ms: 'Pilih 3 subjek trial', en: 'Pick 3 trial subjects' },
@@ -157,6 +212,16 @@ export const S = {
   submitTutor: { ms: 'Hantar permohonan', en: 'Send my application' },
 
   // Offer
+  offerEndedTitle: { ms: 'Terima kasih kerana bermain!', en: 'Thanks for playing!' },
+  offerEnded: {
+    ms: 'Tawaran PESKON UPSI 2026 telah tamat pada 2 Disember 2026. Anda masih boleh cuba kelas trial percuma BSA: WhatsApp kami untuk tetapkan masa.',
+    en: 'The PESKON UPSI 2026 offer ended on 2 December 2026. You can still try a free BSA trial class: WhatsApp us to set a time.',
+  },
+  offerEndedClaim: { ms: 'WhatsApp BSA untuk trial', en: 'WhatsApp BSA for a trial' },
+  waLearnerAfter: {
+    ms: 'Hi BSA! Saya nak cuba kelas trial percuma.\nNama: {name}\nTahap: {level}\nSubjek: {subjects}\nRujukan: {ref}',
+    en: "Hi BSA! I'd like to try a free trial class.\nName: {name}\nLevel: {level}\nSubjects: {subjects}\nReference: {ref}",
+  },
   offerTitle: { ms: 'Tahniah! Trial anda sedia', en: 'Congrats! Your trial is ready' },
   offerExisting: {
     ms: 'Nombor ini sudah didaftarkan untuk acara ini, jadi kami guna rujukan yang sama.',
@@ -169,7 +234,14 @@ export const S = {
   offerCopy: { ms: 'Salin kod', en: 'Copy code' },
   offerCopied: { ms: 'Disalin!', en: 'Copied!' },
   offerClaim: { ms: 'Tuntut di WhatsApp', en: 'Claim on WhatsApp' },
-  offerBooth: { ms: 'Tunjukkan skrin ini kepada staf di booth BSA.', en: 'Show this screen to the staff at the BSA booth.' },
+  offerBooth: {
+    ms: 'Tunjukkan skrin ini di booth BSA untuk ambil beg BSA dan sticker (selagi stok ada).',
+    en: 'Show this screen at the BSA booth to collect your BSA bag and sticker (while stocks last).',
+  },
+  offerTutorBooth: {
+    ms: 'Tunjukkan skrin ini di booth BSA untuk ambil sticker percuma.',
+    en: 'Show this screen at the BSA booth for a free sticker.',
+  },
   offerTutorTitle: { ms: 'Terima kasih, bakal cikgu!', en: 'Thank you, future cikgu!' },
   offerTutorBody: {
     ms: 'Pasukan BSA akan WhatsApp anda. Untuk lebih cepat, lengkapkan pendaftaran tutor di laman web BSA.',

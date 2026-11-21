@@ -6,7 +6,21 @@ export type Txt = { ms: string; en: string }
 export type Role = 'pelajar' | 'ibubapa' | 'cikgu'
 export type Band = 'std1_3' | 'std4_6' | 'f1_3' | 'f4_5'
 export type SubjectKey = 'bm' | 'bi' | 'math' | 'sci' | 'phy' | 'chem' | 'bio'
-export type Trait = 'kreatif' | 'penyayang' | 'strategik' | 'inspirasi'
+/** Game A (cikgu) traits, then Game B (pelajar) learner types. */
+export type Trait =
+  | 'kreatif'
+  | 'penyayang'
+  | 'strategik'
+  | 'inspirasi'
+  | 'disiplin'
+  | 'visual'
+  | 'pendengar'
+  | 'aktif'
+  | 'pemikir'
+  | 'sosial'
+
+/** Game A = Cikgu Sehari (play the teacher); Game B = Misi Pelajar Bijak (play the student). */
+export type Game = 'cikgu' | 'pelajar'
 
 export interface Question {
   id: string
@@ -39,6 +53,8 @@ export interface Mark {
   /** What the player tapped: true = ✓ (pupil is right), false = ✗, null = ran out of time. */
   verdict: boolean | null
   ms: number
+  /** Game B: the player used "Tanya Cikgu BSA" on this item (a right answer then scores 10 XP). */
+  hint?: boolean
 }
 
 export interface SubjectResult {
@@ -64,6 +80,7 @@ export interface PlayResult {
 
 export interface Player {
   role: Role
+  game: Game
   band: Band
   /** Only for future tutors: subjects they would teach. */
   teachSubjects: SubjectKey[]
