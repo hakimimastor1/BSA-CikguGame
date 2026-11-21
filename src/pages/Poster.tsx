@@ -77,7 +77,7 @@ export default function Poster() {
               </p>
               <p className="font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold leading-tight">Misi Pelajar Bijak</p>
               <p className="font-bold">
-                Trial 3 subjek percuma + beg · kod <span className="font-display font-extrabold">{EVENT.offerCode}</span>
+                Trial 3 subjek percuma + beg · kod <span className="whitespace-nowrap font-display font-extrabold">{EVENT.offerCode}</span>
               </p>
             </div>
           </div>
