@@ -11,7 +11,7 @@ Each milestone ends with a live link BSA can try on a phone.
 | M1 ✅ | **Playable game** | Thu 19 Nov | Live link: welcome, role, level, nickname, 5 story scenes, Semak Kerja, result and share card, BM/EN | Play it on a few phones and send feedback |
 | M2 ✅ | **Full flow** | Sat 21 Nov (done Fri 20 Nov) | Supabase and Netlify set up on BSA's accounts; sign-up with PDPA consent, offer screen and WhatsApp claim, tutor path, live projector leaderboard, admin sign-ups list with WhatsApp buttons, status and CSV export, 3 staff logins | Check the story and question texts (BM/EN); give the 3 staff emails |
 | M3 ✅ | **Content and test** | Mon 23 Nov (done Fri 20 Nov) | Full question bank (~140 items, checked); test with 10+ people on different phones and fixes; printable QR poster (A4 and A3); one-page staff guide | Run the trial with students or tutors; print the QR poster |
-| ✅ | **Ready** | Tue 24 Nov | Final fixes; projector and staff logins checked | Set up the booth |
+| Ready ✅ | **Ready** | Tue 24 Nov (prepared Sat 21 Nov) | Final fixes; projector and staff logins checked | Set up the booth |
 | 🚀 | **Live at PESKON** | 25 Nov – 2 Dec | Game running at the booth; I watch for problems and fix them during the event | Projector shows the leaderboard link; follow up sign-ups on WhatsApp |
 | M4 | **After PESKON** | from 3 Dec | Results summary (players, sign-ups, tutor applications), data export, and a v2 plan (admin editing, stats, events, sound) | Share what worked and what didn't at the booth |
 
@@ -46,3 +46,13 @@ Each milestone ends with a live link BSA can try on a phone.
 - **Booth:** projector stays awake; one-page staff guide (`assets/print/staff-guide-peskon26.pdf`).
 - **Still open:** booth staff logins (emails), turning off public sign-ups in Supabase, and a test with real
   people on real phones.
+
+## Ready (21 Nov)
+
+- **Offer expiry:** after 2 Dec 2026 the game drops booth gifts and the event code and points to WhatsApp for a
+  normal trial (test with `?asOf=2026-12-05`).
+- **Health check:** `NODE_USE_ENV_PROXY=1 node scripts/smoke.mjs` (read-only).
+- **Test day:** `docs/TEST-DAY.md`, a checklist for real-phone testers on Mon 23 / Tue 24 Nov.
+- **Monitoring:** a scheduled check at 11:42 and 16:42 Malaysia time, 23 Nov – 2 Dec (health check, numbers,
+  logs, fixes, short report). It switches itself off after the final summary on 2 Dec.
+- **Test data:** parked in a hidden `test-archive` event; PESKON starts at 0 plays and 0 sign-ups.
