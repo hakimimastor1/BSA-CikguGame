@@ -1,8 +1,9 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { ArrowRight, LoaderCircle, RotateCcw, WifiOff } from 'lucide-react'
 import type { Lang, PlayResult, Player, Txt } from '../types'
-import { S, t } from '../content/strings'
-import { BSA_SUBJECTS, LEVELS_BY_BAND, SUBJECT_TO_BSA } from '../content/subjects'
+import { S, fill, t } from '../content/strings'
+import { eventOver } from '../content/event'
+import { BSA_SUBJECTS, LEVELS_BY_BAND, SUBJECT_TO_BSA, trialValue } from '../content/subjects'
 import { normaliseMyPhone } from '../game/whatsapp'
 
 export interface SignupData {
@@ -167,6 +168,11 @@ export function SignUp({
           {isTutor ? t(S.signupTitleTutor, lang) : t(S.signupTitleLearner, lang)}
         </h1>
         <p className="mt-1 text-muted">{isTutor ? t(S.signupBodyTutor, lang) : t(S.signupBodyLearner, lang)}</p>
+        {!isTutor && !eventOver() && (
+          <p className="mt-2 inline-flex rounded-full border-[3px] border-navy bg-yellow px-3 py-0.5 font-display font-extrabold">
+            {t(S.offerWhat, lang).split(' · ')[0]} · {fill(t(S.trialWorth, lang), { value: trialValue(player.band) })}
+          </p>
+        )}
       </div>
 
       <div className="clay-card flex flex-col gap-4 p-5">

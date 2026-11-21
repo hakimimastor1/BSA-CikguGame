@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { ArrowRight, HeartHandshake, Palette, RotateCcw, Share2, ShieldCheck, Sparkles, Sticker, Target, TrendingUp, Trophy } from 'lucide-react'
-import type { Lang, PlayResult, Player, Trait } from '../types'
+import type { Lang, Mark, PlayResult, Player, Question, Trait } from '../types'
 import { S, fill, t } from '../content/strings'
 import { PERSONALITIES } from '../content/story'
 import { BANDS, SUBJECT_NAMES } from '../content/subjects'
 import { eventOver } from '../content/event'
+import { AnswerReview, MiniReport } from './LearnerExtras'
 import { Mentol } from '../components/Mentol'
 import { Confetti, useCountUp } from '../components/ui'
 import { shareCard } from '../game/shareCard'
@@ -21,12 +22,16 @@ export function Result({
   lang,
   player,
   result,
+  questions = [],
+  marks = [],
   onClaim,
   onAgain,
 }: {
   lang: Lang
   player: Player
   result: PlayResult
+  questions?: Question[]
+  marks?: Mark[]
   onClaim: () => void
   onAgain: () => void
 }) {
@@ -97,6 +102,8 @@ export function Result({
         </div>
       </section>
 
+      {!isTutor && <MiniReport lang={lang} result={result} />}
+
       {isTutor && (
         <p className="clay-card bg-yellow-soft p-4 font-bold anim-slide">
           {fill(t(S.resultTutorPay, lang), { level: t(band.label, lang), pay: band.price })}
@@ -134,6 +141,7 @@ export function Result({
           <RotateCcw size={16} strokeWidth={2.5} />
           {t(S.resultPlayAgain, lang)}
         </button>
+        {!isTutor && questions.length > 0 && <AnswerReview lang={lang} questions={questions} marks={marks} />}
       </div>
     </div>
   )

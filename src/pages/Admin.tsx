@@ -48,6 +48,7 @@ interface SignupRow {
   nickname: string | null
   personality: Trait | null
   total_xp: number | null
+  subjects?: { subject: string; right: number; total: number }[] | null
   status: string
   notes: string | null
   created_at: string
@@ -90,13 +91,19 @@ const myTime = (iso: string) =>
   new Date(iso).toLocaleString('ms-MY', { timeZone: 'Asia/Kuala_Lumpur', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
 const prettyPhone = (n: string) => `+${n.slice(0, 2)} ${n.slice(2, 4)}-${n.slice(4, 7)} ${n.slice(7)}`
 
+const SUBJECT_BM: Record<string, string> = { bm: 'BM', bi: 'BI', math: 'Matematik', sci: 'Sains', phy: 'Fizik', chem: 'Kimia', bio: 'Biologi' }
+
 function followUpMessage(s: SignupRow): string {
   if (s.role === 'cikgu') {
     return `Hai ${s.name}! Ini Bright Scholar Academy. Terima kasih kerana berminat menjadi tutor BSA di ${EVENT.name}. Boleh kami tetapkan sesi temu duga ringkas dan demo mengajar? Bila anda free? Rujukan: ${s.ref}`
   }
   const greet = s.parent_name || s.name
   const learner = s.child_name || s.name
-  return `Hai ${greet}! Ini Bright Scholar Academy. Terima kasih kerana bermain Cikgu Sehari di booth kami di ${EVENT.name}. Jom tetapkan masa untuk trial percuma 3 subjek (${s.trial_subjects.join(', ')}) untuk ${learner}. Bila masa yang sesuai? Rujukan: ${s.ref}`
+  const results = (s.subjects ?? [])
+    .map((x) => `${SUBJECT_BM[x.subject] ?? x.subject} ${x.right}/${x.total}`)
+    .join(', ')
+  const report = results ? ` Keputusan Semak Kerja ${learner}: ${results}.` : ''
+  return `Hai ${greet}! Ini Bright Scholar Academy. Terima kasih kerana bermain Cikgu Sehari di booth kami di ${EVENT.name}.${report} Jom tetapkan masa untuk trial percuma 3 subjek (${s.trial_subjects.join(', ')}) untuk ${learner}. Bila masa yang sesuai? Rujukan: ${s.ref}`
 }
 
 function toCsv(rows: SignupRow[]): string {
@@ -422,6 +429,7 @@ function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupR
     if (r.level) details.push(r.level)
     if (r.school) details.push(r.school)
     if (r.trial_subjects.length) details.push(`Trial: ${r.trial_subjects.join(', ')}`)
+    if (r.subjects?.length) details.push(`Semak Kerja: ${r.subjects.map((x) => `${SUBJECT_BM[x.subject] ?? x.subject} ${x.right}/${x.total}`).join(', ')}`)
   }
   if (r.area) details.push(r.area)
 

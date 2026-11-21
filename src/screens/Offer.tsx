@@ -3,7 +3,7 @@ import { Check, Copy, ExternalLink, MessageCircle, Store } from 'lucide-react'
 import type { Lang, Player } from '../types'
 import { S, fill, t } from '../content/strings'
 import { EVENT, eventOver } from '../content/event'
-import { BANDS } from '../content/subjects'
+import { BANDS, trialValue } from '../content/subjects'
 import { Mentol } from '../components/Mentol'
 import { Confetti } from '../components/ui'
 import { waLink } from '../game/whatsapp'
@@ -107,6 +107,9 @@ export function Offer({
         </div>
         <div className="relative border-t-[3px] border-dashed border-navy px-5 py-4 text-center">
           <p className="font-display text-xl font-bold">{t(S.offerWhat, lang)}</p>
+          <p className="mt-1 inline-flex rounded-full bg-yellow px-3 py-0.5 font-display font-extrabold">
+            {fill(t(S.trialWorth, lang), { value: trialValue(player.band) })}
+          </p>
           <p className="mt-1 text-muted">{data.trialSubjects.join(' · ')}</p>
           <p className="mt-1 font-bold">{fill(t(S.offerValid, lang), { date: t(EVENT.offerValidUntil, lang) })}</p>
           <p className="mt-3 text-sm text-muted">

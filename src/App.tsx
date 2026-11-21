@@ -38,6 +38,7 @@ export default function App() {
   const [picks, setPicks] = useState<StoryChoice[]>([])
   const [questions, setQuestions] = useState<Question[]>([])
   const [result, setResult] = useState<PlayResult | null>(null)
+  const [marks, setMarks] = useState<Mark[]>([])
   const [signup, setSignup] = useState<SignupData | null>(null)
   const [reference, setReference] = useState('')
   const [existing, setExisting] = useState(false)
@@ -90,6 +91,7 @@ export default function App() {
   }
 
   const onSemakDone = (marks: Mark[]) => {
+    setMarks(marks)
     const local = scorePlay(picks, questions, marks)
     setResult(local)
     setStep('result')
@@ -186,7 +188,15 @@ export default function App() {
         {step === 'semak' && <SemakRound lang={lang} questions={questions} onDone={onSemakDone} />}
 
         {step === 'result' && result && (
-          <Result lang={lang} player={player} result={result} onClaim={() => setStep('signup')} onAgain={() => startGame(player)} />
+          <Result
+            lang={lang}
+            player={player}
+            result={result}
+            questions={questions}
+            marks={marks}
+            onClaim={() => setStep('signup')}
+            onAgain={() => startGame(player)}
+          />
         )}
 
         {step === 'signup' && result && (
