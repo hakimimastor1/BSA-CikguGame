@@ -6,7 +6,8 @@ import { STYLE_TIPS } from '../content/storyB'
 
 /** Marks per subject and a study tip for each weak one, for students to show their parents. */
 export function MiniReport({ lang, result, game = 'cikgu' }: { lang: Lang; result: PlayResult; game?: Game }) {
-  const weak = result.levelUp.slice(0, 2)
+  // A tip for every subject with a mistake, weakest first (a tie is not left out).
+  const weak = result.levelUp
   const styleTips = game === 'pelajar' ? STYLE_TIPS[result.personality as keyof typeof STYLE_TIPS] : undefined
   return (
     <section className="clay-card p-4 anim-slide" aria-labelledby="report-h">
