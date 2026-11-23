@@ -5,8 +5,8 @@ import { GOOD_XP, OKAY_XP } from './story'
 export const INTRO_B: { title: Txt; body: Txt } = {
   title: { ms: 'Misi Pelajar Bijak!', en: 'Smart Student Mission!' },
   body: {
-    ms: '5 situasi harian pelajar + Kuiz Kilat. Kenali jenis pelajar anda dan cara belajar yang paling sesuai!',
-    en: '5 everyday student situations + a Quick Quiz. Discover your learner type and how you learn best!',
+    ms: 'Pilih apa yang anda buat dalam 5 situasi harian pelajar, kemudian jawab Kuiz Kilat: 8 soalan dalam 45 saat. Di hujung, anda tahu jenis pelajar anda dan cara belajar terbaik.',
+    en: 'Choose what you would do in 5 everyday student situations, then take the Quick Quiz: 8 questions in 45 seconds. At the end you find out your learner type and how you learn best.',
   },
 }
 

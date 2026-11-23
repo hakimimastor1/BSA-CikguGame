@@ -167,8 +167,8 @@ export function LevelPick({
   )
 }
 
-export function NicknamePick({ lang, initial, onDone }: { lang: Lang; initial: string; onDone: (n: string) => void }) {
-  const [name, setName] = useState(initial || suggestNickname())
+export function NicknamePick({ lang, game, initial, onDone }: { lang: Lang; game: Game; initial: string; onDone: (n: string) => void }) {
+  const [name, setName] = useState(initial || suggestNickname(game))
   const trimmed = name.trim()
   const tooShort = trimmed.length < NICK_MIN
   const bad = !tooShort && !isCleanNickname(trimmed)
@@ -197,7 +197,7 @@ export function NicknamePick({ lang, initial, onDone }: { lang: Lang; initial: s
         value={name}
         maxLength={NICK_MAX}
         autoComplete="off"
-        placeholder={t(S.nickPlaceholder, lang)}
+        placeholder={t(game === 'pelajar' ? S.nickPlaceholderB : S.nickPlaceholder, lang)}
         onChange={(e) => setName(cleanNicknameInput(e.target.value))}
         aria-invalid={bad || undefined}
         aria-describedby="nick-msg"
@@ -205,7 +205,7 @@ export function NicknamePick({ lang, initial, onDone }: { lang: Lang; initial: s
       <p id="nick-msg" className="min-h-6 font-bold text-wrong" role="status">
         {bad ? t(S.nickBad, lang) : name && tooShort ? t(S.nickShort, lang) : ''}
       </p>
-      <button type="button" className="clay-btn w-full bg-white" onClick={() => setName(suggestNickname())}>
+      <button type="button" className="clay-btn w-full bg-white" onClick={() => setName(suggestNickname(game))}>
         <Dices size={22} strokeWidth={2.5} />
         {t(S.nickSuggest, lang)}
       </button>

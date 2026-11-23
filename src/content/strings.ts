@@ -64,6 +64,7 @@ export const S = {
   nickTitle: { ms: 'Nama gelaran anda', en: 'Your nickname' },
   nickBody: { ms: 'Nama ini akan keluar di skrin besar booth BSA.', en: 'This name shows on the big screen at the BSA booth.' },
   nickPlaceholder: { ms: 'cth. Cikgu Ceria 27', en: 'e.g. Cikgu Ceria 27' },
+  nickPlaceholderB: { ms: 'cth. Juara Bijak 27', en: 'e.g. Juara Bijak 27' },
   nickSuggest: { ms: 'Cadangkan nama', en: 'Suggest a name' },
   nickBad: { ms: 'Nama ini tak boleh digunakan. Cuba nama lain.', en: "That name can't be used. Try another one." },
   nickShort: { ms: 'Sekurang-kurangnya 3 huruf.', en: 'At least 3 letters.' },

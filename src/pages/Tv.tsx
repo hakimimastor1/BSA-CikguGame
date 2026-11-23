@@ -248,7 +248,13 @@ export default function Tv() {
             <div className="flex w-max animate-[ticker_40s_linear_infinite] gap-[3vw] whitespace-nowrap pl-[100%] font-display text-[1.4vw] font-bold">
               {board.latest.map((l, i) => (
                 <span key={i}>
-                  <span className="text-yellow">{l.nickname}</span> ialah {PERSONALITY_INFO[l.personality].name} · {l.xp} XP
+                  <span className="text-yellow">{l.nickname}</span> · {PERSONALITY_INFO[l.personality].name} · {l.xp} XP
+                  {l.claimed && (
+                    <span className="ml-[0.7vw] inline-flex items-center gap-[0.35vw] rounded-full bg-yellow px-[0.8vw] align-middle text-navy">
+                      <Gift className="h-[1.2vw] w-[1.2vw]" strokeWidth={2.5} />
+                      {l.role === 'cikgu' ? 'Mohon jadi tutor BSA' : 'Dah tuntut trial percuma'}
+                    </span>
+                  )}
                 </span>
               ))}
             </div>

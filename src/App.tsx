@@ -171,6 +171,7 @@ export default function App() {
 
         {step === 'nick' && (
           <NicknamePick
+            game={player.game}
             lang={lang}
             initial={player.nickname}
             onDone={(nickname) => {

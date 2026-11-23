@@ -100,7 +100,8 @@ export interface Board {
   top: BoardRow[]
   /** Top 5 per game: cikgu = Cikgu Sehari, pelajar = Misi Pelajar Bijak. */
   boards?: Record<Game, BoardRow[]>
-  latest: (BoardRow & { game?: Game })[]
+  /** Latest results; claimed = the player sent the sign-up form (trial claim or tutor application). */
+  latest: (BoardRow & { game?: Game; role?: Role; claimed?: boolean })[]
   players: number
   playersByGame?: Record<Game, number>
   /** 'manual': boards run until an admin resets them; 'daily': they start fresh every midnight. */

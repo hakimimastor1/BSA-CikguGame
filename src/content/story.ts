@@ -4,15 +4,15 @@ export const STORY_INTRO: Record<'learner' | 'tutor', { title: Txt; body: Txt }>
   learner: {
     title: { ms: 'Hari ini, anda jadi cikgu!', en: "Today, you're the cikgu!" },
     body: {
-      ms: '5 situasi kelas + 1 cabaran semak kerja. Pilih tindakan terbaik seorang cikgu!',
-      en: '5 class situations + 1 marking challenge. Choose what a great cikgu would do!',
+      ms: 'Pilih tindakan terbaik dalam 5 situasi kelas, kemudian tanda 8 jawapan murid dalam 45 saat. Di hujung, anda tahu jenis cikgu anda.',
+      en: "Choose the best move in 5 class situations, then mark 8 pupils' answers in 45 seconds. At the end you find out your teacher type.",
     },
   },
   tutor: {
     title: { ms: 'Hari pertama anda sebagai tutor BSA', en: 'Your first day as a BSA tutor' },
     body: {
-      ms: '5 situasi sebenar tutor BSA + 1 cabaran semak kerja. Jom kenali jenis cikgu anda!',
-      en: "5 real BSA tutor moments + 1 marking challenge. Let's see what kind of cikgu you are!",
+      ms: 'Pilih apa yang anda buat dalam 5 situasi sebenar tutor BSA, kemudian tanda 8 jawapan murid dalam 45 saat. Di hujung, anda tahu jenis cikgu anda.',
+      en: "Choose what you would do in 5 real BSA tutor moments, then mark 8 pupils' answers in 45 seconds. At the end you find out your teacher type.",
     },
   },
 }
