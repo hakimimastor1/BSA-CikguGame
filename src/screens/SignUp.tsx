@@ -220,8 +220,8 @@ export function SignUp({
           </Field>
         )}
 
-        {role === 'pelajar' && (
-          <Field label={t(S.fSchool, lang)}>
+        {!isTutor && (
+          <Field label={role === 'ibubapa' ? t(S.fChildSchool, lang) : t(S.fSchool, lang)}>
             <input className="field" value={d.school} onChange={(e) => set('school', e.target.value)} />
           </Field>
         )}

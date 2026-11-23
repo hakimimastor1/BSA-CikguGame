@@ -27,6 +27,8 @@
   - **Ibu bapa yang terus daftarkan anak di booth:** beg. Stok beg (lebih kurang 120) dikongsi untuk semua ini.
   - Satu beg untuk satu keluarga. Kalau skrin tunjuk *"Nombor ini sudah didaftarkan"*, beg sudah diambil.
 - Papan skor bermula semula setiap hari pada tengah malam.
+- **Ibu bapa yang nak terus daftar trial tanpa main:** cadangkan laman web BSA, `brightscholaracademy.com.my` →
+  **Claim FREE Trial**. Pautan ini juga ada di bawah butang *Mula main* pada skrin pertama game.
 
 ## 3. Susulan (laman admin)
 

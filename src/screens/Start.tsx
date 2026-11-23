@@ -8,14 +8,19 @@ import { Mentol } from '../components/Mentol'
 import { NICK_MAX, NICK_MIN, cleanNicknameInput, isCleanNickname, suggestNickname } from '../game/nickname'
 
 export function Welcome({ lang, onStart }: { lang: Lang; onStart: () => void }) {
+  // Keep "Mula main" on the first screen of shorter phones (iPhone SE to iPhone 14): smaller mascot and
+  // tighter spacing, and on the very shortest the perk list alone explains the two games.
+  const vh = typeof window === 'undefined' ? 800 : window.innerHeight
+  const short = vh < 760
+  const tiny = vh < 620
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center anim-slide">
-      <Mentol size={150} mood="cheer" bob glow={1} />
+    <div className={`flex flex-1 flex-col items-center justify-center text-center anim-slide ${short ? 'gap-3' : 'gap-5'}`}>
+      <Mentol size={tiny ? 76 : short ? 96 : 150} mood="cheer" bob glow={1} />
       <div>
         <p className="font-display text-lg font-bold text-muted">{t(S.welcomeKicker, lang)}</p>
-        <h1 className="font-display text-[2.6rem] font-extrabold leading-[1.05]">{t(S.welcomeTitle, lang)}</h1>
+        <h1 className={`font-display font-extrabold leading-[1.05] ${short ? 'text-[2.2rem]' : 'text-[2.6rem]'}`}>{t(S.welcomeTitle, lang)}</h1>
       </div>
-      <p className="max-w-xs text-[1.05rem] leading-relaxed text-muted">{t(S.welcomeGames, lang)}</p>
+      {!tiny && <p className={`max-w-xs leading-relaxed text-muted ${short ? 'text-base' : 'text-[1.05rem]'}`}>{t(S.welcomeGames, lang)}</p>}
       <ul className="flex w-full flex-col gap-2 text-left">
         <li className="flex items-center gap-2.5 rounded-2xl border-[3px] border-navy bg-white px-3.5 py-2 font-display font-bold leading-snug">
           <BriefcaseBusiness size={20} strokeWidth={2.5} className="shrink-0" />
@@ -36,6 +41,12 @@ export function Welcome({ lang, onStart }: { lang: Lang; onStart: () => void }) 
         {t(S.welcomeStart, lang)}
         <ArrowRight size={22} strokeWidth={3} />
       </button>
+      <p className="text-sm text-muted">
+        {t(S.welcomeWebTrial, lang)}{' '}
+        <a className="font-bold text-navy underline underline-offset-2" href={EVENT.websiteUrl} target="_blank" rel="noreferrer">
+          {t(S.welcomeWebTrialLink, lang)}
+        </a>
+      </p>
       {!eventOver() && <p className="text-sm font-bold tracking-wide text-muted">{EVENT.name}</p>}
     </div>
   )

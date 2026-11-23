@@ -65,11 +65,21 @@ export function Offer({
   }
 
   const over = eventOver()
+  // One labelled line per detail, so BSA can match the WhatsApp message to the sign-up at a glance.
+  const lines: [keyof typeof S, string | undefined][] = [
+    ['waName', data.name],
+    ['waChild', player.role === 'ibubapa' ? data.childName : undefined],
+    ['waParent', player.role === 'pelajar' && data.under18 ? data.parentName : undefined],
+    ['waLevel', data.level],
+    ['waSchool', data.school],
+    ['waSubjects', data.trialSubjects.join(', ')],
+  ]
   const msg = fill(t(over ? S.waLearnerAfter : S.waLearner, lang), {
     code: EVENT.offerCode,
-    name: player.role === 'ibubapa' && data.childName ? `${data.childName} (${data.name})` : data.name,
-    level: data.level,
-    subjects: data.trialSubjects.join(', '),
+    details: lines
+      .filter(([, v]) => v && v.trim())
+      .map(([k, v]) => `${t(S[k], lang)}: ${v!.trim()}`)
+      .join('\n'),
     ref: reference,
   })
 

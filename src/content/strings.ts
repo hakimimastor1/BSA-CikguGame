@@ -32,6 +32,11 @@ export const S = {
   rolePelajarHintAfter: { ms: 'Main Misi Pelajar Bijak · trial percuma', en: 'Play Smart Student Mission · free trial' },
   roleIbubapaHintAfter: { ms: 'Untuk anak atau adik · pilih permainan · trial percuma', en: 'For your child or sibling · pick a game · free trial' },
   welcomePerkAll: { ms: 'Semua pemain dapat sticker!', en: 'Every player gets a sticker!' },
+  welcomeWebTrial: { ms: 'Nak terus daftar kelas trial tanpa main?', en: 'Want to book a trial class without playing?' },
+  welcomeWebTrialLink: {
+    ms: 'Daftar di laman web BSA (tekan "Claim FREE Trial")',
+    en: 'Register on the BSA website (tap "Claim FREE Trial")',
+  },
 
   // Role
   roleTitle: { ms: 'Saya…', en: 'I am…' },
@@ -173,6 +178,7 @@ export const S = {
   fLevel: { ms: 'Tahap', en: 'Level' },
   fChildLevel: { ms: 'Tahap anak / adik', en: "Child or sibling's level" },
   fSchool: { ms: 'Sekolah', en: 'School' },
+  fChildSchool: { ms: 'Sekolah anak / adik', en: "Child's school" },
   fArea: { ms: 'Kawasan (bandar / negeri)', en: 'Area (town / state)' },
   fTrialSubjects: { ms: 'Pilih 3 subjek trial', en: 'Pick 3 trial subjects' },
   fTrialSubjectsHint: { ms: 'Kami dah pilihkan subjek untuk naik level. Boleh tukar.', en: "We've picked your level-up subjects. Feel free to change them." },
@@ -219,8 +225,8 @@ export const S = {
   },
   offerEndedClaim: { ms: 'WhatsApp BSA untuk trial', en: 'WhatsApp BSA for a trial' },
   waLearnerAfter: {
-    ms: 'Hi BSA! Saya nak cuba kelas trial percuma.\nNama: {name}\nTahap: {level}\nSubjek: {subjects}\nRujukan: {ref}',
-    en: "Hi BSA! I'd like to try a free trial class.\nName: {name}\nLevel: {level}\nSubjects: {subjects}\nReference: {ref}",
+    ms: 'Hi BSA! Saya nak cuba kelas trial percuma.\n{details}\nRujukan: {ref}',
+    en: "Hi BSA! I'd like to try a free trial class.\n{details}\nReference: {ref}",
   },
   offerTitle: { ms: 'Tahniah! Trial anda sedia', en: 'Congrats! Your trial is ready' },
   offerExisting: {
@@ -254,9 +260,16 @@ export const S = {
     en: "RM25–40/hour · paid weekly · flexible hours · online or at the pupil's home",
   },
   waLearner: {
-    ms: 'Hi BSA! Saya nak tuntut trial percuma 3 subjek dengan kod {code}.\nNama: {name}\nTahap: {level}\nSubjek: {subjects}\nRujukan: {ref}',
-    en: "Hi BSA! I'd like to claim the free 3-subject trial with code {code}.\nName: {name}\nLevel: {level}\nSubjects: {subjects}\nReference: {ref}",
+    ms: 'Hi BSA! Saya nak tuntut trial percuma 3 subjek dengan kod {code}.\n{details}\nRujukan: {ref}',
+    en: "Hi BSA! I'd like to claim the free 3-subject trial with code {code}.\n{details}\nReference: {ref}",
   },
+  // Lines of the trial claim message (only the ones the visitor filled in are sent).
+  waName: { ms: 'Nama', en: 'Name' },
+  waChild: { ms: 'Nama anak', en: "Child's name" },
+  waParent: { ms: 'Ibu bapa / penjaga', en: 'Parent / guardian' },
+  waLevel: { ms: 'Tahap', en: 'Level' },
+  waSchool: { ms: 'Sekolah', en: 'School' },
+  waSubjects: { ms: 'Subjek', en: 'Subjects' },
   waTutor: {
     ms: 'Hi BSA! Saya {name}, berminat jadi tutor BSA ({subjects}, {level}). Rujukan: {ref}',
     en: "Hi BSA! I'm {name} and I'd like to become a BSA tutor ({subjects}, {level}). Reference: {ref}",
