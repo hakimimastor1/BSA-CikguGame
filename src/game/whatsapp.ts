@@ -10,7 +10,6 @@ export function normaliseMyPhone(input: string): string | null {
 export const waLink = (numberIntl: string, text: string) =>
   `https://wa.me/${numberIntl}?text=${encodeURIComponent(text)}`
 
-/** Short reference like PK-4F7Q, readable over the phone (no 0/O/1/I). */
 /** A random id for one filled-in form (RFC 4122 v4), so the server can spot the same form sent twice. */
 export function newClientId(): string {
   try {
@@ -27,6 +26,7 @@ export function newClientId(): string {
   return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`
 }
 
+/** Short reference like PK-4F7Q, readable over the phone (no 0/O/1/I). */
 export function makeReference(prefix = 'PK'): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
   let s = ''
