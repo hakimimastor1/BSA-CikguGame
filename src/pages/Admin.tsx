@@ -139,7 +139,8 @@ function toCsv(rows: SignupRow[]): string {
     ['Nama ibu bapa', (r) => r.parent_name],
     ['Bawah 18', (r) => (r.under18 ? 'Ya' : '')],
     ['Nama anak', (r) => r.child_name],
-    [`Tahap ${NEXT_YEAR - 1}`, (r) => r.level],
+    [`Tahap ${NEXT_YEAR - 1}`, (r) => (r.role === 'cikgu' ? '' : r.level)],
+    ['Tahap mengajar', (r) => (r.role === 'cikgu' ? r.level : '')],
     [`Kelas ${NEXT_YEAR}`, (r) => r.level_next],
     ['Aliran', (r) => streamById(r.stream)?.label.ms],
     ['Sekolah', (r) => r.school],
@@ -654,6 +655,7 @@ function SignupCard({ r, isAdmin, onPatch }: { r: SignupRow; isAdmin: boolean; o
     if (r.tutor_status === 'upsi') details.push(`Pelajar UPSI · Sem ${r.semester ?? '?'} · CGPA ${r.cgpa ?? '?'}`)
     if (r.tutor_status === 'grad') details.push(`Graduan · ${r.qualification ?? ''}`)
     if (r.course) details.push(r.course)
+    if (r.level) details.push(`Tahap mengajar: ${r.level}`)
     if (r.teach_subjects.length) details.push(`Boleh ajar: ${r.teach_subjects.join(', ')}`)
     if (r.availability.length) details.push(`Masa lapang: ${r.availability.map((a) => AVAIL_LABEL[a] ?? a).join(', ')}`)
   } else {

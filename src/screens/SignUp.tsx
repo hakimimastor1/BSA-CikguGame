@@ -4,6 +4,7 @@ import type { Band, Lang, PlayResult, Player, Stream, Txt } from '../types'
 import { S, fill, t } from '../content/strings'
 import { NEXT_YEAR, eventOver } from '../content/event'
 import {
+  BANDS,
   BSA_SUBJECTS,
   NEXT_LEVELS,
   NOW_LEVELS_BY_BAND,
@@ -146,7 +147,8 @@ export function SignUp({
     parentName: '',
     under18: role === 'pelajar',
     childName: '',
-    level: levelById(nowLevels[0]).label.ms,
+    // Tutors: the level they'd teach (e.g. "Tingkatan 1–3"); learners: this year's class.
+    level: isTutor ? (BANDS.find((b) => b.id === player.band)?.label.ms ?? '') : levelById(nowLevels[0]).label.ms,
     levelNext: levelById(nextLevelId(nowLevels[0])).label.ms,
     levelNextBand: levelById(nextLevelId(nowLevels[0])).band,
     stream: startStream,
