@@ -95,6 +95,38 @@ export const finishPlay = (playId: string, choices: string[], marks: { id: strin
 export const submitSignup = (playId: string | null, data: Record<string, unknown>) =>
   rpc<{ ref: string; existing: boolean }>('submit_signup', { p_event: eventSlug, p_play: playId, p: data })
 
+/**
+ * Send a sign-up from the phone's outbox with plain fetch, so it can use `keepalive` and still
+ * arrive while the player switches to WhatsApp. 'sent': saved (or already saved); 'drop': the
+ * server refused it and a retry won't help; 'retry': no answer, try again later.
+ */
+export async function sendQueuedSignup(
+  event: string,
+  playId: string | null,
+  data: Record<string, unknown>,
+  keepalive = false,
+): Promise<'sent' | 'retry' | 'drop'> {
+  if (!url || !key) return 'drop'
+  const ctl = new AbortController()
+  const timer = keepalive ? undefined : setTimeout(() => ctl.abort(), 15000)
+  try {
+    const res = await fetch(`${url}/rest/v1/rpc/submit_signup`, {
+      method: 'POST',
+      headers: { apikey: key, 'content-type': 'application/json' },
+      body: JSON.stringify({ p_event: event, p_play: playId, p: data }),
+      keepalive,
+      signal: keepalive ? undefined : ctl.signal,
+    })
+    if (res.ok) return 'sent'
+    // Our own checks (bad input) answer 400 and won't change; anything else may be passing.
+    return res.status === 400 ? 'drop' : 'retry'
+  } catch {
+    return 'retry'
+  } finally {
+    if (timer) clearTimeout(timer)
+  }
+}
+
 type BoardRow = { nickname: string; xp: number; personality: Trait }
 
 export interface Board {

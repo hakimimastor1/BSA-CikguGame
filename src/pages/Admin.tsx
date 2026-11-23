@@ -59,6 +59,8 @@ interface SignupRow {
   game?: Game | null
   status: string
   notes: string | null
+  /** Saved later by the player's phone: the signal was weak at the booth and they went on to WhatsApp. */
+  delayed?: boolean
   created_at: string
   /** Last admin correction of the details, and by whom. */
   edited_at?: string | null
@@ -79,6 +81,9 @@ interface Stats {
   days: { day: string; plays: number; signups: number }[]
   byRole: Record<string, { plays: number; signups: number }>
   byGame?: Partial<Record<Game, number>>
+  /** Leads by follow-up status. */
+  funnel?: { learner: Record<string, number>; tutor: Record<string, number> }
+  delayed?: number
 }
 
 const ROLE_LABEL: Record<SignupRow['role'], string> = { pelajar: 'Pelajar sekolah', ibubapa: 'Ibu bapa / keluarga', cikgu: 'Bakal tutor (UPSI)' }
@@ -154,6 +159,7 @@ function toCsv(rows: SignupRow[]): string {
     ['XP', (r) => r.total_xp],
     ['Status', (r) => ALL_STATUS.get(r.status) ?? r.status],
     ['Nota', (r) => r.notes],
+    ['Masuk lewat', (r) => (r.delayed ? 'Ya' : '')],
   ]
   const esc = (v: unknown) => {
     const s = v == null ? '' : String(v)
@@ -672,6 +678,14 @@ function SignupCard({ r, isAdmin, onPatch }: { r: SignupRow; isAdmin: boolean; o
         <div className="shrink-0 text-right">
           <span className="inline-block rounded-full border-2 border-navy bg-sky px-2.5 py-0.5 text-xs font-bold">{ROLE_LABEL[r.role]}</span>
           <p className="mt-1 font-display font-extrabold">{r.ref}</p>
+          {r.delayed && (
+            <span
+              className="mt-1 inline-block rounded-full border-2 border-navy bg-yellow-soft px-2 py-0.5 text-xs font-bold"
+              title="Talian lemah semasa daftar: telefon pemain hantar maklumat ini kemudian. Dia mungkin sudah WhatsApp dengan rujukan yang sama."
+            >
+              Masuk lewat
+            </span>
+          )}
         </div>
       </div>
       {editing ? (
@@ -976,6 +990,67 @@ function AdminTools({ onChange }: { onChange: () => void }) {
   )
 }
 
+/**
+ * Leads by follow-up status (where each lead is now), and the share that reached each step:
+ * a lead at "Mendaftar" also counts as contacted and as trial booked.
+ */
+function Funnel({
+  title,
+  statuses,
+  counts,
+  rates,
+}: {
+  title: string
+  statuses: [string, string][]
+  counts: Record<string, number>
+  rates: [string, string[]][]
+}) {
+  const total = Object.values(counts).reduce((a, n) => a + n, 0)
+  const pct = (n: number) => (total ? Math.round((n / total) * 100) : 0)
+  const lost = new Set(['not_interested', 'not_suitable'])
+  const done = new Set(['enrolled', 'hired'])
+  return (
+    <section className="clay-card flex flex-col gap-3 p-4">
+      <div className="flex items-baseline justify-between gap-2">
+        <h2 className="font-display text-lg font-extrabold">{title}</h2>
+        <span className="text-sm font-bold text-muted">{total} lead</span>
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {rates.map(([label, keys]) => {
+          const n = keys.reduce((a, k) => a + (counts[k] ?? 0), 0)
+          return (
+            <div key={label} className="rounded-2xl bg-sky p-2.5 text-center">
+              <p className="font-display text-2xl font-extrabold tabular-nums">{total ? `${pct(n)}%` : '–'}</p>
+              <p className="text-xs font-bold leading-tight text-muted">
+                {label} ({n})
+              </p>
+            </div>
+          )
+        })}
+      </div>
+      <ul className="flex flex-col gap-2">
+        {statuses.map(([k, label]) => {
+          const n = counts[k] ?? 0
+          return (
+            <li key={k} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 text-sm">
+              <span className="font-bold">{label}</span>
+              <span className="font-display font-extrabold tabular-nums">
+                {n} <span className="text-xs font-bold text-muted">· {pct(n)}%</span>
+              </span>
+              <span className="col-span-2 h-2.5 overflow-hidden rounded-full border-2 border-navy bg-white" aria-hidden="true">
+                <span
+                  className={`block h-full ${lost.has(k) ? 'bg-wrong' : done.has(k) ? 'bg-correct' : 'bg-navy'}`}
+                  style={{ width: `${pct(n)}%` }}
+                />
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+    </section>
+  )
+}
+
 function StatsTab() {
   const [s, setS] = useState<Stats | null>(null)
   useEffect(() => {
@@ -1007,6 +1082,35 @@ function StatsTab() {
             </div>
           ))}
         </div>
+      )}
+      {s.funnel && (
+        <>
+          <Funnel
+            title="Corong lead · Pelajar & ibu bapa"
+            statuses={LEARNER_STATUS}
+            counts={s.funnel.learner}
+            rates={[
+              ['Sudah dihubungi', ['contacted', 'trial_booked', 'enrolled', 'not_interested']],
+              ['Trial ditempah', ['trial_booked', 'enrolled']],
+              ['Mendaftar', ['enrolled']],
+            ]}
+          />
+          <Funnel
+            title="Corong lead · Bakal tutor"
+            statuses={TUTOR_STATUS}
+            counts={s.funnel.tutor}
+            rates={[
+              ['Sudah dihubungi', ['contacted', 'interviewed', 'hired', 'not_suitable']],
+              ['Ditemu duga', ['interviewed', 'hired']],
+              ['Diambil', ['hired']],
+            ]}
+          />
+        </>
+      )}
+      {!!s.delayed && (
+        <p className="text-sm text-muted">
+          {s.delayed} pendaftaran <b>masuk lewat</b>: talian lemah semasa daftar, telefon pemain hantar kemudian.
+        </p>
       )}
       <table className="clay-card w-full overflow-hidden text-left text-sm">
         <thead className="bg-sky">

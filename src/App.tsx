@@ -13,6 +13,7 @@ import { Offer } from './screens/Offer'
 import { fromServer, pickQuestions, scorePlay } from './game/scoring'
 import { makeReference } from './game/whatsapp'
 import { finishPlay, online, startPlay, submitSignup } from './lib/api'
+import { queueSignup, startOutbox } from './lib/outbox'
 
 type Step = 'welcome' | 'role' | 'gamePick' | 'level' | 'nick' | 'intro' | 'story' | 'semakIntro' | 'semak' | 'result' | 'signup' | 'offer'
 
@@ -60,6 +61,9 @@ export default function App() {
   useEffect(() => {
     window.scrollTo({ top: 0 })
   }, [step, scene])
+
+  // Send any sign-up this phone couldn't save earlier (weak signal at the booth).
+  useEffect(() => startOutbox(), [])
 
   const toggleLang = () => setLang((l) => (l === 'ms' ? 'en' : 'ms'))
   const storyXp = picks.reduce((s, c) => s + c.xp, 0)
@@ -118,9 +122,13 @@ export default function App() {
     setStep('offer')
   }
 
+  // Couldn't save (weak signal): show the offer and WhatsApp message now, and let the phone send the
+  // sign-up by itself once the signal is back, with the same reference.
   const onSignupSkip = (d: SignupData) => {
+    const ref = d.ref ?? makeReference()
+    if (online && d.clientId) queueSignup(activePlayId.current, { ...d, clientId: d.clientId, ref, role: player.role, lang, delayed: true })
     setSignup(d)
-    setReference(makeReference())
+    setReference(ref)
     setExisting(false)
     setStep('offer')
   }

@@ -172,7 +172,7 @@ Priority: **M** = must have for PESKON, **S** = should have (after PESKON), **C*
 | A4 | Follow-up status: new / contacted / trial booked / enrolled / not interested (tutors: new / contacted / interviewed / hired / not suitable) | M |
 | A5 | Export sign-ups to Excel/CSV (admin only) | M |
 | A6a | Hide a rude nickname from the TV leaderboard | M |
-| A6 | Event stats: plays, sign-ups, sign-up rate, by role and level | S |
+| A6 | Event stats: plays, sign-ups, sign-up rate, by role and level, and a lead funnel by follow-up status (contacted, trial booked, enrolled; tutors: contacted, interviewed, hired) | S |
 | A7 | Events: create an event (name, dates, offer code, offer text) and download its QR code and TV link | S |
 | A8 | Edit result texts and WhatsApp message templates (BM and English) | S |
 | A9 | Edit story situations and the question bank | C |

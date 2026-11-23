@@ -225,8 +225,8 @@ export const S = {
   fConsentNeeded: { ms: 'Sila tandakan persetujuan untuk teruskan', en: 'Please tick the consent box to continue' },
   signupSaving: { ms: 'Menyimpan…', en: 'Saving…' },
   signupError: {
-    ms: 'Talian lemah, maklumat belum disimpan. Cuba lagi, atau teruskan dan tuntut terus di WhatsApp.',
-    en: "Weak signal, your details aren't saved yet. Try again, or carry on and claim straight on WhatsApp.",
+    ms: 'Talian lemah, maklumat belum sampai. Cuba lagi, atau teruskan ke WhatsApp: telefon ini akan hantar maklumat anda sendiri bila talian pulih.',
+    en: "Weak signal, your details haven't reached us yet. Try again, or continue to WhatsApp: this phone will send your details by itself once the signal is back.",
   },
   signupRetry: { ms: 'Cuba lagi', en: 'Try again' },
   signupSkip: { ms: 'Teruskan ke WhatsApp', en: 'Continue to WhatsApp' },

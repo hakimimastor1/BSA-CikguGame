@@ -15,7 +15,7 @@ import {
   streamById,
   trialValue,
 } from '../content/subjects'
-import { normaliseMyPhone } from '../game/whatsapp'
+import { makeReference, newClientId, normaliseMyPhone } from '../game/whatsapp'
 
 export interface SignupData {
   name: string
@@ -44,6 +44,9 @@ export interface SignupData {
   availability?: string[]
   consent: boolean
   marketing: boolean
+  /** Made once per form: the server saves a form only once, and keeps this reference when it's free. */
+  clientId?: string
+  ref?: string
 }
 
 const AVAIL: { id: string; label: Txt }[] = [
@@ -161,6 +164,7 @@ export function SignUp({
     marketing: false,
   })
   const [tried, setTried] = useState(false)
+  const [ids] = useState(() => ({ clientId: newClientId(), ref: makeReference() }))
   const [saving, setSaving] = useState(false)
   const [failed, setFailed] = useState(false)
   const set = <K extends keyof SignupData>(k: K, v: SignupData[K]) => setD((cur) => ({ ...cur, [k]: v }))
@@ -177,7 +181,7 @@ export function SignUp({
   const pickStream = (stream: Stream) => setD((cur) => ({ ...cur, stream, trialSubjects: presetFor(trialBand, stream) }))
   const askStream = !isTutor && levelHasStream(nextId)
   /** What is sent: the stream only when next year's class has one. */
-  const final = (): SignupData => ({ ...d, whatsapp: normaliseMyPhone(d.whatsapp)!, stream: askStream ? d.stream : undefined })
+  const final = (): SignupData => ({ ...d, ...ids, whatsapp: normaliseMyPhone(d.whatsapp)!, stream: askStream ? d.stream : undefined })
 
   const needsParent = role === 'pelajar' && d.under18
   const errors: Partial<Record<keyof SignupData, string>> = {}

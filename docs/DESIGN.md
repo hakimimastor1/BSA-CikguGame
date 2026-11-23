@@ -189,6 +189,11 @@ The personality is the trait the player picked most (ties go to the order below)
   reading the keys can't score more than a perfect, honest round. Taps under 250 ms score 0, and rounds finished
   in under 20 seconds are kept off the leaderboard.
 - PDPA notice and consent on the sign-up form, with a link to the full notice.
+- Weak signal at sign-up: the phone makes the form's reference and a client id up front. If saving fails and
+  the player taps **Teruskan ke WhatsApp**, the form waits in the phone's storage and is sent when the signal
+  is back (straight away, every 20 seconds, when the player returns from WhatsApp, or the next time the game
+  opens). The server saves each client id once and keeps the reference the WhatsApp message showed; Admin
+  marks these sign-ups **Masuk lewat**. A phone that never reopens the game only reaches BSA through WhatsApp.
 
 ### WhatsApp
 

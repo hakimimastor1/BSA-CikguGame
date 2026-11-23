@@ -48,7 +48,7 @@
 | Nama tak sopan di projektor | Admin → **Papan skor** → tekan ikon mata untuk sembunyi |
 | Nak kosongkan papan skor (contoh: selepas ujian) | Admin → **Papan skor** → **Reset papan skor sekarang**. Keputusan, pendaftaran dan statistik tidak dipadam |
 | Ikon wifi kuning di projektor | Internet lemah. Ia sambung semula sendiri |
-| Pemain dapat mesej "talian lemah" semasa daftar | Tekan **Cuba lagi**, atau **Teruskan ke WhatsApp** (maklumat sampai melalui WhatsApp) |
+| Pemain dapat mesej "talian lemah" semasa daftar | Tekan **Cuba lagi**, atau **Teruskan ke WhatsApp**. Telefon dia hantar maklumat ke Admin sendiri bila talian pulih, dengan rujukan yang sama (tanda **Masuk lewat**) |
 | Pelanggan tersilap isi borang (nama, nombor, kelas, peranan…) | Admin → **Pendaftaran** → **Edit** pada kad itu → **Simpan** |
 | Tak boleh log masuk admin | Hubungi admin BSA |
 
