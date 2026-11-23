@@ -73,9 +73,11 @@ export interface PlayResult {
   strongest: SubjectKey | null
   levelUp: SubjectKey[]
   rightMarks: number
-  /** Today's leaderboard rank, once the server has scored the play. */
+  /** Rank on this game's board, once the server has scored the play. */
   rank?: number | null
   players?: number
+  /** 'manual': the board runs until an admin resets it; 'daily': it starts fresh every midnight. */
+  boardMode?: 'manual' | 'daily'
 }
 
 export interface Player {

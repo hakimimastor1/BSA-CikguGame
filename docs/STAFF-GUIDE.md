@@ -26,7 +26,8 @@
   - **Pelajar / graduan UPSI yang daftar tutor:** sticker sahaja (tiada beg).
   - **Ibu bapa yang terus daftarkan anak di booth:** beg. Stok beg (lebih kurang 120) dikongsi untuk semua ini.
   - Satu beg untuk satu keluarga. Kalau skrin tunjuk *"Nombor ini sudah didaftarkan"*, beg sudah diambil.
-- Papan skor bermula semula setiap hari pada tengah malam.
+- Papan skor kekal sehingga admin tekan **Reset papan skor sekarang** (mod Manual). Admin boleh tukar ke **Automatik setiap
+  hari** (kosong sendiri setiap tengah malam) dan pilih 3, 5 atau 10 nama di projektor: Admin → **Papan skor** → **Tetapan papan skor**.
 - **Ibu bapa yang nak terus daftar trial tanpa main:** cadangkan laman web BSA, `brightscholaracademy.com.my` →
   **Claim FREE Trial**. Pautan ini juga ada di bawah butang *Mula main* pada skrin pertama game.
 
@@ -42,7 +43,7 @@
 | Masalah | Apa nak buat |
 |---|---|
 | Nama tak sopan di projektor | Admin → **Papan skor** → tekan ikon mata untuk sembunyi |
-| Nak kosongkan papan skor (contoh: selepas ujian) | Admin → **Papan skor** → **Reset papan skor sekarang**. Keputusan, pendaftaran dan statistik tidak dipadam. Papan juga reset sendiri setiap tengah malam |
+| Nak kosongkan papan skor (contoh: selepas ujian) | Admin → **Papan skor** → **Reset papan skor sekarang**. Keputusan, pendaftaran dan statistik tidak dipadam |
 | Ikon wifi kuning di projektor | Internet lemah. Ia sambung semula sendiri |
 | Pemain dapat mesej "talian lemah" semasa daftar | Tekan **Cuba lagi**, atau **Teruskan ke WhatsApp** (maklumat sampai melalui WhatsApp) |
 | "Nombor ini sudah didaftarkan" | Satu nombor, satu tuntutan. Rujukan yang sama digunakan |

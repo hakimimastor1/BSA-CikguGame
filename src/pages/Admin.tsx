@@ -523,13 +523,13 @@ function BoardTab({ isAdmin }: { isAdmin: boolean }) {
   return (
     <div className="flex flex-col gap-3">
       <p className="clay-card bg-yellow-soft p-4 text-sm font-bold">
-        Papan skor hari ini, sama seperti di projektor. Sembunyikan nama yang tidak sesuai. Main yang terlalu pantas (mungkin
+        Papan skor, sama seperti di projektor. Sembunyikan nama yang tidak sesuai. Main yang terlalu pantas (mungkin
         ditipu) ditanda dan tidak dipaparkan.
       </p>
       <a className="clay-btn bg-white" href={`/tv?e=${eventSlug}`} target="_blank" rel="noreferrer">
         <Trophy size={18} /> Buka skrin projektor
       </a>
-      {rows?.length === 0 && <p className="text-center text-muted">Belum ada pemain hari ini.</p>}
+      {rows?.length === 0 && <p className="text-center text-muted">Belum ada pemain di papan skor.</p>}
       {rows != null &&
         rows.length > 0 &&
         GAMES.map((g) => {
@@ -538,9 +538,9 @@ function BoardTab({ isAdmin }: { isAdmin: boolean }) {
             <section key={g} className="flex flex-col gap-2">
               <h3 className="mt-2 font-display text-xl font-extrabold">
                 {g === 'cikgu' ? 'Top Cikgu Sehari' : 'Top Pelajar Bijak'}{' '}
-                <span className="text-sm font-bold text-muted">· {list.length} nama · 5 teratas di projektor</span>
+                <span className="text-sm font-bold text-muted">· {list.length} nama di papan</span>
               </h3>
-              {list.length === 0 && <p className="text-sm text-muted">Belum ada pemain {gameName(g)} hari ini.</p>}
+              {list.length === 0 && <p className="text-sm text-muted">Belum ada pemain {gameName(g)} di papan.</p>}
               <ol className="flex flex-col gap-2">
                 {list.map((r, i) => (
                   <li key={`${g}:${r.nickname}`} className={`clay-card flex items-center gap-3 p-3 ${r.hidden ? 'opacity-55' : ''}`}>
@@ -577,6 +577,8 @@ interface EventInfo {
   startsOn: string
   today: string
   boardResetAt: string | null
+  boardMode: 'manual' | 'daily'
+  boardSize: number
   beforeStart: boolean
   plays: number
   signups: number
@@ -591,10 +593,28 @@ function AdminTools({ onChange }: { onChange: () => void }) {
   const [ask, setAsk] = useState<'reset' | 'clear' | null>(null)
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState<string | null>(null)
+  const [mode, setMode] = useState<'manual' | 'daily'>('manual')
+  const [size, setSize] = useState(5)
   const loadInfo = useCallback(async () => {
     const { data } = await supabase!.rpc('staff_event', { p_event: eventSlug })
-    if (data) setInfo(data as EventInfo)
+    if (data) {
+      const d = data as EventInfo
+      setInfo(d)
+      setMode(d.boardMode ?? 'manual')
+      setSize(d.boardSize ?? 5)
+    }
   }, [])
+  const changed = info != null && (mode !== info.boardMode || size !== info.boardSize)
+
+  const saveSettings = async () => {
+    setBusy(true)
+    setMsg(null)
+    const { error } = await supabase!.rpc('staff_set_board_settings', { p_event: eventSlug, p_mode: mode, p_size: size })
+    setBusy(false)
+    setMsg(error ? `Tidak berjaya: ${error.message}` : 'Tetapan disimpan. Projektor dikemas kini dalam beberapa saat.')
+    await loadInfo()
+    onChange()
+  }
   useEffect(() => {
     void loadInfo()
   }, [loadInfo])
@@ -637,11 +657,52 @@ function AdminTools({ onChange }: { onChange: () => void }) {
         Alat admin
       </h3>
 
-      <div className="flex flex-col gap-2">
+      <fieldset className="flex flex-col gap-2" disabled={busy || !info}>
+        <legend className="mb-1 font-bold">Tetapan papan skor</legend>
+        <p className="text-sm font-bold">Bila papan skor dikosongkan?</p>
+        {(
+          [
+            ['manual', 'Manual', 'Papan kekal sehingga admin tekan Reset. Sesuai untuk kumpul pemenang sepanjang event atau ikut sesi.'],
+            ['daily', 'Automatik setiap hari', 'Papan kosong sendiri setiap hari pada tengah malam. Admin masih boleh tekan Reset bila-bila masa.'],
+          ] as const
+        ).map(([id, label, hint]) => (
+          <label
+            key={id}
+            className={`flex cursor-pointer items-start gap-3 rounded-2xl border-[3px] p-3 ${mode === id ? 'border-navy bg-yellow-soft' : 'border-sky bg-white'}`}
+          >
+            <input type="radio" name="board-mode" className="mt-1 h-5 w-5 accent-[#023E86]" checked={mode === id} onChange={() => setMode(id)} />
+            <span>
+              <span className="block font-bold">{label}</span>
+              <span className="block text-sm text-muted">{hint}</span>
+            </span>
+          </label>
+        ))}
+        <p className="mt-1 text-sm font-bold">Nama di projektor (setiap papan)</p>
+        <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Nama di projektor">
+          {[3, 5, 10].map((n) => (
+            <button
+              key={n}
+              type="button"
+              role="radio"
+              aria-checked={size === n}
+              onClick={() => setSize(n)}
+              className={`min-h-11 rounded-2xl border-[3px] font-display text-lg font-extrabold ${size === n ? 'border-navy bg-yellow' : 'border-sky bg-white'}`}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+        <button type="button" className="clay-btn min-h-11 bg-yellow text-base" disabled={!changed || busy} onClick={saveSettings}>
+          Simpan tetapan
+        </button>
+      </fieldset>
+
+      <div className="flex flex-col gap-2 border-t-[3px] border-dashed border-sky pt-3">
         <p className="font-bold">Reset papan skor</p>
         <p className="text-sm text-muted">
           Kosongkan kedua-dua papan di projektor dan mula semula dari sekarang. Keputusan pemain, pendaftaran dan statistik tidak
-          dipadam. Papan juga reset sendiri setiap hari pada tengah malam.
+          dipadam.
+          {info?.boardMode === 'daily' ? ' Papan juga kosong sendiri setiap tengah malam.' : ' Dalam mod Manual, papan kekal sehingga butang ini ditekan.'}
           {info?.boardResetAt ? ` Reset terakhir: ${myTime(info.boardResetAt)}.` : ''}
         </p>
         {ask === 'reset' ? (

@@ -137,5 +137,6 @@ export function fromServer(r: ServerResult, local: PlayResult): PlayResult {
     rightMarks: r.rightMarks,
     rank: r.rank,
     players: r.players,
+    boardMode: r.boardMode,
   }
 }

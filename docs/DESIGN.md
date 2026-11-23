@@ -140,7 +140,9 @@ The personality is the trait the player picked most (ties go to the order below)
 ### Scoring and leaderboard
 
 - Total XP is up to about 400 (150 from the story and up to 240 from Semak Kerja).
-- The leaderboard is **per day** (today's top 10) and shows a nickname's best score.
+- Each game has its own board, showing a nickname's best score. Admins choose in Admin → Papan skor: **Manual**
+  (default; the board keeps every play since the admin last pressed Reset) or **Daily** (fresh every midnight,
+  Malaysia time), and 3, 5 or 10 names per board on the projector (`cs.events.board_mode`, `board_size`).
 - The phone only sends the player's answers and timings. The server works out the XP, so scores can't be
   inflated.
 

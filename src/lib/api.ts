@@ -83,6 +83,7 @@ export interface ServerResult {
   rightMarks: number
   rank: number | null
   players: number
+  boardMode?: 'manual' | 'daily'
 }
 
 export const finishPlay = (playId: string, choices: string[], marks: { id: string; verdict: boolean | null; ms: number; hint: boolean }[]) =>
@@ -102,6 +103,11 @@ export interface Board {
   latest: (BoardRow & { game?: Game })[]
   players: number
   playersByGame?: Record<Game, number>
+  /** 'manual': boards run until an admin resets them; 'daily': they start fresh every midnight. */
+  mode?: 'manual' | 'daily'
+  /** Names per board on the projector (3, 5 or 10). */
+  size?: number
+  resetAt?: string | null
   mix: Partial<Record<Trait, number>>
 }
 

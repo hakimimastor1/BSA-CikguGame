@@ -73,7 +73,7 @@ export function Result({
             <div className="mx-auto mt-3 inline-flex items-center gap-2.5 rounded-2xl border-[3px] border-navy bg-yellow px-4 py-1.5 text-left anim-pop">
               <Trophy size={22} strokeWidth={2.5} className="shrink-0" />
               <div className="leading-tight">
-                <p className="font-display text-lg font-extrabold">{fill(t(S.resultRank, lang), { rank: result.rank })}</p>
+                <p className="font-display text-lg font-extrabold">{fill(t(result.boardMode === 'daily' ? S.resultRank : S.resultRankBoard, lang), { rank: result.rank })}</p>
                 {result.players ? <p className="text-sm font-bold">{fill(t(S.resultRankOf, lang), { n: result.players, game: t(GAME_NAME[player.game], lang) })}</p> : null}
               </div>
             </div>

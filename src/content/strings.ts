@@ -119,6 +119,7 @@ export const S = {
     en: 'BSA tutors for {level} earn RM{pay}/hour, paid weekly.',
   },
   resultRank: { ms: 'No. {rank} hari ini', en: 'No. {rank} today' },
+  resultRankBoard: { ms: 'No. {rank} di papan skor', en: 'No. {rank} on the board' },
   resultRankOf: { ms: 'daripada {n} pemain {game}', en: 'of {n} {game} players' },
   resultShare: { ms: 'Kongsi kad saya', en: 'Share my card' },
   resultSharing: { ms: 'Menyediakan kad…', en: 'Preparing card…' },

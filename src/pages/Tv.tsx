@@ -9,7 +9,8 @@ import type { Game } from '../types'
 import { EVENT } from '../content/event'
 
 const POLL_MS = 5000
-const TOP_N = 5
+/** Names per board when the server does not say (older servers). Admin can choose 3, 5 or 10. */
+const DEFAULT_SIZE = 5
 
 type Row = Board['top'][number]
 
@@ -18,9 +19,9 @@ const BOARDS: { game: Game; title: string; sub: string; icon: typeof Presentatio
   { game: 'pelajar', title: 'Top Pelajar Bijak', sub: 'Pelajar sekolah · School students', icon: GraduationCap },
 ]
 
-/** Today's top 5 for each game. Older servers only send `top` (Cikgu Sehari). */
+/** The top names for each game. Older servers only send `top` (Cikgu Sehari). */
 const rowsFor = (b: Board | null, g: Game): Row[] =>
-  (b?.boards?.[g] ?? (g === 'cikgu' ? (b?.top ?? []) : [])).slice(0, TOP_N)
+  (b?.boards?.[g] ?? (g === 'cikgu' ? (b?.top ?? []) : [])).slice(0, b?.size ?? DEFAULT_SIZE)
 
 /** Projector screen for the booth: QR code, today's top 5 for each game and the latest results. Updates every 5 s. */
 export default function Tv() {
@@ -82,6 +83,10 @@ export default function Tv() {
   }, [])
 
   const url = gameUrl(eventSlug)
+  // Manual mode (default): boards run until an admin resets them. Daily: fresh every midnight.
+  const daily = board?.mode === 'daily'
+  const size = board?.size ?? DEFAULT_SIZE
+  const dense = size > 5
 
   return (
     <div
@@ -146,7 +151,8 @@ export default function Tv() {
       <section className="relative z-10 flex min-w-0 flex-1 flex-col py-[3vh] pr-[2.5vw]">
         <div className="flex items-end justify-between">
           <h2 className="font-display text-[2.8vw] font-extrabold leading-none">
-            Papan Skor Hari Ini <span className="text-[1.6vw] text-sky">· Today's Top 5</span>
+            {daily ? 'Papan Skor Hari Ini' : 'Papan Skor'}{' '}
+            <span className="text-[1.6vw] text-sky">· {daily ? "Today's" : ''} Top {size}</span>
           </h2>
           <p className="flex items-center gap-[0.5vw] font-display text-[1.5vw] font-bold text-sky">
             <Users className="h-[1.6vw] w-[1.6vw]" strokeWidth={2.5} />
@@ -174,7 +180,7 @@ export default function Tv() {
                   )}
                 </div>
 
-                <ol className="mt-[1.5vh] flex flex-1 flex-col gap-[1vh]">
+                <ol className={`mt-[1.5vh] flex flex-1 flex-col ${dense ? 'gap-[0.7vh]' : 'gap-[1vh]'}`}>
                   {rows.map((r, i) => {
                     const Icon = TRAIT_ICON[r.personality]
                     const first = i === 0
@@ -186,23 +192,25 @@ export default function Tv() {
                         } ${first ? 'bg-yellow text-navy' : i < 3 ? 'bg-yellow/15' : 'bg-white/8'} ${
                           fresh.has(`${game}:${i}:${r.nickname}`) ? 'anim-pop' : ''
                         }`}
-                        style={{ maxHeight: '11vh' }}
+                        style={{ maxHeight: dense ? '6.4vh' : '11vh' }}
                       >
                         <span
-                          className={`flex h-[5vh] w-[5vh] shrink-0 items-center justify-center rounded-full font-display text-[1.6vw] font-extrabold ${
+                          className={`flex shrink-0 items-center justify-center rounded-full font-display font-extrabold ${
+                            dense ? 'h-[4.2vh] w-[4.2vh] text-[1.3vw]' : 'h-[5vh] w-[5vh] text-[1.6vw]'
+                          } ${
                             first ? 'bg-navy text-yellow' : i < 3 ? 'bg-yellow text-navy' : 'bg-white/15'
                           }`}
                         >
                           {i + 1}
                         </span>
                         <span className="flex min-w-0 flex-1 flex-col">
-                          <span className="truncate font-display text-[1.8vw] font-bold leading-tight">{r.nickname}</span>
-                          <span className={`flex items-center gap-[0.35vw] truncate text-[0.95vw] font-bold ${first ? 'text-navy' : 'text-sky'}`}>
+                          <span className={`truncate font-display font-bold leading-tight ${dense ? 'text-[1.4vw]' : 'text-[1.8vw]'}`}>{r.nickname}</span>
+                          <span className={`flex items-center gap-[0.35vw] truncate font-bold ${dense ? 'text-[0.8vw]' : 'text-[0.95vw]'} ${first ? 'text-navy' : 'text-sky'}`}>
                             <Icon className="h-[1.1vw] w-[1.1vw] shrink-0" strokeWidth={2.5} />
                             {PERSONALITY_INFO[r.personality].name}
                           </span>
                         </span>
-                        <span className="shrink-0 text-right font-display text-[2vw] font-extrabold tabular-nums">
+                        <span className={`shrink-0 text-right font-display font-extrabold tabular-nums ${dense ? 'text-[1.6vw]' : 'text-[2vw]'}`}>
                           {r.xp}
                           <span className="ml-[0.2vw] text-[0.9vw]">XP</span>
                         </span>
