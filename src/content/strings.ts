@@ -237,8 +237,8 @@ export const S = {
   },
   offerTitle: { ms: 'Tahniah! Trial anda dah sedia', en: 'Congrats! Your trial is ready' },
   offerExisting: {
-    ms: 'Nombor ini sudah didaftarkan untuk acara ini, jadi kami guna rujukan yang sama.',
-    en: 'This number is already registered for this event, so we kept the same reference.',
+    ms: 'Pendaftaran ini sudah kami terima tadi, jadi rujukan yang sama digunakan.',
+    en: 'We already received this sign-up, so the same reference is used.',
   },
   offerCodeLabel: { ms: 'Kod promosi', en: 'Promo code' },
   offerWhat: { ms: 'Trial percuma 3 subjek · kelas online 1-ke-1', en: 'Free trial for 3 subjects · 1-to-1 online classes' },

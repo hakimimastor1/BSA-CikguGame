@@ -81,14 +81,14 @@ interface Stats {
 
 const ROLE_LABEL: Record<SignupRow['role'], string> = { pelajar: 'Pelajar sekolah', ibubapa: 'Ibu bapa / keluarga', cikgu: 'Bakal tutor (UPSI)' }
 const LEARNER_STATUS: [string, string][] = [
-  ['new', 'Baru'],
+  ['new', 'Belum dihubungi'],
   ['contacted', 'Dihubungi'],
   ['trial_booked', 'Trial ditempah'],
   ['enrolled', 'Mendaftar'],
   ['not_interested', 'Tidak berminat'],
 ]
 const TUTOR_STATUS: [string, string][] = [
-  ['new', 'Baru'],
+  ['new', 'Belum dihubungi'],
   ['contacted', 'Dihubungi'],
   ['interviewed', 'Ditemu duga'],
   ['hired', 'Diambil'],
@@ -425,8 +425,6 @@ const levelByLabel = (label: string) => SCHOOL_LEVELS.find((l) => l.label.ms ===
 const localPhone = (n: string) => (n.startsWith('60') ? '0' + n.slice(2) : n)
 
 function editError(m: string): string {
-  const clash = /phone used by (\S+)/.exec(m)
-  if (clash) return `Nombor ini sudah digunakan oleh pendaftaran ${clash[1]}.`
   if (/bad phone/.test(m)) return 'Nombor WhatsApp tidak sah. Contoh: 012-345 6789.'
   if (/pick 3/.test(m)) return 'Pilih tepat 3 subjek trial.'
   if (/missing subjects/.test(m)) return 'Pilih sekurang-kurangnya 1 subjek yang boleh diajar.'
@@ -458,8 +456,8 @@ function ChipPick({ options, value, max, onChange }: { options: string[]; value:
 
 /** Admin only: correct the details of a sign-up. Same checks as the sign-up form, on the server. */
 function EditSignup({ r, onSaved, onCancel }: { r: SignupRow; onSaved: (row: Partial<SignupRow>) => void; onCancel: () => void }) {
-  const tutor = r.role === 'cikgu'
   const [f, setF] = useState({
+    role: r.role,
     name: r.name,
     whatsapp: localPhone(r.whatsapp),
     parentName: r.parent_name ?? '',
@@ -482,6 +480,8 @@ function EditSignup({ r, onSaved, onCancel }: { r: SignupRow; onSaved: (row: Par
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((c) => ({ ...c, [k]: v }))
+  // Fields follow the role chosen here, so a wrong role can be corrected too.
+  const tutor = f.role === 'cikgu'
   const withCurrent = (list: string[], current: string) => (current && !list.includes(current) ? [current, ...list] : list)
   const trialBand = levelByLabel(f.levelNext)?.band
   const trialList = [...new Set([...(trialBand ? BSA_SUBJECTS[trialBand] : ALL_SUBJECTS), ...f.trialSubjects])]
@@ -519,9 +519,19 @@ function EditSignup({ r, onSaved, onCancel }: { r: SignupRow; onSaved: (row: Par
   return (
     <div className="flex flex-col gap-3 rounded-2xl border-[3px] border-navy bg-yellow-soft p-3">
       <p className="font-display text-lg font-extrabold">Edit pendaftaran {r.ref}</p>
-      {text(r.role === 'ibubapa' ? 'Nama ibu bapa' : 'Nama penuh', 'name')}
-      {text(r.role === 'pelajar' && f.under18 ? 'No. WhatsApp ibu bapa / penjaga' : 'No. WhatsApp', 'whatsapp', { inputMode: 'tel' })}
-      {r.role === 'pelajar' && (
+      <label className="flex flex-col gap-1 text-sm font-bold">
+        Peranan
+        <select className="field font-normal" value={f.role} onChange={(e) => set('role', e.target.value as SignupRow['role'])}>
+          {(['pelajar', 'ibubapa', 'cikgu'] as const).map((x) => (
+            <option key={x} value={x}>
+              {ROLE_LABEL[x]}
+            </option>
+          ))}
+        </select>
+      </label>
+      {text(f.role === 'ibubapa' ? 'Nama ibu bapa' : 'Nama penuh', 'name')}
+      {text(f.role === 'pelajar' && f.under18 ? 'No. WhatsApp ibu bapa / penjaga' : 'No. WhatsApp', 'whatsapp', { inputMode: 'tel' })}
+      {f.role === 'pelajar' && (
         <>
           <label className="flex items-center gap-2 text-sm font-bold">
             <input type="checkbox" className="h-5 w-5 accent-[#023E86]" checked={f.under18} onChange={(e) => set('under18', e.target.checked)} />
@@ -530,7 +540,7 @@ function EditSignup({ r, onSaved, onCancel }: { r: SignupRow; onSaved: (row: Par
           {f.under18 && text('Nama ibu bapa / penjaga', 'parentName')}
         </>
       )}
-      {r.role === 'ibubapa' && text('Nama anak / adik', 'childName')}
+      {f.role === 'ibubapa' && text('Nama anak / adik', 'childName')}
       {!tutor && (
         <>
           <div className="grid grid-cols-2 gap-2">
@@ -670,6 +680,7 @@ function SignupCard({ r, isAdmin, onPatch }: { r: SignupRow; isAdmin: boolean; o
         {r.marketing ? ' · setuju terima tawaran' : ''}
         {r.edited_at ? ` · diedit ${myTime(r.edited_at)}${r.edited_by ? ` oleh ${r.edited_by}` : ''}` : ''}
       </p>
+      <p className="-mb-2 text-sm font-bold">Status susulan</p>
       <div className="grid grid-cols-[1fr_auto] gap-2">
         <select
           className="field"

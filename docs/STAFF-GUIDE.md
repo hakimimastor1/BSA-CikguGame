@@ -25,7 +25,8 @@
     flyer) dan **buku nota kecil** selagi ada (lebih kurang 10 sahaja).
   - **Pelajar / graduan UPSI yang daftar tutor:** sticker sahaja (tiada beg).
   - **Ibu bapa yang terus daftarkan anak di booth:** beg. Stok beg (lebih kurang 120) dikongsi untuk semua ini.
-  - Satu beg untuk satu keluarga. Kalau skrin tunjuk *"Nombor ini sudah didaftarkan"*, beg sudah diambil.
+  - Satu beg untuk satu keluarga. Satu nombor boleh daftar lebih dari sekali (contohnya dua anak), jadi kalau ragu,
+    cari nombor itu di Admin → **Pendaftaran**.
 - Papan skor kekal sehingga admin tekan **Reset papan skor sekarang** (mod Manual). Admin boleh tukar ke **Automatik setiap
   hari** (kosong sendiri setiap tengah malam) dan pilih 3, 5 atau 10 nama di projektor: Admin → **Papan skor** → **Tetapan papan skor**.
 - **Ibu bapa yang nak terus daftar trial tanpa main:** cadangkan laman web BSA, `brightscholaracademy.com.my` →
@@ -48,7 +49,7 @@
 | Nak kosongkan papan skor (contoh: selepas ujian) | Admin → **Papan skor** → **Reset papan skor sekarang**. Keputusan, pendaftaran dan statistik tidak dipadam |
 | Ikon wifi kuning di projektor | Internet lemah. Ia sambung semula sendiri |
 | Pemain dapat mesej "talian lemah" semasa daftar | Tekan **Cuba lagi**, atau **Teruskan ke WhatsApp** (maklumat sampai melalui WhatsApp) |
-| "Nombor ini sudah didaftarkan" | Satu nombor, satu tuntutan. Rujukan yang sama digunakan |
+| Pelanggan tersilap isi borang (nama, nombor, kelas, peranan…) | Admin → **Pendaftaran** → **Edit** pada kad itu → **Simpan** |
 | Tak boleh log masuk admin | Hubungi admin BSA |
 
 **Sebelum 25 Nov sahaja (admin):** selepas pasukan BSA selesai menguji, Admin → **Papan skor** → **Kosongkan data ujian**
