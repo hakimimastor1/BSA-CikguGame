@@ -22,7 +22,7 @@ export const S = {
     en: '2 games, 3 minutes: future teachers play Cikgu Sehari, school students play Smart Student Mission. Top scores go on the big screen!',
   },
   welcomeBody: {
-    ms: 'Ajar, semak kerja murid dan kenali jenis cikgu anda dalam 3 minit. Skor tertinggi keluar di skrin besar!',
+    ms: 'Ajar, semak kerja murid dan kenali gaya mengajar anda dalam 3 minit. Skor tertinggi keluar di skrin besar!',
     en: 'Teach, mark your pupil\'s work and discover your cikgu type in 3 minutes. Top scores go on the big screen!',
   },
   welcomeStart: { ms: 'Mula main', en: 'Start playing' },
