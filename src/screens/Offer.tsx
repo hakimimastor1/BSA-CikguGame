@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Check, Copy, ExternalLink, MessageCircle, Store } from 'lucide-react'
-import type { Lang, Player, Txt } from '../types'
+import type { Lang, Player } from '../types'
 import { S, fill, t } from '../content/strings'
 import { EVENT, NEXT_YEAR, eventOver } from '../content/event'
-import { BANDS, streamById, trialValue } from '../content/subjects'
+import { streamById, trialValue } from '../content/subjects'
 import { Mentol } from '../components/Mentol'
 import { Confetti } from '../components/ui'
 import { waLink } from '../game/whatsapp'
@@ -15,16 +15,18 @@ export function Offer({
   data,
   reference,
   existing = false,
+  queued = false,
 }: {
   lang: Lang
   player: Player
   data: SignupData
   reference: string
   existing?: boolean
+  /** Not saved yet (weak signal): the phone sends it once the signal is back. */
+  queued?: boolean
 }) {
   const [copied, setCopied] = useState(false)
   const isTutor = player.role === 'cikgu'
-  const band = BANDS.find((b) => b.id === player.band)!
   // One labelled line per detail the visitor filled in, so BSA can match the WhatsApp message to the
   // sign-up at a glance. Empty details are left out.
   const detailLines = (lines: [keyof typeof S, string | undefined][]) =>
@@ -33,24 +35,8 @@ export function Offer({
       .map(([k, v]) => `${fill(t(S[k], lang), { now: NEXT_YEAR - 1, next: NEXT_YEAR })}: ${v!.trim()}`)
       .join('\n')
 
+  // Future tutors don't message BSA: the application is in Admin and the BSA team contacts them.
   if (isTutor) {
-    const status =
-      data.tutorStatus === 'grad'
-        ? [t(S.fStatusGrad, lang), data.qualification]
-        : [t(S.fStatusUpsi, lang), data.semester && `Semester ${data.semester}`, data.cgpa && `CGPA ${data.cgpa}`]
-    const free = { weekday: S.avWeekday, weekend: S.avWeekend, flexible: S.avFlexible } as Record<string, Txt>
-    const msg = fill(t(S.waTutor, lang), {
-      details: detailLines([
-        ['waName', data.name],
-        ['waStatus', status.filter((x) => x && x.trim()).join(' · ')],
-        ['waCourse', data.course],
-        ['waTeachLevel', t(band.label, lang)],
-        ['waSubjects', (data.teachSubjects ?? []).join(', ')],
-        ['waAvailability', (data.availability ?? []).map((a) => (free[a] ? t(free[a], lang) : a)).join(', ')],
-        ['waArea', data.area],
-      ]),
-      ref: reference,
-    })
     return (
       <div className="flex flex-1 flex-col gap-4 anim-pop">
         <Confetti pieces={40} />
@@ -64,13 +50,10 @@ export function Offer({
           {t(S.offerRef, lang)}: <span className="font-display text-xl font-extrabold text-navy">{reference}</span>
         </p>
         {existing && <p className="text-center text-sm font-bold text-muted">{t(S.offerExisting, lang)}</p>}
+        {queued && <p className="clay-card bg-sky p-3 text-center text-sm font-bold">{t(S.offerTutorQueued, lang)}</p>}
         <a className="clay-btn w-full bg-yellow" href={EVENT.tutorRegisterUrl} target="_blank" rel="noreferrer">
           <ExternalLink size={20} strokeWidth={2.5} />
           {t(S.offerTutorRegister, lang)}
-        </a>
-        <a className="clay-btn w-full bg-white" href={waLink(EVENT.whatsapp, msg)} target="_blank" rel="noreferrer">
-          <MessageCircle size={20} strokeWidth={2.5} />
-          {t(S.offerTutorWhatsapp, lang)}
         </a>
         {!eventOver() && (
           <p className="flex items-center justify-center gap-2 text-center font-bold text-muted">

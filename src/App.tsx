@@ -44,6 +44,7 @@ export default function App() {
   const [signup, setSignup] = useState<SignupData | null>(null)
   const [reference, setReference] = useState('')
   const [existing, setExisting] = useState(false)
+  const [queued, setQueued] = useState(false)
 
   // The server play is requested when the story starts and used if it arrives before Semak Kerja.
   const serverPlay = useRef<Promise<ServerPlay | null> | null>(null)
@@ -74,6 +75,7 @@ export default function App() {
     setResult(null)
     setSignup(null)
     setExisting(false)
+    setQueued(false)
     activePlayId.current = null
     serverPlay.current = online
       ? startPlay({ nickname: p.nickname, role: p.role, game: p.game, band: p.band, lang, teach: p.teachSubjects, stream: p.stream }).catch(() => null)
@@ -119,6 +121,7 @@ export default function App() {
     setSignup(d)
     setReference(res.ref)
     setExisting(res.existing)
+    setQueued(false)
     setStep('offer')
   }
 
@@ -126,7 +129,9 @@ export default function App() {
   // sign-up by itself once the signal is back, with the same reference.
   const onSignupSkip = (d: SignupData) => {
     const ref = d.ref ?? makeReference()
-    if (online && d.clientId) queueSignup(activePlayId.current, { ...d, clientId: d.clientId, ref, role: player.role, lang, delayed: true })
+    const willSend = online && !!d.clientId
+    if (willSend) queueSignup(activePlayId.current, { ...d, clientId: d.clientId!, ref, role: player.role, lang, delayed: true })
+    setQueued(willSend)
     setSignup(d)
     setReference(ref)
     setExisting(false)
@@ -227,7 +232,7 @@ export default function App() {
           <SignUp lang={lang} player={player} result={result} onSubmit={online ? onSignup : async (d) => onSignupSkip(d)} onSkip={onSignupSkip} />
         )}
 
-        {step === 'offer' && signup && <Offer lang={lang} player={player} data={signup} reference={reference} existing={existing} />}
+        {step === 'offer' && signup && <Offer lang={lang} player={player} data={signup} reference={reference} existing={existing} queued={queued} />}
       </Screen>
     </>
   )

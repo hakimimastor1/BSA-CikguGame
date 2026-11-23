@@ -230,6 +230,11 @@ export const S = {
   },
   signupRetry: { ms: 'Cuba lagi', en: 'Try again' },
   signupSkip: { ms: 'Teruskan ke WhatsApp', en: 'Continue to WhatsApp' },
+  signupErrorTutor: {
+    ms: 'Talian lemah, permohonan belum sampai. Cuba lagi, atau teruskan: telefon ini akan hantar permohonan anda sendiri bila talian pulih.',
+    en: "Weak signal, your application hasn't reached us yet. Try again, or carry on: this phone will send it by itself once the signal is back.",
+  },
+  signupSkipTutor: { ms: 'Teruskan', en: 'Carry on' },
   submitLearner: { ms: 'Dapatkan kod trial', en: 'Get my trial code' },
   submitTutor: { ms: 'Hantar permohonan', en: 'Send my application' },
 
@@ -269,8 +274,11 @@ export const S = {
     ms: 'Pasukan BSA akan menghubungi anda melalui WhatsApp. Untuk proses lebih cepat, lengkapkan pendaftaran tutor di laman web BSA.',
     en: 'The BSA team will WhatsApp you. To speed things up, complete the tutor registration on the BSA website.',
   },
+  offerTutorQueued: {
+    ms: 'Talian lemah: permohonan anda akan dihantar sendiri bila talian pulih. Biarkan halaman ini terbuka seketika.',
+    en: 'Weak signal: your application will be sent by itself once the signal is back. Keep this page open for a moment.',
+  },
   offerTutorRegister: { ms: 'Daftar di laman web', en: 'Register on the website' },
-  offerTutorWhatsapp: { ms: 'WhatsApp BSA', en: 'WhatsApp BSA' },
   offerTutorPerks: {
     ms: 'RM25–40/jam · bayaran mingguan · masa fleksibel · online atau di rumah murid',
     en: "RM25–40/hour · paid weekly · flexible hours · online or at the pupil's home",
@@ -289,13 +297,4 @@ export const S = {
   waSchool: { ms: 'Sekolah', en: 'School' },
   waSubjects: { ms: 'Subjek', en: 'Subjects' },
   waArea: { ms: 'Kawasan', en: 'Area' },
-  // Lines of the tutor message.
-  waStatus: { ms: 'Status', en: 'Status' },
-  waCourse: { ms: 'Program / bidang', en: 'Programme / field' },
-  waTeachLevel: { ms: 'Tahap mengajar', en: 'Level to teach' },
-  waAvailability: { ms: 'Masa lapang', en: 'Free time' },
-  waTutor: {
-    ms: 'Hi BSA! Saya berminat menjadi tutor BSA.\n{details}\nRujukan: {ref}',
-    en: "Hi BSA! I'd like to become a BSA tutor.\n{details}\nReference: {ref}",
-  },
 } satisfies Record<string, Txt>

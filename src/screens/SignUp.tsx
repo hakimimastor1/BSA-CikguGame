@@ -391,10 +391,10 @@ export function SignUp({
         <div className="clay-card flex flex-col gap-3 bg-wrong-soft p-4" role="alert">
           <p className="flex items-start gap-2 font-bold">
             <WifiOff size={20} strokeWidth={2.5} className="mt-0.5 shrink-0" />
-            {t(S.signupError, lang)}
+            {t(isTutor ? S.signupErrorTutor : S.signupError, lang)}
           </p>
           <button type="button" className="clay-btn w-full bg-white" onClick={() => onSkip(final())}>
-            {t(S.signupSkip, lang)}
+            {t(isTutor ? S.signupSkipTutor : S.signupSkip, lang)}
           </button>
         </div>
       )}

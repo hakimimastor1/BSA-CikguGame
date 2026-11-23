@@ -116,11 +116,6 @@ items.push({
   ],
 })
 items.push({
-  id: 'msg-tutor', sec: 'mesej', title: 'WhatsApp: future tutor', src: 'src/content/strings.ts · waTutor',
-  meta: [`Sent to ${EVENT.whatsappDisplay}`],
-  rows: [txt('Message', s.waTutor, '{details} lines: Name, Status (UPSI student · semester · CGPA, or graduate · qualification), Programme, Level to teach, Subjects, Free time, Area')],
-})
-items.push({
   id: 'msg-followup-learner', sec: 'mesej', title: 'Admin: follow-up message to parents / students', src: 'src/pages/Admin.tsx · followUpMessage',
   meta: ['WhatsApp button in Admin → Pendaftaran', 'BM only'],
   rows: [{

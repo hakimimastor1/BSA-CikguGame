@@ -62,7 +62,7 @@ PESKON.
 | 6 | **Semak Kerja** | A pupil's exercise book: question and the pupil's answer, big ✓ and ✗ buttons, 45-second timer, streak counter, 8 items |
 | 7 | **Result** | Personality card (name, picture, one-line description), XP and today's rank, *Strongest subject* and *Subjects to level up*, **Share** button, and the main button *"Tuntut trial percuma / Claim your free trial"* (tutors: *"Jom jadi cikgu BSA"*) |
 | 8 | **Sign-up** | Fields for the role (see requirements R2–R4), 3 trial subjects pre-selected, PDPA consent |
-| 9 | **Offer** | Code `PESKON UPSI 2026` (large, with copy button), "3 subjects free trial, valid until 2 Dec 2026", reference number (e.g. `PK-0123`), **Claim on WhatsApp** button. Tutors: pay range, **Apply now** (website `/register`) and a WhatsApp button |
+| 9 | **Offer** | Code `PESKON UPSI 2026` (large, with copy button), "3 subjects free trial, valid until 2 Dec 2026", reference number (e.g. `PK-0123`), **Claim on WhatsApp** button. Tutors: pay range and **Apply now** (website `/register`); no WhatsApp step, since the application is in Admin and BSA contacts them |
 
 The share card is a 1080×1920 image (story size) with the personality, XP, logo and *"Main di booth BSA,
 PESKON UPSI 2026"*. It is shared with the phone's own share sheet, or downloaded if sharing isn't
