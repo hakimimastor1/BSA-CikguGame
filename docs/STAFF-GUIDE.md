@@ -42,10 +42,14 @@
 | Masalah | Apa nak buat |
 |---|---|
 | Nama tak sopan di projektor | Admin → **Papan skor** → tekan ikon mata untuk sembunyi |
+| Nak kosongkan papan skor (contoh: selepas ujian) | Admin → **Papan skor** → **Reset papan skor sekarang**. Keputusan, pendaftaran dan statistik tidak dipadam. Papan juga reset sendiri setiap tengah malam |
 | Ikon wifi kuning di projektor | Internet lemah. Ia sambung semula sendiri |
 | Pemain dapat mesej "talian lemah" semasa daftar | Tekan **Cuba lagi**, atau **Teruskan ke WhatsApp** (maklumat sampai melalui WhatsApp) |
 | "Nombor ini sudah didaftarkan" | Satu nombor, satu tuntutan. Rujukan yang sama digunakan |
 | Tak boleh log masuk admin | Hubungi admin BSA |
+
+**Sebelum 25 Nov sahaja (admin):** selepas pasukan BSA selesai menguji, Admin → **Papan skor** → **Kosongkan data ujian**
+mengeluarkan semua main dan pendaftaran ujian supaya event bermula bersih. Butang ini hilang bila event bermula.
 
 ## 5. Maklumat penting
 

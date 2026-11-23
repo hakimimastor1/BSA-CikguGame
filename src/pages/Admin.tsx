@@ -305,7 +305,7 @@ function Dashboard({ me }: { me: Me }) {
         ))}
       </nav>
       {tab === 'signups' && <Signups me={me} />}
-      {tab === 'board' && <BoardTab />}
+      {tab === 'board' && <BoardTab isAdmin={me.role === 'admin'} />}
       {tab === 'stats' && <StatsTab />}
       {tab === 'account' && <Account me={me} />}
     </Shell>
@@ -503,7 +503,7 @@ function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupR
   )
 }
 
-function BoardTab() {
+function BoardTab({ isAdmin }: { isAdmin: boolean }) {
   const [rows, setRows] = useState<BoardRow[] | null>(null)
   const load = useCallback(async () => {
     const { data } = await supabase!.rpc('staff_board', { p_event: eventSlug, p_day: null })
@@ -567,7 +567,115 @@ function BoardTab() {
             </section>
           )
         })}
+      {isAdmin && <AdminTools onChange={load} />}
     </div>
+  )
+}
+
+interface EventInfo {
+  name: string
+  startsOn: string
+  today: string
+  boardResetAt: string | null
+  beforeStart: boolean
+  plays: number
+  signups: number
+}
+
+const prettyDay = (d: string) =>
+  new Date(d + 'T00:00:00+08:00').toLocaleDateString('ms-MY', { timeZone: 'Asia/Kuala_Lumpur', day: 'numeric', month: 'short' })
+
+/** Admin only: start the projector boards again, and (before the event) clear the team's test data. */
+function AdminTools({ onChange }: { onChange: () => void }) {
+  const [info, setInfo] = useState<EventInfo | null>(null)
+  const [ask, setAsk] = useState<'reset' | 'clear' | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState<string | null>(null)
+  const loadInfo = useCallback(async () => {
+    const { data } = await supabase!.rpc('staff_event', { p_event: eventSlug })
+    if (data) setInfo(data as EventInfo)
+  }, [])
+  useEffect(() => {
+    void loadInfo()
+  }, [loadInfo])
+
+  const run = async (what: 'reset' | 'clear') => {
+    setBusy(true)
+    setMsg(null)
+    const { data, error } = await supabase!.rpc(what === 'reset' ? 'staff_reset_board' : 'staff_clear_test_data', { p_event: eventSlug })
+    setBusy(false)
+    setAsk(null)
+    if (error) {
+      setMsg(/started/.test(error.message) ? 'Event sudah bermula, jadi data tidak boleh dikosongkan lagi.' : `Tidak berjaya: ${error.message}`)
+    } else if (what === 'reset') {
+      setMsg('Papan skor sudah direset. Projektor akan kosong dalam beberapa saat.')
+    } else {
+      const r = data as { plays: number; signups: number }
+      setMsg(`Selesai: ${r.plays} main dan ${r.signups} pendaftaran ujian sudah dikeluarkan. Event bermula bersih.`)
+    }
+    await loadInfo()
+    onChange()
+  }
+
+  const confirmRow = (what: 'reset' | 'clear', text: string, label: string) => (
+    <div className="flex flex-col gap-2 rounded-2xl border-[3px] border-wrong bg-wrong-soft p-3" role="alert">
+      <p className="text-sm font-bold">{text}</p>
+      <div className="grid grid-cols-2 gap-2">
+        <button type="button" className="clay-btn min-h-11 bg-white text-base" onClick={() => setAsk(null)} disabled={busy}>
+          Batal
+        </button>
+        <button type="button" className="clay-btn min-h-11 bg-yellow text-base" onClick={() => run(what)} disabled={busy}>
+          {busy ? 'Sedang proses…' : label}
+        </button>
+      </div>
+    </div>
+  )
+
+  return (
+    <section className="clay-card mt-4 flex flex-col gap-3 p-4" aria-labelledby="admin-tools">
+      <h3 id="admin-tools" className="font-display text-xl font-extrabold">
+        Alat admin
+      </h3>
+
+      <div className="flex flex-col gap-2">
+        <p className="font-bold">Reset papan skor</p>
+        <p className="text-sm text-muted">
+          Kosongkan kedua-dua papan di projektor dan mula semula dari sekarang. Keputusan pemain, pendaftaran dan statistik tidak
+          dipadam. Papan juga reset sendiri setiap hari pada tengah malam.
+          {info?.boardResetAt ? ` Reset terakhir: ${myTime(info.boardResetAt)}.` : ''}
+        </p>
+        {ask === 'reset' ? (
+          confirmRow('reset', 'Pasti? Semua nama di kedua-dua papan projektor akan hilang dari papan.', 'Ya, reset papan')
+        ) : (
+          <button type="button" className="clay-btn min-h-11 bg-white text-base" onClick={() => setAsk('reset')}>
+            <RefreshCw size={18} /> Reset papan skor sekarang
+          </button>
+        )}
+      </div>
+
+      {info?.beforeStart && (
+        <div className="flex flex-col gap-2 border-t-[3px] border-dashed border-sky pt-3">
+          <p className="font-bold">Kosongkan data ujian</p>
+          <p className="text-sm text-muted">
+            Untuk selepas pasukan BSA selesai menguji. Semua {info.plays} main dan {info.signups} pendaftaran setakat ini dikeluarkan
+            dari {info.name}, supaya admin dan statistik bermula bersih. Hanya boleh sebelum event bermula ({prettyDay(info.startsOn)}).
+          </p>
+          {ask === 'clear' ? (
+            confirmRow('clear', `Pasti? ${info.plays} main dan ${info.signups} pendaftaran ujian akan dikeluarkan dari senarai.`, 'Ya, kosongkan')
+          ) : (
+            <button type="button" className="clay-btn min-h-11 bg-white text-base" onClick={() => setAsk('clear')} disabled={!info.plays && !info.signups}>
+              <ShieldAlert size={18} /> Kosongkan data ujian
+            </button>
+          )}
+        </div>
+      )}
+
+      {msg && (
+        <p className="rounded-2xl bg-yellow-soft p-3 text-sm font-bold" role="status">
+          {msg}
+        </p>
+      )}
+    </section>
   )
 }
 
