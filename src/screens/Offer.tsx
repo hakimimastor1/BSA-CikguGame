@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Check, Copy, ExternalLink, MessageCircle, Store } from 'lucide-react'
-import type { Lang, Player } from '../types'
+import type { Lang, Player, Txt } from '../types'
 import { S, fill, t } from '../content/strings'
 import { EVENT, NEXT_YEAR, eventOver } from '../content/event'
 import { BANDS, streamById, trialValue } from '../content/subjects'
@@ -25,12 +25,30 @@ export function Offer({
   const [copied, setCopied] = useState(false)
   const isTutor = player.role === 'cikgu'
   const band = BANDS.find((b) => b.id === player.band)!
+  // One labelled line per detail the visitor filled in, so BSA can match the WhatsApp message to the
+  // sign-up at a glance. Empty details are left out.
+  const detailLines = (lines: [keyof typeof S, string | undefined][]) =>
+    lines
+      .filter(([, v]) => v && v.trim())
+      .map(([k, v]) => `${fill(t(S[k], lang), { now: NEXT_YEAR - 1, next: NEXT_YEAR })}: ${v!.trim()}`)
+      .join('\n')
 
   if (isTutor) {
+    const status =
+      data.tutorStatus === 'grad'
+        ? [t(S.fStatusGrad, lang), data.qualification]
+        : [t(S.fStatusUpsi, lang), data.semester && `Semester ${data.semester}`, data.cgpa && `CGPA ${data.cgpa}`]
+    const free = { weekday: S.avWeekday, weekend: S.avWeekend, flexible: S.avFlexible } as Record<string, Txt>
     const msg = fill(t(S.waTutor, lang), {
-      name: data.name,
-      subjects: (data.teachSubjects ?? []).join(', '),
-      level: t(band.label, lang),
+      details: detailLines([
+        ['waName', data.name],
+        ['waStatus', status.filter((x) => x && x.trim()).join(' · ')],
+        ['waCourse', data.course],
+        ['waTeachLevel', t(band.label, lang)],
+        ['waSubjects', (data.teachSubjects ?? []).join(', ')],
+        ['waAvailability', (data.availability ?? []).map((a) => (free[a] ? t(free[a], lang) : a)).join(', ')],
+        ['waArea', data.area],
+      ]),
       ref: reference,
     })
     return (
@@ -65,7 +83,6 @@ export function Offer({
   }
 
   const over = eventOver()
-  // One labelled line per detail, so BSA can match the WhatsApp message to the sign-up at a glance.
   const lines: [keyof typeof S, string | undefined][] = [
     ['waName', data.name],
     ['waChild', player.role === 'ibubapa' ? data.childName : undefined],
@@ -74,14 +91,12 @@ export function Offer({
     ['waLevelNext', data.levelNext],
     ['waStream', data.stream ? streamById(data.stream)?.label.ms : undefined],
     ['waSchool', data.school],
+    ['waArea', data.area],
     ['waSubjects', data.trialSubjects.join(', ')],
   ]
   const msg = fill(t(over ? S.waLearnerAfter : S.waLearner, lang), {
     code: EVENT.offerCode,
-    details: lines
-      .filter(([, v]) => v && v.trim())
-      .map(([k, v]) => `${fill(t(S[k], lang), { now: NEXT_YEAR - 1, next: NEXT_YEAR })}: ${v!.trim()}`)
-      .join('\n'),
+    details: detailLines(lines),
     ref: reference,
   })
 

@@ -111,13 +111,14 @@ items.push({
   id: 'msg-claim', sec: 'mesej', title: 'WhatsApp: claim the trial (students / parents)', src: 'src/content/strings.ts · waLearner',
   meta: [`Sent to ${EVENT.whatsappDisplay}`],
   rows: [
-    txt('Message', s.waLearner, '{details} lines: Name, Child\'s name (parents), Parent / guardian (students under 18), Level now, Class next year, Stream (Form 4–5), School, Subjects'),
+    txt('Message', s.waLearner, '{details} lines: Name, Child\'s name (parents), Parent / guardian (students under 18), Level now, Class next year, Stream (Form 4–5), School, Area, Subjects'),
     txt('After 2 Dec', s.waLearnerAfter),
   ],
 })
 items.push({
   id: 'msg-tutor', sec: 'mesej', title: 'WhatsApp: future tutor', src: 'src/content/strings.ts · waTutor',
-  meta: [`Sent to ${EVENT.whatsappDisplay}`], rows: [txt('Message', s.waTutor)],
+  meta: [`Sent to ${EVENT.whatsappDisplay}`],
+  rows: [txt('Message', s.waTutor, '{details} lines: Name, Status (UPSI student · semester · CGPA, or graduate · qualification), Programme, Level to teach, Subjects, Free time, Area')],
 })
 items.push({
   id: 'msg-followup-learner', sec: 'mesej', title: 'Admin: follow-up message to parents / students', src: 'src/pages/Admin.tsx · followUpMessage',

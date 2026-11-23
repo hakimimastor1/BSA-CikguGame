@@ -288,8 +288,14 @@ export const S = {
   waStream: { ms: 'Aliran', en: 'Stream' },
   waSchool: { ms: 'Sekolah', en: 'School' },
   waSubjects: { ms: 'Subjek', en: 'Subjects' },
+  waArea: { ms: 'Kawasan', en: 'Area' },
+  // Lines of the tutor message.
+  waStatus: { ms: 'Status', en: 'Status' },
+  waCourse: { ms: 'Program / bidang', en: 'Programme / field' },
+  waTeachLevel: { ms: 'Tahap mengajar', en: 'Level to teach' },
+  waAvailability: { ms: 'Masa lapang', en: 'Free time' },
   waTutor: {
-    ms: 'Hi BSA! Saya {name}. Saya berminat menjadi tutor BSA ({subjects}, {level}). Rujukan: {ref}',
-    en: "Hi BSA! I'm {name} and I'd like to become a BSA tutor ({subjects}, {level}). Reference: {ref}",
+    ms: 'Hi BSA! Saya berminat menjadi tutor BSA.\n{details}\nRujukan: {ref}',
+    en: "Hi BSA! I'd like to become a BSA tutor.\n{details}\nReference: {ref}",
   },
 } satisfies Record<string, Txt>
