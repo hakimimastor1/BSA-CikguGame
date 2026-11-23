@@ -20,6 +20,9 @@ pelajar UPSI (Game A), 2 pelajar sekolah (Game B) dan 1 ibu bapa.
    - Jenis cikgu / jenis pelajar dan XP masuk akal?
    - Ada **"No. … hari ini"** dengan nama permainan yang betul?
    - Misi Pelajar Bijak: laporan mini, "Cara belajar terbaik" dan **Semak semula jawapan** jelas?
+   - Laporan mini: subjek yang semua betul dapat pujian **"Syabas!"**; subjek yang ada salah dapat tip.
+   - Seorang penguji pilih **Tingkatan 4–5** dan aliran bukan Sains (cth. Sastera): soalan hanya BM, BI dan
+     Matematik? Aliran Sains Tulen pula dapat BI, Matematik dan 2 subjek sains.
    - Tekan **Kongsi kad saya**: gambar keluar atau boleh disimpan?
 5. Daftar (guna nombor WhatsApp **sebenar** anda):
    - Pelajar sekolah / keluarga: skrin **"Tahniah! Trial anda sedia"** dengan kod PESKON UPSI 2026 dan no. rujukan.
