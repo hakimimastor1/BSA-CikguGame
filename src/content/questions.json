@@ -202,7 +202,7 @@
     "band": "std1_3",
     "subject": "bi",
     "q": {
-      "ms": "Lawan bagi 'happy':",
+      "ms": "Lawan kata bagi 'happy':",
       "en": "Opposite of 'happy':"
     },
     "a": {
@@ -796,7 +796,7 @@
     "band": "std4_6",
     "subject": "bi",
     "q": {
-      "ms": "Collective noun: a ___ of fish",
+      "ms": "Kata nama kolektif: a ___ of fish",
       "en": "Collective noun: a ___ of fish"
     },
     "a": {
@@ -1246,7 +1246,7 @@
     "band": "f1_3",
     "subject": "bm",
     "q": {
-      "ms": "Yang betul: 'para guru' atau 'para guru-guru'?",
+      "ms": "Bentuk yang betul: 'para guru' atau 'para guru-guru'?",
       "en": "Which is correct: 'para guru' or 'para guru-guru'?"
     },
     "a": {
@@ -2200,7 +2200,7 @@
     "band": "f4_5",
     "subject": "phy",
     "q": {
-      "ms": "Laju atau halaju: yang manakah kuantiti vektor?",
+      "ms": "Antara laju dan halaju, yang manakah kuantiti vektor?",
       "en": "Speed or velocity: which is a vector quantity?"
     },
     "a": {

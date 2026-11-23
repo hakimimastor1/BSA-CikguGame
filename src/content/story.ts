@@ -2,16 +2,16 @@ import type { Role, StoryScene, Trait, Txt } from '../types'
 
 export const STORY_INTRO: Record<'learner' | 'tutor', { title: Txt; body: Txt }> = {
   learner: {
-    title: { ms: 'Hari ini, anda cikgunya!', en: "Today, you're the cikgu!" },
+    title: { ms: 'Hari ini, anda jadi cikgu!', en: "Today, you're the cikgu!" },
     body: {
-      ms: '5 situasi kelas + 1 cabaran semak kerja. Pilih apa yang cikgu hebat akan buat!',
+      ms: '5 situasi kelas + 1 cabaran semak kerja. Pilih tindakan terbaik seorang cikgu!',
       en: '5 class situations + 1 marking challenge. Choose what a great cikgu would do!',
     },
   },
   tutor: {
     title: { ms: 'Hari pertama anda sebagai tutor BSA', en: 'Your first day as a BSA tutor' },
     body: {
-      ms: '5 situasi sebenar tutor BSA + 1 cabaran semak kerja. Jom lihat cikgu jenis apa anda!',
+      ms: '5 situasi sebenar tutor BSA + 1 cabaran semak kerja. Jom kenali jenis cikgu anda!',
       en: "5 real BSA tutor moments + 1 marking challenge. Let's see what kind of cikgu you are!",
     },
   },
@@ -27,7 +27,7 @@ export const STORY: StoryScene[] = [
     id: 's1',
     title: { ms: 'Kelas online pertama', en: 'Your first online class' },
     situation: {
-      ms: 'Kelas bermula! Kamera Aiman tertutup dan dia diam sahaja. Apa anda buat?',
+      ms: 'Kelas dah bermula, tapi kamera Aiman tertutup dan dia diam sahaja. Apa yang anda buat?',
       en: "Class begins! Aiman's camera is off and he hasn't said a word. What do you do?",
     },
     choices: [
@@ -35,9 +35,9 @@ export const STORY: StoryScene[] = [
         id: 's1a',
         trait: 'penyayang',
         xp: GOOD_XP,
-        text: { ms: 'Sapa Aiman dengan namanya & tanya kartun kegemarannya', en: 'Greet Aiman by name & ask about his favourite cartoon' },
+        text: { ms: 'Panggil nama Aiman dan tanya kartun kegemarannya', en: 'Greet Aiman by name & ask about his favourite cartoon' },
         reaction: {
-          ms: 'Aiman ketawa dan buka kamera! Murid rasa dihargai bila cikgu kenal mereka.',
+          ms: 'Aiman ketawa dan buka kamera! Murid rasa dihargai bila cikgu ambil tahu tentang mereka.',
           en: 'Aiman laughs and turns his camera on! Pupils feel valued when their cikgu knows them.',
         },
       },
@@ -45,9 +45,9 @@ export const STORY: StoryScene[] = [
         id: 's1d',
         trait: 'disiplin',
         xp: GOOD_XP,
-        text: { ms: 'Tetapkan peraturan kelas: kamera buka, jawab bila dipanggil', en: 'Set class rules: cameras on, answer when called' },
+        text: { ms: 'Tetapkan peraturan kelas: kamera mesti dibuka, jawab bila dipanggil', en: 'Set class rules: cameras on, answer when called' },
         reaction: {
-          ms: 'Aiman buka kamera dan duduk tegak! Peraturan yang jelas dari awal buat kelas tersusun.',
+          ms: 'Aiman buka kamera dan duduk tegak! Peraturan yang jelas dari awal menjadikan kelas lebih teratur.',
           en: 'Aiman turns his camera on and sits up! Clear rules from the start keep class on track.',
         },
       },
@@ -55,9 +55,9 @@ export const STORY: StoryScene[] = [
         id: 's1b',
         trait: null,
         xp: OKAY_XP,
-        text: { ms: 'Teruskan mengajar, tanya dia di hujung kelas', en: 'Keep teaching and check on him at the end' },
+        text: { ms: 'Teruskan mengajar, tegur dia di akhir kelas', en: 'Keep teaching and check on him at the end' },
         reaction: {
-          ms: 'Boleh, tapi Aiman terlepas separuh kelas. Libatkan murid dari minit pertama.',
+          ms: 'Boleh juga, tapi Aiman dah terlepas separuh kelas. Libatkan murid sejak minit pertama.',
           en: 'That works, but Aiman missed half the class. Involve pupils from the first minute.',
         },
       },
@@ -65,9 +65,9 @@ export const STORY: StoryScene[] = [
         id: 's1c',
         trait: 'kreatif',
         xp: GOOD_XP,
-        text: { ms: 'Mulakan permainan teka lukisan di whiteboard', en: 'Start a guess-the-drawing game on the whiteboard' },
+        text: { ms: 'Mulakan permainan teka gambar di papan putih', en: 'Start a guess-the-drawing game on the whiteboard' },
         reaction: {
-          ms: 'Aiman terus melukis! Aktiviti pendek memecahkan rasa malu.',
+          ms: 'Aiman terus ikut melukis! Aktiviti ringkas buat murid hilang rasa malu.',
           en: 'Aiman starts drawing straight away! A short activity breaks the ice.',
         },
       },
@@ -85,9 +85,9 @@ export const STORY: StoryScene[] = [
         id: 's2a',
         trait: 'strategik',
         xp: GOOD_XP,
-        text: { ms: 'Lukis peta: pecahan → perpuluhan → peratus → diskaun jualan', en: 'Draw a map: fractions → decimals → percentages → sale discounts' },
+        text: { ms: 'Lukis rajah kaitan: pecahan → perpuluhan → peratus → diskaun jualan', en: 'Draw a map: fractions → decimals → percentages → sale discounts' },
         reaction: {
-          ms: '“Oh, jadi semua bersambung!” Bila murid nampak gambaran besar, mereka lebih yakin.',
+          ms: '“Oh, rupanya semua berkait!” Bila murid nampak gambaran keseluruhan, mereka lebih yakin.',
           en: '“Oh, it all connects!” When pupils see the big picture, they feel more confident.',
         },
       },
@@ -95,7 +95,7 @@ export const STORY: StoryScene[] = [
         id: 's2b',
         trait: null,
         xp: OKAY_XP,
-        text: { ms: '“Sebab ia ada dalam silibus. Jom sambung.”', en: '“Because it\'s in the syllabus. Let\'s continue.”' },
+        text: { ms: '“Sebab ia ada dalam silibus. Jom kita sambung.”', en: '“Because it\'s in the syllabus. Let\'s continue.”' },
         reaction: {
           ms: 'Betul, tapi murid belajar lebih baik bila mereka faham kenapa ia penting.',
           en: 'True, but pupils learn better when they understand why it matters.',
@@ -105,9 +105,9 @@ export const STORY: StoryScene[] = [
         id: 's2c',
         trait: 'inspirasi',
         xp: GOOD_XP,
-        text: { ms: 'Tunjuk cara bahagi pizza sama rata untuk 8 kawan', en: 'Show how to share a pizza fairly among 8 friends' },
+        text: { ms: 'Tunjuk cara bahagi pizza sama rata kepada 8 orang kawan', en: 'Show how to share a pizza fairly among 8 friends' },
         reaction: {
-          ms: 'Mata murid bersinar! Contoh dunia sebenar buat ilmu lebih bermakna.',
+          ms: 'Mata murid terus bersinar! Contoh dalam kehidupan sebenar buat ilmu lebih bermakna.',
           en: 'Their eyes light up! Real-life examples make learning meaningful.',
         },
       },
@@ -117,7 +117,7 @@ export const STORY: StoryScene[] = [
     id: 's3',
     title: { ms: 'Mesej daripada ibu bapa', en: 'A message from a parent' },
     situation: {
-      ms: 'Ibu Siti menghantar WhatsApp: “Cikgu, kenapa markah Siti turun?”',
+      ms: 'Ibu Siti hantar WhatsApp: “Cikgu, kenapa markah Siti turun?”',
       en: "Siti's mum sends a WhatsApp: “Cikgu, why have Siti's marks dropped?”",
     },
     choices: [
@@ -125,7 +125,7 @@ export const STORY: StoryScene[] = [
         id: 's3a',
         trait: null,
         xp: OKAY_XP,
-        text: { ms: '“Saya akan cuba lebih lagi, puan.”', en: '“I\'ll try harder, ma\'am.”' },
+        text: { ms: '“Saya akan cuba lebih gigih, puan.”', en: '“I\'ll try harder, ma\'am.”' },
         reaction: {
           ms: 'Sopan, tapi ibu bapa mahu tahu langkah seterusnya. Beri pelan yang jelas.',
           en: 'Polite, but parents want to know the next step. Give a clear plan.',
@@ -135,7 +135,7 @@ export const STORY: StoryScene[] = [
         id: 's3b',
         trait: 'strategik',
         xp: GOOD_XP,
-        text: { ms: 'Kongsi pelan 4 minggu dengan sasaran setiap minggu', en: 'Share a 4-week plan with a goal for each week' },
+        text: { ms: 'Kongsi pelan 4 minggu dengan sasaran mingguan', en: 'Share a 4-week plan with a goal for each week' },
         reaction: {
           ms: 'Ibu Siti lega! Pelan yang jelas membina kepercayaan ibu bapa.',
           en: "Siti's mum is relieved! A clear plan builds parents' trust.",
@@ -145,9 +145,9 @@ export const STORY: StoryScene[] = [
         id: 's3c',
         trait: 'penyayang',
         xp: GOOD_XP,
-        text: { ms: 'Dengar dulu, dan tanya bagaimana perasaan Siti di sekolah', en: 'Listen first, and ask how Siti has been feeling at school' },
+        text: { ms: 'Dengar dulu, kemudian tanya bagaimana keadaan Siti di sekolah', en: 'Listen first, and ask how Siti has been feeling at school' },
         reaction: {
-          ms: 'Rupanya Siti baru bertukar kelas. Memahami murid ialah langkah pertama membantu.',
+          ms: 'Rupanya Siti baru bertukar kelas. Memahami murid ialah langkah pertama untuk membantu.',
           en: 'Turns out Siti just changed classes. Understanding the pupil is the first step to helping.',
         },
       },
@@ -157,7 +157,7 @@ export const STORY: StoryScene[] = [
         xp: GOOD_XP,
         text: { ms: 'Buat jadual latihan harian dan semak kerja Siti setiap minggu', en: "Set a daily practice timetable and check Siti's work every week" },
         reaction: {
-          ms: 'Ibu Siti suka! Rutin yang konsisten ialah kunci markah naik.',
+          ms: 'Ibu Siti setuju! Rutin yang konsisten ialah kunci untuk markah naik.',
           en: "Siti's mum loves it! A steady routine is the key to better marks.",
         },
       },
@@ -175,9 +175,9 @@ export const STORY: StoryScene[] = [
         id: 's4a',
         trait: 'kreatif',
         xp: GOOD_XP,
-        text: { ms: 'Rehat otak 2 minit: kuiz pantas sambil berdiri', en: '2-minute brain break: a quick stand-up quiz' },
+        text: { ms: 'Rehat 2 minit: kuiz pantas sambil berdiri', en: '2-minute brain break: a quick stand-up quiz' },
         reaction: {
-          ms: 'Danish segar semula! Gerakan dan permainan menghidupkan otak yang penat.',
+          ms: 'Danish kembali segar! Bergerak dan bermain menyegarkan otak yang penat.',
           en: 'Danish perks up! Movement and games wake up a tired brain.',
         },
       },
@@ -185,9 +185,9 @@ export const STORY: StoryScene[] = [
         id: 's4b',
         trait: 'inspirasi',
         xp: GOOD_XP,
-        text: { ms: 'Cerita tentang saintis muda Malaysia yang suka subjek ini', en: 'Tell him about a young Malaysian scientist who loved this subject' },
+        text: { ms: 'Ceritakan tentang saintis muda Malaysia yang minat subjek ini', en: 'Tell him about a young Malaysian scientist who loved this subject' },
         reaction: {
-          ms: 'Danish teruja: “Saya pun nak jadi macam dia!” Inspirasi ialah bahan api belajar.',
+          ms: 'Danish teruja: “Saya pun nak jadi macam dia!” Inspirasi buat murid bersemangat untuk belajar.',
           en: 'Danish is excited: “I want to be like her!” Inspiration fuels learning.',
         },
       },
@@ -217,7 +217,7 @@ export const STORY: StoryScene[] = [
     id: 's5',
     title: { ms: 'Selepas kelas', en: 'After class' },
     situation: {
-      ms: 'Hari pertama hampir tamat! Apa anda buat sebelum kelas seterusnya?',
+      ms: 'Kelas hari ini dah tamat. Apa langkah anda seterusnya?',
       en: 'Your first day is almost done! What do you do before the next class?',
     },
     choices: [
@@ -225,9 +225,9 @@ export const STORY: StoryScene[] = [
         id: 's5a',
         trait: 'penyayang',
         xp: GOOD_XP,
-        text: { ms: 'Hantar nota pujian ringkas kepada murid', en: 'Send your pupil a short note of praise' },
+        text: { ms: 'Hantar mesej pujian ringkas kepada murid', en: 'Send your pupil a short note of praise' },
         reaction: {
-          ms: 'Murid tersenyum sampai ke rumah. Pujian kecil, kesan besar!',
+          ms: 'Murid tersenyum sepanjang hari. Pujian kecil, kesan besar!',
           en: 'Your pupil smiles all the way home. Small praise, big impact!',
         },
       },
@@ -237,7 +237,7 @@ export const STORY: StoryScene[] = [
         xp: GOOD_XP,
         text: { ms: 'Rancang kelas seterusnya berdasarkan kesilapan hari ini', en: "Plan the next lesson around today's mistakes" },
         reaction: {
-          ms: 'Bijak! Kesilapan hari ini ialah peta untuk kelas esok.',
+          ms: 'Bijak! Kesilapan hari ini jadi panduan untuk kelas akan datang.',
           en: "Smart! Today's mistakes are the map for tomorrow's class.",
         },
       },
@@ -245,7 +245,7 @@ export const STORY: StoryScene[] = [
         id: 's5c',
         trait: 'kreatif',
         xp: GOOD_XP,
-        text: { ms: 'Cipta kuiz permainan untuk buka kelas seterusnya', en: 'Create a game quiz to open the next class' },
+        text: { ms: 'Sediakan kuiz seronok untuk kelas akan datang', en: 'Create a game quiz to open the next class' },
         reaction: {
           ms: 'Murid tak sabar nak masuk kelas! Permulaan yang seronok buat semua fokus.',
           en: "Pupils can't wait for class! A fun start gets everyone focused.",
@@ -257,7 +257,7 @@ export const STORY: StoryScene[] = [
         xp: GOOD_XP,
         text: { ms: 'Cari video menarik tentang topik seterusnya', en: 'Find a cool video about the next topic' },
         reaction: {
-          ms: 'Murid datang dengan seribu soalan. Rasa ingin tahu ialah permulaan ilmu.',
+          ms: 'Murid datang dengan banyak soalan. Rasa ingin tahu ialah permulaan ilmu.',
           en: 'Pupils arrive full of questions. Curiosity is where learning begins.',
         },
       },
@@ -265,7 +265,7 @@ export const STORY: StoryScene[] = [
         id: 's5e',
         trait: 'disiplin',
         xp: GOOD_XP,
-        text: { ms: 'Beri kerja rumah ringkas dan semak esok', en: 'Give short homework and check it tomorrow' },
+        text: { ms: 'Beri kerja rumah ringkas untuk disemak nanti', en: 'Give short homework and check it tomorrow' },
         reaction: {
           ms: 'Murid tahu cikgu akan semak, jadi semua siap! Disiplin kecil, hasil besar.',
           en: "Pupils know you'll check, so everyone finishes! Small habits, big results.",
@@ -282,7 +282,7 @@ export const PERSONALITIES: Record<'kreatif' | 'penyayang' | 'strategik' | 'insp
     name: 'Cikgu Kreatif',
     tagline: { ms: 'Setiap pelajaran jadi permainan', en: 'Every lesson becomes a game' },
     description: {
-      ms: 'Anda jadikan setiap pelajaran satu permainan. Murid tak sedar mereka sedang belajar!',
+      ms: 'Anda jadikan setiap pelajaran seperti permainan. Murid seronok sampai tak sedar mereka sedang belajar!',
       en: "You turn every lesson into a game. Pupils don't even notice they're learning!",
     },
   },
@@ -290,7 +290,7 @@ export const PERSONALITIES: Record<'kreatif' | 'penyayang' | 'strategik' | 'insp
     name: 'Cikgu Penyayang',
     tagline: { ms: 'Setiap murid rasa dihargai', en: 'Every pupil feels seen' },
     description: {
-      ms: 'Bersama anda, setiap murid rasa dihargai dan berani bertanya.',
+      ms: 'Dengan anda, setiap murid rasa dihargai dan berani bertanya.',
       en: 'With you, every pupil feels seen and brave enough to ask.',
     },
   },
@@ -298,7 +298,7 @@ export const PERSONALITIES: Record<'kreatif' | 'penyayang' | 'strategik' | 'insp
     name: 'Cikgu Strategik',
     tagline: { ms: 'Sasaran jelas, keputusan jelas', en: 'Clear goals, clear results' },
     description: {
-      ms: 'Sasaran jelas, pelan jelas, keputusan jelas. Murid tahu ke mana mereka menuju.',
+      ms: 'Sasaran jelas, pelan jelas, keputusan jelas. Murid tahu hala tuju mereka.',
       en: "Clear goals, clear plan, clear results. Pupils know exactly where they're heading.",
     },
   },
@@ -306,15 +306,15 @@ export const PERSONALITIES: Record<'kreatif' | 'penyayang' | 'strategik' | 'insp
     name: 'Cikgu Disiplin',
     tagline: { ms: 'Garang sikit, tapi adil', en: 'A bit fierce, always fair' },
     description: {
-      ms: 'Kelas anda tersusun: peraturan jelas, kerja rumah sentiasa siap. Murid hormat, dan mereka lulus!',
+      ms: 'Kelas anda teratur: peraturan jelas, kerja rumah sentiasa siap. Murid hormat anda, dan keputusan mereka meningkat!',
       en: 'Your class runs like clockwork: clear rules, homework always done. Pupils respect you, and they pass!',
     },
   },
   inspirasi: {
     name: 'Cikgu Inspirasi',
-    tagline: { ms: 'Murid jatuh cinta dengan ilmu', en: 'Pupils fall in love with learning' },
+    tagline: { ms: 'Murid cintakan ilmu', en: 'Pupils fall in love with learning' },
     description: {
-      ms: 'Anda buat murid jatuh cinta dengan ilmu dan ingin tahu tentang dunia.',
+      ms: 'Anda buat murid cintakan ilmu dan ingin tahu lebih banyak tentang dunia.',
       en: 'You make pupils fall in love with learning and curious about the world.',
     },
   },

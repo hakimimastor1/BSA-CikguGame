@@ -53,9 +53,9 @@ export function StoryScene({
       </div>
       <Progress step={index + (picked ? 1 : 0)} total={scenes.length} />
 
-      <section className="clay-card relative p-5 pr-24">
+      <section className={`clay-card relative pr-24 ${compact ? 'p-4' : 'p-5'}`}>
         <h1 className="font-display text-2xl font-extrabold leading-tight">{t(scene.title, lang)}</h1>
-        <p className="mt-2 text-[1.05rem] leading-relaxed">{t(scene.situation, lang)}</p>
+        <p className={`mt-2 ${compact ? 'text-base leading-snug' : 'text-[1.05rem] leading-relaxed'}`}>{t(scene.situation, lang)}</p>
         <div className="absolute -right-2 -top-6">
           <Mentol size={88} mood={picked ? (good ? 'cheer' : 'oops') : 'think'} />
         </div>

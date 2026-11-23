@@ -59,8 +59,8 @@ export const STUDY_TIPS: Record<SubjectKey, Txt> = {
   math: { ms: 'Buat 5 soalan setiap hari dan semak langkah kerja, bukan jawapan sahaja.', en: 'Do 5 questions a day and check your working, not just the answer.' },
   sci: { ms: 'Lukis peta minda selepas setiap bab dan terangkan kepada orang lain.', en: 'Draw a mind map after each chapter and explain it to someone.' },
   phy: { ms: 'Fahami setiap formula bersama unitnya, kemudian cuba 3 soalan pengiraan.', en: 'Understand each formula with its units, then try 3 calculation questions.' },
-  chem: { ms: 'Hafal 20 unsur pertama jadual berkala dan latih persamaan kimia.', en: 'Learn the first 20 elements and practise chemical equations.' },
-  bio: { ms: 'Guna rajah berlabel dan kad imbas untuk istilah penting.', en: 'Use labelled diagrams and flashcards for key terms.' },
+  chem: { ms: 'Hafal 20 unsur pertama dalam Jadual Berkala dan banyakkan latihan menulis persamaan kimia.', en: 'Learn the first 20 elements and practise chemical equations.' },
+  bio: { ms: 'Guna rajah berlabel dan kad imbas untuk menghafal istilah penting.', en: 'Use labelled diagrams and flashcards for key terms.' },
 }
 
 /** What the free 3-subject trial is worth at BSA's hourly price for the level (3 × 1 hour). */
