@@ -1,9 +1,9 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { ArrowRight, LoaderCircle, RotateCcw, WifiOff } from 'lucide-react'
-import type { Lang, PlayResult, Player, Txt } from '../types'
+import type { Band, Lang, PlayResult, Player, Txt } from '../types'
 import { S, fill, t } from '../content/strings'
-import { eventOver } from '../content/event'
-import { BSA_SUBJECTS, LEVELS_BY_BAND, SUBJECT_TO_BSA, trialValue } from '../content/subjects'
+import { NEXT_YEAR, eventOver } from '../content/event'
+import { BSA_SUBJECTS, NEXT_LEVELS, NOW_LEVELS_BY_BAND, SUBJECT_TO_BSA, levelById, nextLevelId, trialValue } from '../content/subjects'
 import { normaliseMyPhone } from '../game/whatsapp'
 
 export interface SignupData {
@@ -13,7 +13,12 @@ export interface SignupData {
   parentName?: string
   under18?: boolean
   childName?: string
+  /** This year's level (BM label, e.g. "Tahun 4"). */
   level: string
+  /** Next year's class (BM label, e.g. "Tahun 5"): the trial and classes are for that year. */
+  levelNext?: string
+  /** Band of next year's class, for the trial value on the offer screen. */
+  levelNextBand?: Band
   school?: string
   area?: string
   trialSubjects: string[]
@@ -97,15 +102,22 @@ export function SignUp({
 }) {
   const role = player.role
   const isTutor = role === 'cikgu'
-  const levels = LEVELS_BY_BAND[player.band]
+  // Learners: this year's level and next year's class (the trial is for next year). Tutors: the band they teach.
+  const nowLevels = NOW_LEVELS_BY_BAND[player.band]
+  const [nowId, setNowId] = useState(nowLevels[0])
+  const [nextId, setNextId] = useState(nextLevelId(nowLevels[0]))
+  const trialBand = levelById(nextId).band
   const subjectOptions = BSA_SUBJECTS[player.band].map((s) => ({ id: s, label: s }))
+  const trialOptions = BSA_SUBJECTS[trialBand].map((s) => ({ id: s, label: s }))
 
-  const presetTrial = useMemo(() => {
+  /** Suggested trial subjects: the ones the player found hardest, if next year's class offers them. */
+  const presetFor = (band: Band) => {
     const fromGame = [...result.levelUp, ...(result.strongest ? [result.strongest] : []), ...result.subjects.map((s) => s.subject)].map(
       (s) => SUBJECT_TO_BSA[s],
     )
-    return [...new Set(fromGame)].filter((s) => BSA_SUBJECTS[player.band].includes(s)).slice(0, 3)
-  }, [result, player.band])
+    return [...new Set(fromGame)].filter((s) => BSA_SUBJECTS[band].includes(s)).slice(0, 3)
+  }
+  const presetTrial = useMemo(() => presetFor(levelById(nextLevelId(nowLevels[0])).band), [result]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const [d, setD] = useState<SignupData>({
     name: '',
@@ -113,7 +125,9 @@ export function SignUp({
     parentName: '',
     under18: role === 'pelajar',
     childName: '',
-    level: t(levels[0], lang),
+    level: levelById(nowLevels[0]).label.ms,
+    levelNext: levelById(nextLevelId(nowLevels[0])).label.ms,
+    levelNextBand: levelById(nextLevelId(nowLevels[0])).band,
     school: '',
     area: '',
     trialSubjects: presetTrial,
@@ -131,6 +145,15 @@ export function SignUp({
   const [saving, setSaving] = useState(false)
   const [failed, setFailed] = useState(false)
   const set = <K extends keyof SignupData>(k: K, v: SignupData[K]) => setD((cur) => ({ ...cur, [k]: v }))
+  /** Next year's class decides the trial subjects on offer: keep the picks that still exist, else suggest again. */
+  const pickNext = (id: string) => {
+    const band = levelById(id).band
+    setNextId(id)
+    setD((cur) => {
+      const kept = cur.trialSubjects.filter((x) => BSA_SUBJECTS[band].includes(x))
+      return { ...cur, levelNext: levelById(id).label.ms, levelNextBand: band, trialSubjects: kept.length ? kept : presetFor(band) }
+    })
+  }
 
   const needsParent = role === 'pelajar' && d.under18
   const errors: Partial<Record<keyof SignupData, string>> = {}
@@ -170,7 +193,7 @@ export function SignUp({
         <p className="mt-1 text-muted">{isTutor ? t(S.signupBodyTutor, lang) : t(S.signupBodyLearner, lang)}</p>
         {!isTutor && !eventOver() && (
           <p className="mt-2 inline-flex rounded-full border-[3px] border-navy bg-yellow px-3 py-0.5 font-display font-extrabold">
-            {t(S.offerWhat, lang).split(' · ')[0]} · {fill(t(S.trialWorth, lang), { value: trialValue(player.band) })}
+            {t(S.offerWhat, lang).split(' · ')[0]} · {fill(t(S.trialWorth, lang), { value: trialValue(trialBand) })}
           </p>
         )}
       </div>
@@ -211,13 +234,38 @@ export function SignUp({
         )}
 
         {!isTutor && (
-          <Field label={role === 'ibubapa' ? t(S.fChildLevel, lang) : t(S.fLevel, lang)}>
-            <select className="field" value={d.level} onChange={(e) => set('level', e.target.value)}>
-              {levels.map((l) => (
-                <option key={l.ms}>{t(l, lang)}</option>
-              ))}
-            </select>
-          </Field>
+          <>
+            <Field label={fill(t(role === 'ibubapa' ? S.fChildLevelNow : S.fLevelNow, lang), { year: NEXT_YEAR - 1 })}>
+              <select
+                className="field"
+                value={nowId}
+                onChange={(e) => {
+                  const now = e.target.value
+                  setNowId(now)
+                  set('level', levelById(now).label.ms)
+                  pickNext(nextLevelId(now))
+                }}
+              >
+                {nowLevels.map((id) => (
+                  <option key={id} value={id}>
+                    {t(levelById(id).label, lang)}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field
+              label={fill(t(role === 'ibubapa' ? S.fChildLevelNext : S.fLevelNext, lang), { year: NEXT_YEAR })}
+              hint={fill(t(S.fLevelNextHint, lang), { year: NEXT_YEAR })}
+            >
+              <select className="field" value={nextId} onChange={(e) => pickNext(e.target.value)}>
+                {NEXT_LEVELS.map((id) => (
+                  <option key={id} value={id}>
+                    {t(levelById(id).label, lang)}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          </>
         )}
 
         {!isTutor && (
@@ -280,7 +328,7 @@ export function SignUp({
               {t(S.fTrialSubjects, lang)} <span className="tabular-nums text-muted">({d.trialSubjects.length}/3)</span>
             </legend>
             <span className="text-sm text-muted">{t(S.fTrialSubjectsHint, lang)}</span>
-            <Chips options={subjectOptions} value={d.trialSubjects} max={3} onChange={(v) => set('trialSubjects', v)} />
+            <Chips options={trialOptions} value={d.trialSubjects} max={3} onChange={(v) => set('trialSubjects', v)} />
             {err('trialSubjects') && <span className="text-sm font-bold text-wrong">{err('trialSubjects')}</span>}
           </fieldset>
         )}

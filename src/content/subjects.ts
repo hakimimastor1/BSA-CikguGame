@@ -25,13 +25,32 @@ export const BANDS: { id: Band; label: Txt; hint: Txt; price: number }[] = [
   { id: 'f4_5', label: { ms: 'Tingkatan 4–5', en: 'Form 4–5' }, hint: { ms: 'SPM', en: 'SPM' }, price: 40 },
 ]
 
-/** Exact levels for the sign-up form. */
-export const LEVELS_BY_BAND: Record<Band, Txt[]> = {
-  std1_3: [1, 2, 3].map((n) => ({ ms: `Tahun ${n}`, en: `Standard ${n}` })),
-  std4_6: [4, 5, 6].map((n) => ({ ms: `Tahun ${n}`, en: `Standard ${n}` })),
-  f1_3: [1, 2, 3].map((n) => ({ ms: `Tingkatan ${n}`, en: `Form ${n}` })),
-  f4_5: [4, 5].map((n) => ({ ms: `Tingkatan ${n}`, en: `Form ${n}` })),
+export interface SchoolLevel {
+  id: string
+  label: Txt
+  /** The band whose subjects and price apply; preschool and after-SPM borrow the nearest one. */
+  band: Band
 }
+
+/** Every school level in order, so next year's class is simply the next entry. */
+export const SCHOOL_LEVELS: SchoolLevel[] = [
+  { id: 'pra', label: { ms: 'Prasekolah', en: 'Preschool' }, band: 'std1_3' },
+  ...[1, 2, 3, 4, 5, 6].map((n): SchoolLevel => ({ id: `t${n}`, label: { ms: `Tahun ${n}`, en: `Standard ${n}` }, band: n <= 3 ? 'std1_3' : 'std4_6' })),
+  ...[1, 2, 3, 4, 5].map((n): SchoolLevel => ({ id: `f${n}`, label: { ms: `Tingkatan ${n}`, en: `Form ${n}` }, band: n <= 3 ? 'f1_3' : 'f4_5' })),
+  { id: 'spm', label: { ms: 'Lepasan SPM', en: 'After SPM' }, band: 'f4_5' },
+]
+export const levelById = (id: string) => SCHOOL_LEVELS.find((l) => l.id === id) ?? SCHOOL_LEVELS[1]
+export const nextLevelId = (id: string) => SCHOOL_LEVELS[Math.min(SCHOOL_LEVELS.findIndex((l) => l.id === id) + 1, SCHOOL_LEVELS.length - 1)].id
+
+/** This year's levels to pick from, for the band played (preschool for families with younger children). */
+export const NOW_LEVELS_BY_BAND: Record<Band, string[]> = {
+  std1_3: ['t1', 't2', 't3', 'pra'],
+  std4_6: ['t4', 't5', 't6'],
+  f1_3: ['f1', 'f2', 'f3'],
+  f4_5: ['f4', 'f5'],
+}
+/** Next year's classes: Tahun 1 to after SPM. */
+export const NEXT_LEVELS = SCHOOL_LEVELS.filter((l) => l.id !== 'pra').map((l) => l.id)
 
 /** All subjects BSA offers per band (from the website), for the trial picker. */
 export const BSA_SUBJECTS: Record<Band, string[]> = {

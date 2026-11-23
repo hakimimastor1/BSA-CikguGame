@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Check, Copy, ExternalLink, MessageCircle, Store } from 'lucide-react'
 import type { Lang, Player } from '../types'
 import { S, fill, t } from '../content/strings'
-import { EVENT, eventOver } from '../content/event'
+import { EVENT, NEXT_YEAR, eventOver } from '../content/event'
 import { BANDS, trialValue } from '../content/subjects'
 import { Mentol } from '../components/Mentol'
 import { Confetti } from '../components/ui'
@@ -71,6 +71,7 @@ export function Offer({
     ['waChild', player.role === 'ibubapa' ? data.childName : undefined],
     ['waParent', player.role === 'pelajar' && data.under18 ? data.parentName : undefined],
     ['waLevel', data.level],
+    ['waLevelNext', data.levelNext],
     ['waSchool', data.school],
     ['waSubjects', data.trialSubjects.join(', ')],
   ]
@@ -78,7 +79,7 @@ export function Offer({
     code: EVENT.offerCode,
     details: lines
       .filter(([, v]) => v && v.trim())
-      .map(([k, v]) => `${t(S[k], lang)}: ${v!.trim()}`)
+      .map(([k, v]) => `${fill(t(S[k], lang), { now: NEXT_YEAR - 1, next: NEXT_YEAR })}: ${v!.trim()}`)
       .join('\n'),
     ref: reference,
   })
@@ -118,7 +119,7 @@ export function Offer({
         <div className="relative border-t-[3px] border-dashed border-navy px-5 py-4 text-center">
           <p className="font-display text-xl font-bold">{t(S.offerWhat, lang)}</p>
           <p className="mt-1 inline-flex rounded-full bg-yellow px-3 py-0.5 font-display font-extrabold">
-            {fill(t(S.trialWorth, lang), { value: trialValue(player.band) })}
+            {fill(t(S.trialWorth, lang), { value: trialValue(data.levelNextBand ?? player.band) })}
           </p>
           <p className="mt-1 text-muted">{data.trialSubjects.join(' · ')}</p>
           <p className="mt-1 font-bold">{fill(t(S.offerValid, lang), { date: t(EVENT.offerValidUntil, lang) })}</p>

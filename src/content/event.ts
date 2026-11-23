@@ -17,6 +17,9 @@ export const EVENT = {
   websiteUrl: 'https://brightscholaracademy.com.my/',
 }
 
+/** The trial and classes booked at the event are for next school year (2027 for PESKON UPSI 2026). */
+export const NEXT_YEAR = Number(EVENT.endsOn.slice(0, 4)) + 1
+
 export const PRICES: Record<'primary' | 'lower' | 'upper', number> = {
   primary: 25,
   lower: 35,

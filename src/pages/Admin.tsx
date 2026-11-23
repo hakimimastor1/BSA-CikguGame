@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import { eventSlug, supabase } from '../lib/api'
 import { GAME_NAME, PERSONALITY_INFO } from '../content/personalities'
-import { EVENT } from '../content/event'
+import { EVENT, NEXT_YEAR } from '../content/event'
 import { waLink } from '../game/whatsapp'
 import type { Game, Trait } from '../types'
 
@@ -34,6 +34,8 @@ interface SignupRow {
   under18: boolean | null
   child_name: string | null
   level: string | null
+  /** Learner's class next year (the trial is for that year). */
+  level_next?: string | null
   school: string | null
   area: string | null
   trial_subjects: string[]
@@ -112,7 +114,7 @@ function followUpMessage(s: SignupRow): string {
     .join(', ')
   const report = results ? ` Keputusan ${roundName(s.game)} ${learner}: ${results}.` : ''
   const played = s.game ? ` bermain ${gameName(s.game)}` : ' singgah'
-  return `Hai ${greet}! Ini Bright Scholar Academy. Terima kasih kerana${played} di booth kami di ${EVENT.name}.${report} Jom tetapkan masa untuk trial percuma 3 subjek (${s.trial_subjects.join(', ')}) untuk ${learner}. Bila masa yang sesuai? Rujukan: ${s.ref}`
+  return `Hai ${greet}! Ini Bright Scholar Academy. Terima kasih kerana${played} di booth kami di ${EVENT.name}.${report} Jom tetapkan masa untuk trial percuma 3 subjek (${s.trial_subjects.join(', ')}) untuk ${learner}${s.level_next ? ` (${s.level_next} pada ${NEXT_YEAR})` : ''}. Bila masa yang sesuai? Rujukan: ${s.ref}`
 }
 
 function toCsv(rows: SignupRow[]): string {
@@ -125,7 +127,8 @@ function toCsv(rows: SignupRow[]): string {
     ['Nama ibu bapa', (r) => r.parent_name],
     ['Bawah 18', (r) => (r.under18 ? 'Ya' : '')],
     ['Nama anak', (r) => r.child_name],
-    ['Tahap', (r) => r.level],
+    [`Tahap ${NEXT_YEAR - 1}`, (r) => r.level],
+    [`Kelas ${NEXT_YEAR}`, (r) => r.level_next],
     ['Sekolah', (r) => r.school],
     ['Kawasan', (r) => r.area],
     ['Subjek trial', (r) => r.trial_subjects.join('; ')],
@@ -436,7 +439,7 @@ function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupR
     if (r.availability.length) details.push(`Masa lapang: ${r.availability.map((a) => AVAIL_LABEL[a] ?? a).join(', ')}`)
   } else {
     if (r.child_name) details.push(`Anak/adik: ${r.child_name}`)
-    if (r.level) details.push(r.level)
+    if (r.level) details.push(r.level_next ? `${r.level} → ${NEXT_YEAR}: ${r.level_next}` : r.level)
     if (r.school) details.push(r.school)
     if (r.trial_subjects.length) details.push(`Trial: ${r.trial_subjects.join(', ')}`)
     if (r.subjects?.length) details.push(`${roundName(r.game)}: ${r.subjects.map((x) => `${SUBJECT_BM[x.subject] ?? x.subject} ${x.right}/${x.total}`).join(', ')}`)
