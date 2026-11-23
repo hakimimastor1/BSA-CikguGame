@@ -34,6 +34,8 @@
 ## 3. Susulan (laman admin)
 
 - **Pendaftaran:** tekan **WhatsApp** → mesej sudah ditulis → hantar.
+- **Betulkan maklumat (admin sahaja):** tekan **Edit** pada kad pendaftaran untuk betulkan nama, nombor WhatsApp,
+  kelas 2027, sekolah atau subjek trial, kemudian **Simpan**. Kad tunjuk bila dan siapa yang edit.
 - **Status:** pelajar *Dihubungi → Trial ditempah → Mendaftar*; tutor *Dihubungi → Ditemu duga → Diambil*. Tulis nota.
 - Admin boleh **muat turun CSV**.
 - Sasaran: hubungi semua dalam **24–48 jam**.

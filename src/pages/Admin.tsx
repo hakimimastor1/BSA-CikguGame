@@ -10,6 +10,7 @@ import {
   ListChecks,
   LogOut,
   MessageCircle,
+  Pencil,
   RefreshCw,
   Search,
   ShieldAlert,
@@ -18,6 +19,7 @@ import {
 import { eventSlug, supabase } from '../lib/api'
 import { GAME_NAME, PERSONALITY_INFO } from '../content/personalities'
 import { EVENT, NEXT_YEAR } from '../content/event'
+import { BSA_SUBJECTS, NEXT_LEVELS, SCHOOL_LEVELS } from '../content/subjects'
 import { waLink } from '../game/whatsapp'
 import type { Game, Trait } from '../types'
 
@@ -56,6 +58,9 @@ interface SignupRow {
   status: string
   notes: string | null
   created_at: string
+  /** Last admin correction of the details, and by whom. */
+  edited_at?: string | null
+  edited_by?: string | null
 }
 
 interface BoardRow {
@@ -408,13 +413,192 @@ function Signups({ me }: { me: Me }) {
       </div>
 
       {shown.map((r) => (
-        <SignupCard key={r.id} r={r} onPatch={(p) => patch(r.id, p)} />
+        <SignupCard key={r.id} r={r} isAdmin={me.role === 'admin'} onPatch={(p) => patch(r.id, p)} />
       ))}
     </div>
   )
 }
 
-function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupRow>) => void }) {
+const ALL_SUBJECTS = [...new Set(Object.values(BSA_SUBJECTS).flat())]
+const levelByLabel = (label: string) => SCHOOL_LEVELS.find((l) => l.label.ms === label)
+/** 60123456789 -> 0123456789, the way people type it. */
+const localPhone = (n: string) => (n.startsWith('60') ? '0' + n.slice(2) : n)
+
+function editError(m: string): string {
+  const clash = /phone used by (\S+)/.exec(m)
+  if (clash) return `Nombor ini sudah digunakan oleh pendaftaran ${clash[1]}.`
+  if (/bad phone/.test(m)) return 'Nombor WhatsApp tidak sah. Contoh: 012-345 6789.'
+  if (/pick 3/.test(m)) return 'Pilih tepat 3 subjek trial.'
+  if (/missing subjects/.test(m)) return 'Pilih sekurang-kurangnya 1 subjek yang boleh diajar.'
+  if (/name required/.test(m)) return 'Nama wajib diisi.'
+  if (/admin only/.test(m)) return 'Hanya admin boleh edit pendaftaran.'
+  return `Tidak berjaya: ${m}`
+}
+
+function ChipPick({ options, value, max, onChange }: { options: string[]; value: string[]; max?: number; onChange: (v: string[]) => void }) {
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {options.map((o) => {
+        const on = value.includes(o)
+        return (
+          <button
+            key={o}
+            type="button"
+            aria-pressed={on}
+            onClick={() => onChange(on ? value.filter((x) => x !== o) : max && value.length >= max ? value : [...value, o])}
+            className={`min-h-10 rounded-full border-2 border-navy px-3 text-sm font-bold ${on ? 'bg-yellow' : 'bg-white'}`}
+          >
+            {o}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+/** Admin only: correct the details of a sign-up. Same checks as the sign-up form, on the server. */
+function EditSignup({ r, onSaved, onCancel }: { r: SignupRow; onSaved: (row: Partial<SignupRow>) => void; onCancel: () => void }) {
+  const tutor = r.role === 'cikgu'
+  const [f, setF] = useState({
+    name: r.name,
+    whatsapp: localPhone(r.whatsapp),
+    parentName: r.parent_name ?? '',
+    under18: !!r.under18,
+    childName: r.child_name ?? '',
+    level: r.level ?? '',
+    levelNext: r.level_next ?? '',
+    school: r.school ?? '',
+    area: r.area ?? '',
+    trialSubjects: r.trial_subjects,
+    tutorStatus: r.tutor_status ?? 'upsi',
+    semester: r.semester ?? '',
+    cgpa: r.cgpa ?? '',
+    qualification: r.qualification ?? '',
+    course: r.course ?? '',
+    teachSubjects: r.teach_subjects,
+    availability: r.availability,
+    marketing: r.marketing,
+  })
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((c) => ({ ...c, [k]: v }))
+  const withCurrent = (list: string[], current: string) => (current && !list.includes(current) ? [current, ...list] : list)
+  const trialBand = levelByLabel(f.levelNext)?.band
+  const trialList = [...new Set([...(trialBand ? BSA_SUBJECTS[trialBand] : ALL_SUBJECTS), ...f.trialSubjects])]
+
+  const save = async () => {
+    setBusy(true)
+    setError(null)
+    const { data, error: e } = await supabase!.rpc('staff_edit_signup', { p_id: r.id, p: f })
+    setBusy(false)
+    if (e) setError(editError(e.message))
+    else onSaved(data as Partial<SignupRow>)
+  }
+
+  const text = (label: string, k: 'name' | 'whatsapp' | 'parentName' | 'childName' | 'school' | 'area' | 'semester' | 'cgpa' | 'qualification' | 'course', extra?: { inputMode?: 'tel' | 'numeric' | 'decimal' }) => (
+    <label className="flex flex-col gap-1 text-sm font-bold">
+      {label}
+      <input className="field font-normal" value={f[k] as string} inputMode={extra?.inputMode} onChange={(e) => set(k, e.target.value)} />
+    </label>
+  )
+  const select = (label: string, k: 'level' | 'levelNext', ids: string[]) => {
+    const labels = withCurrent(ids.map((id) => SCHOOL_LEVELS.find((l) => l.id === id)!.label.ms), f[k])
+    return (
+      <label className="flex flex-col gap-1 text-sm font-bold">
+        {label}
+        <select className="field font-normal" value={f[k]} onChange={(e) => set(k, e.target.value)}>
+          {!f[k] && <option value="">–</option>}
+          {labels.map((l) => (
+            <option key={l}>{l}</option>
+          ))}
+        </select>
+      </label>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-3 rounded-2xl border-[3px] border-navy bg-yellow-soft p-3">
+      <p className="font-display text-lg font-extrabold">Edit pendaftaran {r.ref}</p>
+      {text(r.role === 'ibubapa' ? 'Nama ibu bapa' : 'Nama penuh', 'name')}
+      {text(r.role === 'pelajar' && f.under18 ? 'No. WhatsApp ibu bapa / penjaga' : 'No. WhatsApp', 'whatsapp', { inputMode: 'tel' })}
+      {r.role === 'pelajar' && (
+        <>
+          <label className="flex items-center gap-2 text-sm font-bold">
+            <input type="checkbox" className="h-5 w-5 accent-[#023E86]" checked={f.under18} onChange={(e) => set('under18', e.target.checked)} />
+            Bawah 18 tahun
+          </label>
+          {f.under18 && text('Nama ibu bapa / penjaga', 'parentName')}
+        </>
+      )}
+      {r.role === 'ibubapa' && text('Nama anak / adik', 'childName')}
+      {!tutor && (
+        <>
+          <div className="grid grid-cols-2 gap-2">
+            {select(`Tahap ${NEXT_YEAR - 1}`, 'level', SCHOOL_LEVELS.map((l) => l.id))}
+            {select(`Kelas ${NEXT_YEAR}`, 'levelNext', NEXT_LEVELS)}
+          </div>
+          {text('Sekolah', 'school')}
+        </>
+      )}
+      {tutor && (
+        <>
+          <div className="flex flex-col gap-1 text-sm font-bold">
+            Status
+            <ChipPick options={['Pelajar UPSI', 'Graduan / bekerja']} value={[f.tutorStatus === 'grad' ? 'Graduan / bekerja' : 'Pelajar UPSI']} onChange={(v) => set('tutorStatus', v.includes('Graduan / bekerja') && f.tutorStatus !== 'grad' ? 'grad' : 'upsi')} />
+          </div>
+          {f.tutorStatus === 'upsi' ? (
+            <div className="grid grid-cols-2 gap-2">
+              {text('Semester', 'semester', { inputMode: 'numeric' })}
+              {text('CGPA', 'cgpa', { inputMode: 'decimal' })}
+            </div>
+          ) : (
+            text('Kelayakan tertinggi', 'qualification')
+          )}
+          {text('Program / bidang', 'course')}
+          <div className="flex flex-col gap-1 text-sm font-bold">
+            Subjek yang boleh diajar
+            <ChipPick options={[...new Set([...ALL_SUBJECTS, ...f.teachSubjects])]} value={f.teachSubjects} onChange={(v) => set('teachSubjects', v)} />
+          </div>
+          <div className="flex flex-col gap-1 text-sm font-bold">
+            Masa lapang
+            <ChipPick
+              options={Object.values(AVAIL_LABEL)}
+              value={f.availability.map((a) => AVAIL_LABEL[a] ?? a)}
+              onChange={(v) => set('availability', Object.keys(AVAIL_LABEL).filter((k) => v.includes(AVAIL_LABEL[k])))}
+            />
+          </div>
+        </>
+      )}
+      {text('Kawasan', 'area')}
+      {!tutor && (
+        <div className="flex flex-col gap-1 text-sm font-bold">
+          Subjek trial ({f.trialSubjects.length}/3)
+          <ChipPick options={trialList} value={f.trialSubjects} max={3} onChange={(v) => set('trialSubjects', v)} />
+        </div>
+      )}
+      <label className="flex items-center gap-2 text-sm font-bold">
+        <input type="checkbox" className="h-5 w-5 accent-[#023E86]" checked={f.marketing} onChange={(e) => set('marketing', e.target.checked)} />
+        Setuju terima tawaran lain daripada BSA
+      </label>
+      {error && (
+        <p className="rounded-xl bg-wrong-soft p-2 text-sm font-bold text-wrong" role="alert">
+          {error}
+        </p>
+      )}
+      <div className="grid grid-cols-2 gap-2">
+        <button type="button" className="clay-btn min-h-11 bg-white text-base" onClick={onCancel} disabled={busy}>
+          Batal
+        </button>
+        <button type="button" className="clay-btn min-h-11 bg-yellow text-base" onClick={save} disabled={busy}>
+          {busy ? 'Menyimpan…' : 'Simpan'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function SignupCard({ r, isAdmin, onPatch }: { r: SignupRow; isAdmin: boolean; onPatch: (p: Partial<SignupRow>) => void }) {
+  const [editing, setEditing] = useState(false)
   const [notes, setNotes] = useState(r.notes ?? '')
   const [saved, setSaved] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const statuses = r.role === 'cikgu' ? TUTOR_STATUS : LEARNER_STATUS
@@ -461,11 +645,30 @@ function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupR
           <p className="mt-1 font-display font-extrabold">{r.ref}</p>
         </div>
       </div>
-      <p className="text-[0.95rem] leading-snug">{details.join(' · ')}</p>
+      {editing ? (
+        <EditSignup
+          r={r}
+          onCancel={() => setEditing(false)}
+          onSaved={(row) => {
+            onPatch(row)
+            setEditing(false)
+          }}
+        />
+      ) : (
+        <div className="flex items-start gap-2">
+          <p className="min-w-0 flex-1 text-[0.95rem] leading-snug">{details.join(' · ')}</p>
+          {isAdmin && (
+            <button type="button" className="clay-btn min-h-11 shrink-0 bg-white px-3 text-sm" onClick={() => setEditing(true)} aria-label={`Edit ${r.ref}`}>
+              <Pencil size={16} /> Edit
+            </button>
+          )}
+        </div>
+      )}
       <p className="text-xs text-muted">
         {myTime(r.created_at)}
         {r.personality ? ` · ${gameName(r.game) || 'Main'}: ${r.nickname} · ${PERSONALITY_INFO[r.personality].name} · ${r.total_xp} XP` : ''}
         {r.marketing ? ' · setuju terima tawaran' : ''}
+        {r.edited_at ? ` · diedit ${myTime(r.edited_at)}${r.edited_by ? ` oleh ${r.edited_by}` : ''}` : ''}
       </p>
       <div className="grid grid-cols-[1fr_auto] gap-2">
         <select
