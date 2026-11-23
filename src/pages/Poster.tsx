@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BriefcaseBusiness, Gift, Printer, ScanLine, Shuffle, Sticker, Trophy } from 'lucide-react'
+import { BriefcaseBusiness, Download, Gift, Image as ImageIcon, Printer, ScanLine, Shuffle, Sticker, Trophy } from 'lucide-react'
 import { Mentol } from '../components/Mentol'
 import { Qr, gameUrl } from '../components/Qr'
 import { EVENT } from '../content/event'
@@ -20,8 +20,17 @@ export default function Poster() {
   return (
     <div className="min-h-dvh bg-[#e9edf5] py-6 print:bg-white print:py-0">
       <style>{`@page { size: A4 portrait; margin: 0 } @media print { html, body { background: #fff !important } }`}</style>
-      <div className="mx-auto mb-4 flex max-w-[210mm] justify-end px-4 print:hidden">
-        <button type="button" className="clay-btn bg-yellow" onClick={() => window.print()}>
+      {/* Ready-made files (public/print/), made from this page; regenerate them when the poster changes. */}
+      <div className="mx-auto mb-4 flex max-w-[210mm] flex-wrap justify-end gap-2 px-4 print:hidden">
+        <a className="clay-btn bg-yellow" href="/print/poster-peskon26-a4.pdf" download="Poster-BSA-PESKON-UPSI-2026-A4.pdf">
+          <Download size={20} strokeWidth={2.5} />
+          Muat turun PDF (A4)
+        </a>
+        <a className="clay-btn bg-white" href="/print/poster-peskon26-a4.png" download="Poster-BSA-PESKON-UPSI-2026.png">
+          <ImageIcon size={20} strokeWidth={2.5} />
+          Gambar (PNG)
+        </a>
+        <button type="button" className="clay-btn bg-white" onClick={() => window.print()}>
           <Printer size={20} strokeWidth={2.5} />
           Cetak / Print
         </button>
