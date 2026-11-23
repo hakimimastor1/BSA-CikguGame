@@ -56,7 +56,7 @@ PESKON.
 |---|---|---|
 | 1 | **Welcome** | BSA logo, Cik Mentol, headline *"Jadi Cikgu Sehari!"*, "PESKON UPSI 2026" tag, big **Mula / Start** button, BM/EN toggle (top right, on every screen) |
 | 2 | **Saya…** | Three big cards: *Pelajar*, *Ibu bapa*, *Nak jadi cikgu* |
-| 3 | **Level** | Std 1–3, Std 4–6, Form 1–3, Form 4–5. Future tutors also pick up to 3 subjects they'd teach |
+| 3 | **Level** | Std 1–3, Std 4–6, Form 1–3, Form 4–5. Future tutors also pick up to 3 subjects they'd teach. Students and parents who pick Form 4–5 also pick the stream: Sains Tulen, Sastera & Kemanusiaan, Agama, Teknik & Vokasional or Belum pasti |
 | 4 | **Nickname** | Text box plus a "suggest" button with a dice icon (e.g. *Cikgu Ceria 27*). Rude words are blocked |
 | 5 | **Story ×5** | Scene card (title, short situation, Cik Mentol), 3 choice buttons, then a reaction with XP gained and a one-line "Tip cikgu" |
 | 6 | **Semak Kerja** | A pupil's exercise book: question and the pupil's answer, big ✓ and ✗ buttons, 45-second timer, streak counter, 8 items |
@@ -124,16 +124,22 @@ The personality is the trait the player picked most (ties go to the order below)
 
 ### Semak Kerja (mark the work)
 
-- 8 items from the player's level: 2 each from 4 subjects. A pupil's answer is shown; the player taps ✓
-  (correct) or ✗ (wrong). About half the pupil answers are wrong.
+- 8 items from the player's level: 2 each from 4 subjects (3 subjects: 3, 3 and 2). A pupil's answer is
+  shown; the player taps ✓ (correct) or ✗ (wrong). About half the pupil answers are wrong.
 - Each right mark gives 20 XP, plus up to 10 XP for speed and a streak bonus. The timer is 45 seconds.
 - **Subjects by level for PESKON:** Std 1–3, Std 4–6 and Form 1–3 use BM, BI, Matematik and Sains.
-  Form 4–5 uses BI, Matematik, plus 2 of Fizik, Kimia and Biologi. Future tutors get items from the
-  subjects they picked.
+  Form 4–5 follows the stream: Sains Tulen uses BI, Matematik, plus 2 of Fizik, Kimia and Biologi;
+  Sastera & Kemanusiaan, Agama, Teknik & Vokasional and Belum pasti use BM, BI and Matematik (the core SPM
+  subjects every stream takes). Future tutors get items from the subjects they picked.
 - Questions show in the chosen language (Matematik and Sains have BM and English versions; BM and BI items
   stay in their own language).
-- *Strongest subject* = most right marks; *Subjects to level up* = subjects with mistakes. These pre-fill
-  the 3 trial subjects on the sign-up form.
+- *Strongest subject* = most right marks; *Subjects to level up* = subjects with mistakes. The mini report
+  praises every full-mark subject ("Syabas! Matematik: Semua betul. Hebat, teruskan!") and gives a level-up
+  tip for every subject with a mistake.
+- The sign-up form pre-fills the 3 trial subjects: subjects with mistakes first, then (Form 4–5 next year)
+  the stream's own subjects, e.g. Sains Tulen → Matematik Tambahan, Fizik, Kimia; Sastera → Sejarah,
+  Prinsip Perakaunan; Agama → PSI, PQS, Sejarah; Teknik → RBT. It asks the stream when next year's class is
+  Tingkatan 4 or 5, and the stream shows in the WhatsApp message, Admin, the CSV and the edit form.
 - **Question bank for PESKON:** about 8 items per subject per level, roughly 140 in all. I draft them
   from the KSSR/KSSM syllabus, and BSA tutors check them.
 

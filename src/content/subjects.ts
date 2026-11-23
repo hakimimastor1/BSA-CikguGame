@@ -1,4 +1,4 @@
-import type { Band, SubjectKey, Txt } from '../types'
+import type { Band, Stream, SubjectKey, Txt } from '../types'
 
 export const SUBJECT_NAMES: Record<SubjectKey, Txt> = {
   bm: { ms: 'Bahasa Melayu', en: 'Bahasa Melayu' },
@@ -59,6 +59,22 @@ export const BSA_SUBJECTS: Record<Band, string[]> = {
   f1_3: ['Bahasa Melayu', 'Bahasa Inggeris', 'Matematik', 'Sains', 'Sejarah', 'Geografi', 'RBT', 'ASK'],
   f4_5: ['Bahasa Melayu', 'Bahasa Inggeris', 'Sejarah', 'Pendidikan Islam', 'Matematik', 'Sains', 'Fizik', 'Kimia', 'Biologi', 'Matematik Tambahan', 'Prinsip Perakaunan', 'RBT', 'PQS', 'PSI'],
 }
+
+/**
+ * Form 4–5 streams. `quiz`: the question subjects for the stream (Sains Tulen: BI, Matematik and
+ * 2 of the 3 sciences; every other stream: BM, BI, Matematik). `extras`: stream subjects BSA teaches,
+ * suggested for the trial after the subjects the player found hard.
+ */
+export const STREAMS: { id: Stream; label: Txt; extras: string[] }[] = [
+  { id: 'sains', label: { ms: 'Sains Tulen', en: 'Pure Science' }, extras: ['Matematik Tambahan', 'Fizik', 'Kimia', 'Biologi'] },
+  { id: 'sastera', label: { ms: 'Sastera & Kemanusiaan', en: 'Arts & Humanities' }, extras: ['Sejarah', 'Prinsip Perakaunan'] },
+  { id: 'agama', label: { ms: 'Agama', en: 'Religious Studies' }, extras: ['PSI', 'PQS', 'Sejarah'] },
+  { id: 'teknik', label: { ms: 'Teknik & Vokasional', en: 'Technical & Vocational' }, extras: ['RBT'] },
+  { id: 'belum', label: { ms: 'Belum pasti', en: 'Not sure yet' }, extras: [] },
+]
+export const streamById = (id?: string | null) => STREAMS.find((s) => s.id === id)
+/** Tingkatan 4 and 5 have streams (not after SPM). */
+export const levelHasStream = (levelId: string) => levelId === 'f4' || levelId === 'f5'
 
 /** BSA's subject name (as on the website) for a question subject. */
 export const SUBJECT_TO_BSA: Record<SubjectKey, string> = {

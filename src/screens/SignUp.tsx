@@ -1,9 +1,20 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { ArrowRight, LoaderCircle, RotateCcw, WifiOff } from 'lucide-react'
-import type { Band, Lang, PlayResult, Player, Txt } from '../types'
+import type { Band, Lang, PlayResult, Player, Stream, Txt } from '../types'
 import { S, fill, t } from '../content/strings'
 import { NEXT_YEAR, eventOver } from '../content/event'
-import { BSA_SUBJECTS, NEXT_LEVELS, NOW_LEVELS_BY_BAND, SUBJECT_TO_BSA, levelById, nextLevelId, trialValue } from '../content/subjects'
+import {
+  BSA_SUBJECTS,
+  NEXT_LEVELS,
+  NOW_LEVELS_BY_BAND,
+  STREAMS,
+  SUBJECT_TO_BSA,
+  levelById,
+  levelHasStream,
+  nextLevelId,
+  streamById,
+  trialValue,
+} from '../content/subjects'
 import { normaliseMyPhone } from '../game/whatsapp'
 
 export interface SignupData {
@@ -19,6 +30,8 @@ export interface SignupData {
   levelNext?: string
   /** Band of next year's class, for the trial value on the offer screen. */
   levelNextBand?: Band
+  /** Stream for next year's class, when it is Tingkatan 4 or 5. */
+  stream?: Stream
   school?: string
   area?: string
   trialSubjects: string[]
@@ -110,14 +123,19 @@ export function SignUp({
   const subjectOptions = BSA_SUBJECTS[player.band].map((s) => ({ id: s, label: s }))
   const trialOptions = BSA_SUBJECTS[trialBand].map((s) => ({ id: s, label: s }))
 
-  /** Suggested trial subjects: the ones the player found hardest, if next year's class offers them. */
-  const presetFor = (band: Band) => {
-    const fromGame = [...result.levelUp, ...(result.strongest ? [result.strongest] : []), ...result.subjects.map((s) => s.subject)].map(
-      (s) => SUBJECT_TO_BSA[s],
-    )
-    return [...new Set(fromGame)].filter((s) => BSA_SUBJECTS[band].includes(s)).slice(0, 3)
+  // The game's stream carries over (Form 4 → Form 5); otherwise "Belum pasti" until they say.
+  const startStream: Stream = player.band === 'f4_5' && player.stream ? player.stream : 'belum'
+  /**
+   * Suggested trial subjects: the ones the player found hardest, then the stream's own subjects
+   * (Tingkatan 4–5), then the rest of the round, if next year's class offers them.
+   */
+  const presetFor = (band: Band, stream: Stream | undefined) => {
+    const hard = result.levelUp.map((s) => SUBJECT_TO_BSA[s])
+    const extras = band === 'f4_5' ? (streamById(stream)?.extras ?? []) : []
+    const rest = [...(result.strongest ? [result.strongest] : []), ...result.subjects.map((s) => s.subject)].map((s) => SUBJECT_TO_BSA[s])
+    return [...new Set([...hard, ...extras, ...rest])].filter((s) => BSA_SUBJECTS[band].includes(s)).slice(0, 3)
   }
-  const presetTrial = useMemo(() => presetFor(levelById(nextLevelId(nowLevels[0])).band), [result]) // eslint-disable-line react-hooks/exhaustive-deps
+  const presetTrial = useMemo(() => presetFor(levelById(nextLevelId(nowLevels[0])).band, startStream), [result]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const [d, setD] = useState<SignupData>({
     name: '',
@@ -128,6 +146,7 @@ export function SignUp({
     level: levelById(nowLevels[0]).label.ms,
     levelNext: levelById(nextLevelId(nowLevels[0])).label.ms,
     levelNextBand: levelById(nextLevelId(nowLevels[0])).band,
+    stream: startStream,
     school: '',
     area: '',
     trialSubjects: presetTrial,
@@ -151,9 +170,14 @@ export function SignUp({
     setNextId(id)
     setD((cur) => {
       const kept = cur.trialSubjects.filter((x) => BSA_SUBJECTS[band].includes(x))
-      return { ...cur, levelNext: levelById(id).label.ms, levelNextBand: band, trialSubjects: kept.length ? kept : presetFor(band) }
+      return { ...cur, levelNext: levelById(id).label.ms, levelNextBand: band, trialSubjects: kept.length ? kept : presetFor(band, cur.stream) }
     })
   }
+  /** A new stream means different subjects: suggest the trial again. */
+  const pickStream = (stream: Stream) => setD((cur) => ({ ...cur, stream, trialSubjects: presetFor(trialBand, stream) }))
+  const askStream = !isTutor && levelHasStream(nextId)
+  /** What is sent: the stream only when next year's class has one. */
+  const final = (): SignupData => ({ ...d, whatsapp: normaliseMyPhone(d.whatsapp)!, stream: askStream ? d.stream : undefined })
 
   const needsParent = role === 'pelajar' && d.under18
   const errors: Partial<Record<keyof SignupData, string>> = {}
@@ -179,7 +203,7 @@ export function SignUp({
         setSaving(true)
         setFailed(false)
         try {
-          await onSubmit({ ...d, whatsapp: normaliseMyPhone(d.whatsapp)! })
+          await onSubmit(final())
         } catch {
           setFailed(true)
           setSaving(false)
@@ -265,6 +289,17 @@ export function SignUp({
                 ))}
               </select>
             </Field>
+            {askStream && (
+              <Field label={fill(t(role === 'ibubapa' ? S.fChildStream : S.fStream, lang), { year: NEXT_YEAR })} hint={t(S.fStreamHint, lang)}>
+                <select className="field" value={d.stream} onChange={(e) => pickStream(e.target.value as Stream)}>
+                  {STREAMS.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {t(s.label, lang)}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            )}
           </>
         )}
 
@@ -352,7 +387,7 @@ export function SignUp({
             <WifiOff size={20} strokeWidth={2.5} className="mt-0.5 shrink-0" />
             {t(S.signupError, lang)}
           </p>
-          <button type="button" className="clay-btn w-full bg-white" onClick={() => onSkip({ ...d, whatsapp: normaliseMyPhone(d.whatsapp)! })}>
+          <button type="button" className="clay-btn w-full bg-white" onClick={() => onSkip(final())}>
             {t(S.signupSkip, lang)}
           </button>
         </div>

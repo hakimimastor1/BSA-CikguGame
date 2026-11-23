@@ -19,9 +19,9 @@ import {
 import { eventSlug, supabase } from '../lib/api'
 import { GAME_NAME, PERSONALITY_INFO } from '../content/personalities'
 import { EVENT, NEXT_YEAR } from '../content/event'
-import { BSA_SUBJECTS, NEXT_LEVELS, SCHOOL_LEVELS } from '../content/subjects'
+import { BSA_SUBJECTS, NEXT_LEVELS, SCHOOL_LEVELS, STREAMS, levelHasStream, streamById } from '../content/subjects'
 import { waLink } from '../game/whatsapp'
-import type { Game, Trait } from '../types'
+import type { Game, Stream, Trait } from '../types'
 
 type StaffRole = 'admin' | 'booth'
 type Me = { email: string; role: StaffRole; name: string | null }
@@ -38,6 +38,8 @@ interface SignupRow {
   level: string | null
   /** Learner's class next year (the trial is for that year). */
   level_next?: string | null
+  /** Stream for next year's class (Tingkatan 4–5 only). */
+  stream?: Stream | null
   school: string | null
   area: string | null
   trial_subjects: string[]
@@ -119,7 +121,7 @@ function followUpMessage(s: SignupRow): string {
     .join(', ')
   const report = results ? ` Keputusan ${roundName(s.game)} ${learner}: ${results}.` : ''
   const played = s.game ? ` bermain ${gameName(s.game)}` : ' singgah'
-  return `Hai ${greet}! Ini Bright Scholar Academy. Terima kasih kerana${played} di booth kami di ${EVENT.name}.${report} Jom tetapkan masa untuk trial percuma 3 subjek (${s.trial_subjects.join(', ')}) untuk ${learner}${s.level_next ? ` (${s.level_next} pada ${NEXT_YEAR})` : ''}. Bila masa yang sesuai? Rujukan: ${s.ref}`
+  return `Hai ${greet}! Ini Bright Scholar Academy. Terima kasih kerana${played} di booth kami di ${EVENT.name}.${report} Jom tetapkan masa untuk trial percuma 3 subjek (${s.trial_subjects.join(', ')}) untuk ${learner}${s.level_next ? ` (${s.level_next} pada ${NEXT_YEAR}${s.stream ? `, aliran ${streamById(s.stream)?.label.ms}` : ''})` : ''}. Bila masa yang sesuai? Rujukan: ${s.ref}`
 }
 
 function toCsv(rows: SignupRow[]): string {
@@ -134,6 +136,7 @@ function toCsv(rows: SignupRow[]): string {
     ['Nama anak', (r) => r.child_name],
     [`Tahap ${NEXT_YEAR - 1}`, (r) => r.level],
     [`Kelas ${NEXT_YEAR}`, (r) => r.level_next],
+    ['Aliran', (r) => streamById(r.stream)?.label.ms],
     ['Sekolah', (r) => r.school],
     ['Kawasan', (r) => r.area],
     ['Subjek trial', (r) => r.trial_subjects.join('; ')],
@@ -465,6 +468,7 @@ function EditSignup({ r, onSaved, onCancel }: { r: SignupRow; onSaved: (row: Par
     childName: r.child_name ?? '',
     level: r.level ?? '',
     levelNext: r.level_next ?? '',
+    stream: (r.stream ?? '') as Stream | '',
     school: r.school ?? '',
     area: r.area ?? '',
     trialSubjects: r.trial_subjects,
@@ -484,12 +488,14 @@ function EditSignup({ r, onSaved, onCancel }: { r: SignupRow; onSaved: (row: Par
   const tutor = f.role === 'cikgu'
   const withCurrent = (list: string[], current: string) => (current && !list.includes(current) ? [current, ...list] : list)
   const trialBand = levelByLabel(f.levelNext)?.band
+  // Tingkatan 4–5 next year: the stream can be set or corrected; other classes have none.
+  const showStream = !tutor && levelHasStream(levelByLabel(f.levelNext)?.id ?? '')
   const trialList = [...new Set([...(trialBand ? BSA_SUBJECTS[trialBand] : ALL_SUBJECTS), ...f.trialSubjects])]
 
   const save = async () => {
     setBusy(true)
     setError(null)
-    const { data, error: e } = await supabase!.rpc('staff_edit_signup', { p_id: r.id, p: f })
+    const { data, error: e } = await supabase!.rpc('staff_edit_signup', { p_id: r.id, p: { ...f, stream: showStream ? f.stream : null } })
     setBusy(false)
     if (e) setError(editError(e.message))
     else onSaved(data as Partial<SignupRow>)
@@ -547,6 +553,19 @@ function EditSignup({ r, onSaved, onCancel }: { r: SignupRow; onSaved: (row: Par
             {select(`Tahap ${NEXT_YEAR - 1}`, 'level', SCHOOL_LEVELS.map((l) => l.id))}
             {select(`Kelas ${NEXT_YEAR}`, 'levelNext', NEXT_LEVELS)}
           </div>
+          {showStream && (
+            <label className="flex flex-col gap-1 text-sm font-bold">
+              Aliran {NEXT_YEAR}
+              <select className="field font-normal" value={f.stream} onChange={(e) => set('stream', e.target.value as Stream | '')}>
+                {!f.stream && <option value="">–</option>}
+                {STREAMS.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.label.ms}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           {text('Sekolah', 'school')}
         </>
       )}
@@ -633,7 +652,7 @@ function SignupCard({ r, isAdmin, onPatch }: { r: SignupRow; isAdmin: boolean; o
     if (r.availability.length) details.push(`Masa lapang: ${r.availability.map((a) => AVAIL_LABEL[a] ?? a).join(', ')}`)
   } else {
     if (r.child_name) details.push(`Anak/adik: ${r.child_name}`)
-    if (r.level) details.push(r.level_next ? `${r.level} → ${NEXT_YEAR}: ${r.level_next}` : r.level)
+    if (r.level) details.push((r.level_next ? `${r.level} → ${NEXT_YEAR}: ${r.level_next}` : r.level) + (r.stream ? ` · ${streamById(r.stream)?.label.ms}` : ''))
     if (r.school) details.push(r.school)
     if (r.trial_subjects.length) details.push(`Trial: ${r.trial_subjects.join(', ')}`)
     if (r.subjects?.length) details.push(`${roundName(r.game)}: ${r.subjects.map((x) => `${SUBJECT_BM[x.subject] ?? x.subject} ${x.right}/${x.total}`).join(', ')}`)

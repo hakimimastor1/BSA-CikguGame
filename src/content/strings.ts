@@ -58,6 +58,9 @@ export const S = {
   levelTitlePelajar: { ms: 'Anda di tahap mana?', en: 'Which level are you in?' },
   levelTitleIbubapa: { ms: 'Anak atau adik anda di tahap mana?', en: 'What level is your child or sibling in?' },
   levelTitleCikgu: { ms: 'Anda nak mengajar tahap mana?', en: 'Which level would you teach?' },
+  streamTitlePelajar: { ms: 'Anda dalam aliran apa?', en: 'Which stream are you in?' },
+  streamTitleIbubapa: { ms: 'Anak atau adik anda dalam aliran apa?', en: 'Which stream is your child or sibling in?' },
+  streamHint: { ms: 'Soalan kuiz akan ikut subjek aliran ini.', en: 'The quiz questions follow the subjects of this stream.' },
   teachSubjectsTitle: { ms: 'Pilih subjek yang anda boleh ajar (sehingga 3)', en: 'Pick subjects you could teach (up to 3)' },
 
   // Nickname
@@ -136,6 +139,8 @@ export const S = {
   reportBody: { ms: 'Tunjukkan kepada ibu bapa anda!', en: 'Show this to your parents!' },
   reportTips: { ms: 'Tip untuk naik level', en: 'Tips to level up' },
   reportAllRight: { ms: 'Semua betul! Teruskan usaha.', en: 'All correct! Keep it up.' },
+  reportPraiseTitle: { ms: 'Syabas!', en: 'Well done!' },
+  reportPraise: { ms: 'Semua betul. Hebat, teruskan!', en: 'All correct. Great, keep it up!' },
   reviewTitle: { ms: 'Semak semula jawapan', en: 'Review the answers' },
   reviewPupil: { ms: 'Jawapan murid', en: "Pupil's answer" },
   reviewCorrect: { ms: 'Jawapan betul', en: 'Correct answer' },
@@ -187,6 +192,9 @@ export const S = {
     ms: 'Trial dan kelas BSA ikut kelas {year}. Kami dah isi automatik; tukar kalau perlu.',
     en: 'The trial and BSA classes follow the {year} class. We filled it in; change it if needed.',
   },
+  fStream: { ms: 'Aliran anda pada {year}', en: 'Your stream in {year}' },
+  fChildStream: { ms: 'Aliran anak / adik pada {year}', en: "Child's stream in {year}" },
+  fStreamHint: { ms: 'Belum tahu lagi? Pilih "Belum pasti".', en: 'Not decided yet? Pick "Not sure yet".' },
   fArea: { ms: 'Kawasan (bandar / negeri)', en: 'Area (town / state)' },
   fTrialSubjects: { ms: 'Pilih 3 subjek trial', en: 'Pick 3 trial subjects' },
   fTrialSubjectsHint: { ms: 'Kami dah pilihkan subjek yang paling perlu dibantu. Anda boleh tukar.', en: "We've picked your level-up subjects. Feel free to change them." },
@@ -277,6 +285,7 @@ export const S = {
   waParent: { ms: 'Ibu bapa / penjaga', en: 'Parent / guardian' },
   waLevel: { ms: 'Tahap {now}', en: 'Level {now}' },
   waLevelNext: { ms: 'Kelas {next}', en: 'Class {next}' },
+  waStream: { ms: 'Aliran', en: 'Stream' },
   waSchool: { ms: 'Sekolah', en: 'School' },
   waSubjects: { ms: 'Subjek', en: 'Subjects' },
   waTutor: {

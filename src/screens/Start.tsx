@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, Backpack, BriefcaseBusiness, Dices, Gift, GraduationCap, Presentation, Sticker, Users } from 'lucide-react'
-import type { Band, Game, Lang, Role, SubjectKey } from '../types'
+import type { Band, Game, Lang, Role, Stream, SubjectKey } from '../types'
 import { S, t } from '../content/strings'
-import { BAND_SUBJECTS, BANDS, SUBJECT_NAMES } from '../content/subjects'
+import { BAND_SUBJECTS, BANDS, STREAMS, SUBJECT_NAMES } from '../content/subjects'
 import { EVENT, eventOver } from '../content/event'
 import { Mentol } from '../components/Mentol'
 import { NICK_MAX, NICK_MIN, cleanNicknameInput, isCleanNickname, suggestNickname } from '../game/nickname'
@@ -109,17 +109,23 @@ export function LevelPick({
 }: {
   lang: Lang
   role: Role
-  onDone: (band: Band, teach: SubjectKey[]) => void
+  onDone: (band: Band, teach: SubjectKey[], stream?: Stream) => void
 }) {
   const [band, setBand] = useState<Band | null>(null)
+  const streamRef = useRef<HTMLDivElement>(null)
   const [teach, setTeach] = useState<SubjectKey[]>([])
   const title = role === 'pelajar' ? S.levelTitlePelajar : role === 'ibubapa' ? S.levelTitleIbubapa : S.levelTitleCikgu
 
+  // Learners in Form 4–5 also say their stream; everyone else goes straight on.
   const choose = (b: Band) => {
-    if (role !== 'cikgu') return onDone(b, [])
+    if (role !== 'cikgu' && b !== 'f4_5') return onDone(b, [])
     setBand(b)
     setTeach([])
   }
+  const askStream = role !== 'cikgu' && band === 'f4_5'
+  useEffect(() => {
+    if (askStream) streamRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, [askStream])
   const toggle = (s: SubjectKey) =>
     setTeach((cur) => (cur.includes(s) ? cur.filter((x) => x !== s) : cur.length < 3 ? [...cur, s] : cur))
 
@@ -140,6 +146,27 @@ export function LevelPick({
           </button>
         ))}
       </div>
+
+      {askStream && (
+        <div ref={streamRef} className="flex flex-col gap-3 anim-slide">
+          <div>
+            <h2 className="font-display text-xl font-bold">{t(role === 'ibubapa' ? S.streamTitleIbubapa : S.streamTitlePelajar, lang)}</h2>
+            <p className="text-sm text-muted">{t(S.streamHint, lang)}</p>
+          </div>
+          <div className="grid grid-cols-2 gap-2.5">
+            {STREAMS.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className={`clay-option flex min-h-14 items-center font-display text-lg font-bold leading-tight ${s.id === 'belum' ? 'col-span-2' : ''}`}
+                onClick={() => onDone('f4_5', [], s.id)}
+              >
+                {t(s.label, lang)}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {role === 'cikgu' && band && (
         <div className="flex flex-col gap-3 anim-slide">

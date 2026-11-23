@@ -1,13 +1,15 @@
-import { Check, ChevronDown, Clock, Lightbulb, Sparkles, X } from 'lucide-react'
+import { Award, Check, ChevronDown, Clock, Lightbulb, Sparkles, X } from 'lucide-react'
 import type { Game, Lang, Mark, PlayResult, Question } from '../types'
 import { S, t } from '../content/strings'
 import { STUDY_TIPS, SUBJECT_NAMES } from '../content/subjects'
 import { STYLE_TIPS } from '../content/storyB'
 
-/** Marks per subject and a study tip for each weak one, for students to show their parents. */
+/** Marks per subject, praise for each full-mark one and a study tip for each weak one, for students to show their parents. */
 export function MiniReport({ lang, result, game = 'cikgu' }: { lang: Lang; result: PlayResult; game?: Game }) {
   // A tip for every subject with a mistake, weakest first (a tie is not left out).
   const weak = result.levelUp
+  // Praise for every subject with full marks.
+  const praised = result.subjects.filter((s) => s.total > 0 && s.right === s.total).map((s) => s.subject)
   const styleTips = game === 'pelajar' ? STYLE_TIPS[result.personality as keyof typeof STYLE_TIPS] : undefined
   return (
     <section className="clay-card p-4 anim-slide" aria-labelledby="report-h">
@@ -46,12 +48,34 @@ export function MiniReport({ lang, result, game = 'cikgu' }: { lang: Lang; resul
           </ul>
         </div>
       )}
-      <div className="mt-3 rounded-2xl bg-yellow-soft p-3">
-        <p className="flex items-center gap-1.5 font-display font-bold">
-          <Lightbulb size={18} strokeWidth={2.5} />
-          {t(S.reportTips, lang)}
-        </p>
-        {weak.length ? (
+      {praised.length > 0 && (
+        <div className="mt-3 rounded-2xl bg-correct-soft p-3">
+          <p className="flex items-center gap-1.5 font-display font-bold text-correct">
+            <Award size={18} strokeWidth={2.5} />
+            {t(S.reportPraiseTitle, lang)}
+          </p>
+          {weak.length ? (
+            <ul className="mt-1 flex flex-col gap-1.5 text-[0.95rem] leading-snug">
+              {praised.map((s) => (
+                <li key={s} className="flex items-start gap-1.5">
+                  <Check size={18} strokeWidth={3} className="mt-0.5 shrink-0 text-correct" aria-hidden="true" />
+                  <span>
+                    <b>{t(SUBJECT_NAMES[s], lang)}:</b> {t(S.reportPraise, lang)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-1 text-[0.95rem]">{t(S.reportAllRight, lang)}</p>
+          )}
+        </div>
+      )}
+      {weak.length > 0 && (
+        <div className="mt-3 rounded-2xl bg-yellow-soft p-3">
+          <p className="flex items-center gap-1.5 font-display font-bold">
+            <Lightbulb size={18} strokeWidth={2.5} />
+            {t(S.reportTips, lang)}
+          </p>
           <ul className="mt-1 flex flex-col gap-1.5 text-[0.95rem] leading-snug">
             {weak.map((s) => (
               <li key={s}>
@@ -59,10 +83,8 @@ export function MiniReport({ lang, result, game = 'cikgu' }: { lang: Lang; resul
               </li>
             ))}
           </ul>
-        ) : (
-          <p className="mt-1 text-[0.95rem]">{t(S.reportAllRight, lang)}</p>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   )
 }

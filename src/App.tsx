@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Band, Game, Lang, Mark, PlayResult, Player, Question, Role, StoryChoice, SubjectKey } from './types'
+import type { Band, Game, Lang, Mark, PlayResult, Player, Question, Role, Stream, StoryChoice, SubjectKey } from './types'
 import bank from './content/questions.json'
 import { STORY } from './content/story'
 import { STORY_B } from './content/storyB'
@@ -72,7 +72,7 @@ export default function App() {
     setExisting(false)
     activePlayId.current = null
     serverPlay.current = online
-      ? startPlay({ nickname: p.nickname, role: p.role, game: p.game, band: p.band, lang, teach: p.teachSubjects }).catch(() => null)
+      ? startPlay({ nickname: p.nickname, role: p.role, game: p.game, band: p.band, lang, teach: p.teachSubjects, stream: p.stream }).catch(() => null)
       : Promise.resolve(null)
     setStep('intro')
   }
@@ -86,7 +86,7 @@ export default function App() {
       setQuestions(sp.questions)
     } else {
       activePlayId.current = null
-      setQuestions(pickQuestions(LOCAL_BANK, player.band, player.teachSubjects))
+      setQuestions(pickQuestions(LOCAL_BANK, player.band, player.teachSubjects, player.stream))
     }
     setStep('semakIntro')
   }
@@ -162,8 +162,8 @@ export default function App() {
           <LevelPick
             lang={lang}
             role={player.role}
-            onDone={(band: Band, teachSubjects: SubjectKey[]) => {
-              setPlayer((p) => ({ ...p, band, teachSubjects }))
+            onDone={(band: Band, teachSubjects: SubjectKey[], stream?: Stream) => {
+              setPlayer((p) => ({ ...p, band, teachSubjects, stream }))
               setStep('nick')
             }}
           />

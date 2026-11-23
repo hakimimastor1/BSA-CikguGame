@@ -5,6 +5,8 @@ export type Txt = { ms: string; en: string }
 
 export type Role = 'pelajar' | 'ibubapa' | 'cikgu'
 export type Band = 'std1_3' | 'std4_6' | 'f1_3' | 'f4_5'
+/** Form 4–5 stream (aliran): Sains Tulen, Sastera & Kemanusiaan, Agama, Teknik & Vokasional, not sure yet. */
+export type Stream = 'sains' | 'sastera' | 'agama' | 'teknik' | 'belum'
 export type SubjectKey = 'bm' | 'bi' | 'math' | 'sci' | 'phy' | 'chem' | 'bio'
 /** Game A (cikgu) traits, then Game B (pelajar) learner types. */
 export type Trait =
@@ -86,5 +88,7 @@ export interface Player {
   band: Band
   /** Only for future tutors: subjects they would teach. */
   teachSubjects: SubjectKey[]
+  /** Only for Form 4–5 learners: their stream, which decides the quiz subjects. */
+  stream?: Stream
   nickname: string
 }

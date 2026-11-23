@@ -3,7 +3,7 @@ import { Check, Copy, ExternalLink, MessageCircle, Store } from 'lucide-react'
 import type { Lang, Player } from '../types'
 import { S, fill, t } from '../content/strings'
 import { EVENT, NEXT_YEAR, eventOver } from '../content/event'
-import { BANDS, trialValue } from '../content/subjects'
+import { BANDS, streamById, trialValue } from '../content/subjects'
 import { Mentol } from '../components/Mentol'
 import { Confetti } from '../components/ui'
 import { waLink } from '../game/whatsapp'
@@ -72,6 +72,7 @@ export function Offer({
     ['waParent', player.role === 'pelajar' && data.under18 ? data.parentName : undefined],
     ['waLevel', data.level],
     ['waLevelNext', data.levelNext],
+    ['waStream', data.stream ? streamById(data.stream)?.label.ms : undefined],
     ['waSchool', data.school],
     ['waSubjects', data.trialSubjects.join(', ')],
   ]

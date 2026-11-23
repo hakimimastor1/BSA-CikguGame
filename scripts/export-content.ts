@@ -11,7 +11,7 @@ import { writeFileSync } from 'node:fs'
 import type { StoryScene, Txt } from '../src/types'
 import { STORY, STORY_INTRO, PERSONALITIES, GOOD_XP } from '../src/content/story'
 import { STORY_B, INTRO_B, PERSONALITIES_B, STYLE_TIPS } from '../src/content/storyB'
-import { BANDS, SUBJECT_NAMES, STUDY_TIPS } from '../src/content/subjects'
+import { BANDS, STREAMS, SUBJECT_NAMES, STUDY_TIPS } from '../src/content/subjects'
 import { S } from '../src/content/strings'
 import { EVENT } from '../src/content/event'
 import questions from '../src/content/questions.json'
@@ -92,9 +92,18 @@ for (const q of questions as { id: string; band: string; subject: string; q: Txt
 for (const [k, tip] of Object.entries(STUDY_TIPS)) {
   items.push({
     id: `tip-${k}`, sec: 'tip', title: SUBJECT_NAMES[k as keyof typeof SUBJECT_NAMES].en, src: 'src/content/subjects.ts',
-    rows: [txt('Level-up tip', tip, 'Mini report, for the weakest subject')],
+    rows: [txt('Level-up tip', tip, 'Mini report, for every subject with a mistake')],
   })
 }
+
+// Form 4–5 streams
+items.push({
+  id: 'streams', sec: 'tip', title: 'Form 4–5 streams', titleMs: 'Aliran Tingkatan 4–5', src: 'src/content/subjects.ts · STREAMS',
+  meta: ['Asked after Tingkatan 4–5 (students and parents) and in the sign-up form'],
+  rows: STREAMS.map((x) => txt(x.label.en, x.label, x.id === 'sains'
+    ? 'Quiz: BI, Mathematics + 2 of Physics, Chemistry, Biology · Trial suggests: ' + x.extras.join(', ')
+    : 'Quiz: BM, BI, Mathematics' + (x.extras.length ? ' · Trial suggests: ' + x.extras.join(', ') : ''))),
+})
 
 // Messages the system writes for people (WhatsApp, admin follow-up, share card)
 const s = S as unknown as Record<string, Txt>
@@ -102,7 +111,7 @@ items.push({
   id: 'msg-claim', sec: 'mesej', title: 'WhatsApp: claim the trial (students / parents)', src: 'src/content/strings.ts · waLearner',
   meta: [`Sent to ${EVENT.whatsappDisplay}`],
   rows: [
-    txt('Message', s.waLearner, '{details} lines: Name, Child\'s name (parents), Parent / guardian (students under 18), Level, School, Subjects'),
+    txt('Message', s.waLearner, '{details} lines: Name, Child\'s name (parents), Parent / guardian (students under 18), Level now, Class next year, Stream (Form 4–5), School, Subjects'),
     txt('After 2 Dec', s.waLearnerAfter),
   ],
 })
@@ -146,7 +155,7 @@ items.push({
 const GROUPS: [string, RegExp][] = [
   ['Welcome screen', /^welcome/],
   ['Role and game pick', /^(role|game)/],
-  ['Level and nickname', /^(level|teach|nick)/],
+  ['Level and nickname', /^(level|stream|teach|nick)/],
   ['Situations', /^(scene|tip|xp|continue|next|back)/],
   ['Semak Kerja (Game A)', /^semak/],
   ['Kuiz Kilat and hint (Game B)', /^(quiz|hint)/],
@@ -171,7 +180,7 @@ const SECTIONS = [
   { id: 'game-b', name: 'Game B · Misi Pelajar Bijak', blurb: 'The story for school students: 5 everyday situations. Each good choice shows a learner type.' },
   { id: 'jenis', name: 'Teacher and learner types', blurb: 'The result at the end of each story: 5 teacher types and 5 learner types, with study tips for Game B.' },
   { id: 'soalan', name: 'Question bank', blurb: 'Questions for Semak Kerja (Game A) and Kuiz Kilat (Game B). Each play picks 8 questions for the chosen level. Check the question, the answer shown, whether that answer is right, and the correct answer.' },
-  { id: 'tip', name: 'Subject tips', blurb: 'Level-up tips in the mini report, for the weakest subject.' },
+  { id: 'tip', name: 'Subject tips and streams', blurb: 'Level-up tips in the mini report (for every subject with a mistake; full-mark subjects get praise instead), and the Form 4–5 streams.' },
   { id: 'mesej', name: 'Messages and poster', blurb: 'WhatsApp messages the system writes, the share text, and projector and poster text.' },
   { id: 'skrin', name: 'Screen text', blurb: 'Every button and screen text, by screen. Words in {curly brackets} are replaced with real details.' },
 ]

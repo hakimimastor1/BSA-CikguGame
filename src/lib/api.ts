@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import type { Band, Game, Lang, Question, Role, SubjectKey, SubjectResult, Trait } from '../types'
+import type { Band, Game, Lang, Question, Role, Stream, SubjectKey, SubjectResult, Trait } from '../types'
 
 // The project's API address and publishable key are public by design: visitors can only call the
 // game functions, never read tables. Set VITE_SUPABASE_URL to an empty string for a local-only build.
@@ -60,6 +60,7 @@ export async function startPlay(args: {
   band: Band
   lang: Lang
   teach: SubjectKey[]
+  stream?: Stream
 }): Promise<{ playId: string; questions: Question[] }> {
   const r = await rpc<{ play_id: string; questions: Question[] }>('begin_play', {
     p_game: args.game,
@@ -69,6 +70,8 @@ export async function startPlay(args: {
     p_band: args.band,
     p_lang: args.lang,
     p_teach: args.teach,
+    // Only Form 4–5 learners send a stream; the server picks their quiz subjects by it.
+    ...(args.stream ? { p_stream: args.stream } : {}),
   })
   return { playId: r.play_id, questions: r.questions }
 }
