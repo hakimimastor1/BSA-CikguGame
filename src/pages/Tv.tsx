@@ -75,6 +75,13 @@ export default function Tv() {
     }
   }, [])
 
+  const [portrait, setPortrait] = useState(() => typeof window !== 'undefined' && window.innerHeight > window.innerWidth)
+  useEffect(() => {
+    const on = () => setPortrait(window.innerHeight > window.innerWidth)
+    window.addEventListener('resize', on)
+    return () => window.removeEventListener('resize', on)
+  }, [])
+
   const [fullscreen, setFullscreen] = useState(false)
   useEffect(() => {
     const on = () => setFullscreen(!!document.fullscreenElement)
@@ -87,6 +94,11 @@ export default function Tv() {
   const daily = board?.mode === 'daily'
   const size = board?.size ?? DEFAULT_SIZE
   const dense = size > 5
+
+  // A phone held upright (staff checking the board) gets a stacked layout instead of the projector one.
+  if (portrait) {
+    return <PortraitBoard board={board} url={url} daily={daily} size={size} stale={stale} />
+  }
 
   return (
     <div
@@ -244,6 +256,125 @@ export default function Tv() {
         )}
       </section>
       <style>{`@keyframes ticker { from { transform: translateX(0) } to { transform: translateX(-100%) } }`}</style>
+    </div>
+  )
+}
+
+/**
+ * The board on an upright screen (a phone). Sizes are in em off a width-based font size, so it reads the same
+ * on a normal phone and in Chrome's "Desktop site" mode.
+ */
+function PortraitBoard({ board, url, daily, size, stale }: { board: Board | null; url: string; daily: boolean; size: number; stale: boolean }) {
+  return (
+    <div className="min-h-dvh w-full bg-navy-deep font-body text-white" style={{ fontSize: '4.2vw' }}>
+      <div className="flex flex-col gap-[1.1em] px-[1em] py-[1.2em]">
+        <header className="flex flex-col items-center gap-[0.5em] text-center">
+          <img src="/bsa-wordmark-on-navy.png" alt="Bright Scholar Academy" className="w-[70%]" />
+          <h1 className="font-display text-[2.4em] font-extrabold leading-none text-yellow">Jom Main!</h1>
+          <p className="font-display text-[0.95em] font-bold text-sky">2 permainan · 1 QR · Let's play!</p>
+        </header>
+
+        <div className="mx-auto w-[58%] rounded-[1em] border-[0.2em] border-yellow bg-white p-[0.5em] shadow-[0_0.35em_0_#F9C414]">
+          <Qr value={url} className="aspect-square h-auto w-full" />
+        </div>
+        <p className="text-center font-display text-[1.3em] font-extrabold leading-tight">
+          Imbas &amp; main! <span className="text-sky">· Scan &amp; play!</span>
+        </p>
+
+        <div className="grid grid-cols-2 gap-[0.6em] font-display leading-tight">
+          <div className="rounded-[0.8em] border-[0.15em] border-yellow px-[0.7em] py-[0.5em]">
+            <p className="flex items-center gap-[0.3em] text-[0.75em] font-bold text-sky">
+              <BriefcaseBusiness className="h-[1.1em] w-[1.1em] text-yellow" strokeWidth={2.5} /> Pelajar UPSI
+            </p>
+            <p className="text-[0.95em] font-extrabold">Cikgu Sehari</p>
+            <p className="text-[0.75em] font-bold">Jadi tutor BSA</p>
+            <p className="text-[0.75em] font-bold text-yellow">RM25–40/jam</p>
+          </div>
+          <div className="rounded-[0.8em] border-[0.15em] border-yellow px-[0.7em] py-[0.5em]">
+            <p className="flex items-center gap-[0.3em] text-[0.75em] font-bold text-sky">
+              <Gift className="h-[1.1em] w-[1.1em] text-yellow" strokeWidth={2.5} /> Adik-adik sekolah
+            </p>
+            <p className="text-[0.95em] font-extrabold">Misi Pelajar Bijak</p>
+            <p className="text-[0.75em] font-bold">Trial percuma + beg</p>
+            <p className="text-[0.75em] font-bold text-yellow">Kod {board?.event.offerCode ?? EVENT.offerCode}</p>
+          </div>
+        </div>
+        <p className="flex items-center justify-center gap-[0.4em] font-display text-[0.9em] font-bold text-yellow">
+          <Sticker className="h-[1.1em] w-[1.1em]" strokeWidth={2.5} /> Semua pemain dapat sticker!
+        </p>
+
+        <div className="mt-[0.4em] flex items-end justify-between gap-[0.5em]">
+          <h2 className="font-display text-[1.5em] font-extrabold leading-none">
+            {daily ? 'Papan Skor Hari Ini' : 'Papan Skor'} <span className="text-[0.6em] text-sky">· Top {size}</span>
+          </h2>
+          <p className="flex shrink-0 items-center gap-[0.3em] font-display text-[0.85em] font-bold text-sky">
+            <Users className="h-[1.1em] w-[1.1em]" strokeWidth={2.5} />
+            {board?.players ?? 0} pemain
+            {stale && <WifiOff className="h-[1em] w-[1em] text-yellow" strokeWidth={2.5} aria-label="Menyambung semula" />}
+          </p>
+        </div>
+
+        {BOARDS.map(({ game, title, sub, icon: GameIcon }) => {
+          const rows = rowsFor(board, game)
+          const count = board?.playersByGame?.[game]
+          return (
+            <section key={game} className="flex flex-col gap-[0.6em] rounded-[1em] border-[0.15em] border-white/25 bg-white/5 p-[0.7em]">
+              <div className="flex items-center gap-[0.6em]">
+                <span className="flex h-[2.4em] w-[2.4em] shrink-0 items-center justify-center rounded-[0.6em] bg-yellow text-navy">
+                  <GameIcon className="h-[1.4em] w-[1.4em]" strokeWidth={2.5} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-display text-[1.25em] font-extrabold leading-none text-yellow">{title}</h3>
+                  <p className="mt-[0.2em] text-[0.75em] font-bold text-sky">{sub}</p>
+                </div>
+                {count != null && <span className="shrink-0 font-display text-[0.8em] font-bold text-sky">{count} pemain</span>}
+              </div>
+              <ol className="flex flex-col gap-[0.4em]">
+                {rows.map((r, i) => {
+                  const Icon = TRAIT_ICON[r.personality]
+                  const first = i === 0
+                  return (
+                    <li
+                      key={`${r.nickname}-${i}`}
+                      className={`flex items-center gap-[0.6em] rounded-[0.7em] border-[0.15em] px-[0.6em] py-[0.4em] ${
+                        i < 3 ? 'border-yellow' : 'border-white/25'
+                      } ${first ? 'bg-yellow text-navy' : i < 3 ? 'bg-yellow/15' : 'bg-white/8'}`}
+                    >
+                      <span
+                        className={`flex h-[1.9em] w-[1.9em] shrink-0 items-center justify-center rounded-full font-display font-extrabold ${
+                          first ? 'bg-navy text-yellow' : i < 3 ? 'bg-yellow text-navy' : 'bg-white/15'
+                        }`}
+                      >
+                        {i + 1}
+                      </span>
+                      <span className="flex min-w-0 flex-1 flex-col">
+                        <span className="truncate font-display text-[1.05em] font-bold leading-tight">{r.nickname}</span>
+                        <span className={`flex items-center gap-[0.3em] truncate text-[0.72em] font-bold ${first ? 'text-navy' : 'text-sky'}`}>
+                          <Icon className="h-[1.1em] w-[1.1em] shrink-0" strokeWidth={2.5} />
+                          {PERSONALITY_INFO[r.personality].name}
+                        </span>
+                      </span>
+                      <span className="shrink-0 font-display text-[1.2em] font-extrabold tabular-nums">
+                        {r.xp}
+                        <span className="ml-[0.15em] text-[0.55em]">XP</span>
+                      </span>
+                    </li>
+                  )
+                })}
+                {rows.length === 0 && (
+                  <li className="flex flex-col items-center gap-[0.3em] rounded-[0.8em] border-[0.15em] border-dashed border-white/30 py-[1em] text-center">
+                    <p className="font-display text-[1.1em] font-extrabold text-yellow">Jadilah yang pertama!</p>
+                    <p className="text-[0.75em] font-bold text-sky">Be the first on this board!</p>
+                    {!online && <p className="text-[0.7em] text-sky">(Sambungan pangkalan data belum disediakan)</p>}
+                  </li>
+                )}
+              </ol>
+            </section>
+          )
+        })}
+
+        <p className="text-center text-[0.7em] text-sky/80">{url.replace(/^https?:\/\//, '')}</p>
+      </div>
     </div>
   )
 }
