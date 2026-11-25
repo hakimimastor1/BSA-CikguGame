@@ -186,8 +186,9 @@ The personality is the trait the player picked most (ties go to the order below)
 - Sign-ups are visible only to logged-in staff (row-level security). Only the admin can export.
 - The round's answer keys are sent to the phone when the round starts, so right/wrong feedback is instant even
   on weak signal. The score is still worked out on the server from the answers and their timings, so someone
-  reading the keys can't score more than a perfect, honest round. Taps under 250 ms score 0, and rounds finished
-  in under 20 seconds are kept off the leaderboard.
+  reading the keys can't score more than a perfect, honest round. Taps under 250 ms score 0. There is no
+  "suspicious play" check (BSA's call, 25 Nov): every finished play goes on the projector straight away, and
+  staff can hide a rude name in Admin → Papan skor.
 - PDPA notice and consent on the sign-up form, with a link to the full notice.
 - Weak signal at sign-up: the phone makes the form's reference and a client id up front. If saving fails and
   the player taps **Teruskan ke WhatsApp**, the form waits in the phone's storage and is sent when the signal
