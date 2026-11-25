@@ -1,9 +1,12 @@
 const ADJECTIVES = ['Ceria', 'Bijak', 'Hebat', 'Gigih', 'Cekap', 'Bestari', 'Ligat', 'Tangkas', 'Rajin', 'Pintar', 'Mesra', 'Kental']
 
-export function suggestNickname(): string {
-  const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]
+/** Cikgu Sehari players get a teacher name; Misi Pelajar Bijak players a student one. */
+const STUDENT_WORDS = ['Juara', 'Bintang', 'Wira', 'Pelajar']
+const pick = <T,>(list: T[]) => list[Math.floor(Math.random() * list.length)]
+
+export function suggestNickname(game: 'cikgu' | 'pelajar' = 'cikgu'): string {
   const n = 10 + Math.floor(Math.random() * 90)
-  return `Cikgu ${adj} ${n}`
+  return `${game === 'pelajar' ? pick(STUDENT_WORDS) : 'Cikgu'} ${pick(ADJECTIVES)} ${n}`
 }
 
 /**

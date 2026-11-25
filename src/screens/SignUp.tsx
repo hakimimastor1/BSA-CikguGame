@@ -1,9 +1,22 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { ArrowRight, LoaderCircle, RotateCcw, WifiOff } from 'lucide-react'
-import type { Lang, PlayResult, Player, Txt } from '../types'
-import { S, t } from '../content/strings'
-import { BSA_SUBJECTS, LEVELS_BY_BAND, SUBJECT_TO_BSA } from '../content/subjects'
-import { normaliseMyPhone } from '../game/whatsapp'
+import type { Band, Lang, PlayResult, Player, Stream, Txt } from '../types'
+import { S, fill, t } from '../content/strings'
+import { NEXT_YEAR, eventOver } from '../content/event'
+import {
+  BANDS,
+  BSA_SUBJECTS,
+  NEXT_LEVELS,
+  NOW_LEVELS_BY_BAND,
+  STREAMS,
+  SUBJECT_TO_BSA,
+  levelById,
+  levelHasStream,
+  nextLevelId,
+  streamById,
+  trialValue,
+} from '../content/subjects'
+import { makeReference, newClientId, normaliseMyPhone } from '../game/whatsapp'
 
 export interface SignupData {
   name: string
@@ -12,7 +25,14 @@ export interface SignupData {
   parentName?: string
   under18?: boolean
   childName?: string
+  /** This year's level (BM label, e.g. "Tahun 4"). */
   level: string
+  /** Next year's class (BM label, e.g. "Tahun 5"): the trial and classes are for that year. */
+  levelNext?: string
+  /** Band of next year's class, for the trial value on the offer screen. */
+  levelNextBand?: Band
+  /** Stream for next year's class, when it is Tingkatan 4 or 5. */
+  stream?: Stream
   school?: string
   area?: string
   trialSubjects: string[]
@@ -25,6 +45,9 @@ export interface SignupData {
   availability?: string[]
   consent: boolean
   marketing: boolean
+  /** Made once per form: the server saves a form only once, and keeps this reference when it's free. */
+  clientId?: string
+  ref?: string
 }
 
 const AVAIL: { id: string; label: Txt }[] = [
@@ -96,15 +119,27 @@ export function SignUp({
 }) {
   const role = player.role
   const isTutor = role === 'cikgu'
-  const levels = LEVELS_BY_BAND[player.band]
+  // Learners: this year's level and next year's class (the trial is for next year). Tutors: the band they teach.
+  const nowLevels = NOW_LEVELS_BY_BAND[player.band]
+  const [nowId, setNowId] = useState(nowLevels[0])
+  const [nextId, setNextId] = useState(nextLevelId(nowLevels[0]))
+  const trialBand = levelById(nextId).band
   const subjectOptions = BSA_SUBJECTS[player.band].map((s) => ({ id: s, label: s }))
+  const trialOptions = BSA_SUBJECTS[trialBand].map((s) => ({ id: s, label: s }))
 
-  const presetTrial = useMemo(() => {
-    const fromGame = [...result.levelUp, ...(result.strongest ? [result.strongest] : []), ...result.subjects.map((s) => s.subject)].map(
-      (s) => SUBJECT_TO_BSA[s],
-    )
-    return [...new Set(fromGame)].filter((s) => BSA_SUBJECTS[player.band].includes(s)).slice(0, 3)
-  }, [result, player.band])
+  // The game's stream carries over (Form 4 → Form 5); otherwise "Belum pasti" until they say.
+  const startStream: Stream = player.band === 'f4_5' && player.stream ? player.stream : 'belum'
+  /**
+   * Suggested trial subjects: the ones the player found hardest, then the stream's own subjects
+   * (Tingkatan 4–5), then the rest of the round, if next year's class offers them.
+   */
+  const presetFor = (band: Band, stream: Stream | undefined) => {
+    const hard = result.levelUp.map((s) => SUBJECT_TO_BSA[s])
+    const extras = band === 'f4_5' ? (streamById(stream)?.extras ?? []) : []
+    const rest = [...(result.strongest ? [result.strongest] : []), ...result.subjects.map((s) => s.subject)].map((s) => SUBJECT_TO_BSA[s])
+    return [...new Set([...hard, ...extras, ...rest])].filter((s) => BSA_SUBJECTS[band].includes(s)).slice(0, 3)
+  }
+  const presetTrial = useMemo(() => presetFor(levelById(nextLevelId(nowLevels[0])).band, startStream), [result]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const [d, setD] = useState<SignupData>({
     name: '',
@@ -112,7 +147,11 @@ export function SignUp({
     parentName: '',
     under18: role === 'pelajar',
     childName: '',
-    level: t(levels[0], lang),
+    // Tutors: the level they'd teach (e.g. "Tingkatan 1–3"); learners: this year's class.
+    level: isTutor ? (BANDS.find((b) => b.id === player.band)?.label.ms ?? '') : levelById(nowLevels[0]).label.ms,
+    levelNext: levelById(nextLevelId(nowLevels[0])).label.ms,
+    levelNextBand: levelById(nextLevelId(nowLevels[0])).band,
+    stream: startStream,
     school: '',
     area: '',
     trialSubjects: presetTrial,
@@ -127,9 +166,24 @@ export function SignUp({
     marketing: false,
   })
   const [tried, setTried] = useState(false)
+  const [ids] = useState(() => ({ clientId: newClientId(), ref: makeReference() }))
   const [saving, setSaving] = useState(false)
   const [failed, setFailed] = useState(false)
   const set = <K extends keyof SignupData>(k: K, v: SignupData[K]) => setD((cur) => ({ ...cur, [k]: v }))
+  /** Next year's class decides the trial subjects on offer: keep the picks that still exist, else suggest again. */
+  const pickNext = (id: string) => {
+    const band = levelById(id).band
+    setNextId(id)
+    setD((cur) => {
+      const kept = cur.trialSubjects.filter((x) => BSA_SUBJECTS[band].includes(x))
+      return { ...cur, levelNext: levelById(id).label.ms, levelNextBand: band, trialSubjects: kept.length ? kept : presetFor(band, cur.stream) }
+    })
+  }
+  /** A new stream means different subjects: suggest the trial again. */
+  const pickStream = (stream: Stream) => setD((cur) => ({ ...cur, stream, trialSubjects: presetFor(trialBand, stream) }))
+  const askStream = !isTutor && levelHasStream(nextId)
+  /** What is sent: the stream only when next year's class has one. */
+  const final = (): SignupData => ({ ...d, ...ids, whatsapp: normaliseMyPhone(d.whatsapp)!, stream: askStream ? d.stream : undefined })
 
   const needsParent = role === 'pelajar' && d.under18
   const errors: Partial<Record<keyof SignupData, string>> = {}
@@ -141,7 +195,7 @@ export function SignUp({
   const ok = Object.keys(errors).length === 0
   const err = (k: keyof SignupData) => (tried ? errors[k] : undefined)
 
-  const nameLabel = role === 'ibubapa' ? t(S.fParentName, lang) : t(S.fName, lang)
+  const nameLabel = role === 'ibubapa' ? t(S.fYourName, lang) : t(S.fName, lang)
   const phoneLabel = needsParent ? t(S.fParentWhatsapp, lang) : t(S.fWhatsapp, lang)
 
   return (
@@ -155,7 +209,7 @@ export function SignUp({
         setSaving(true)
         setFailed(false)
         try {
-          await onSubmit({ ...d, whatsapp: normaliseMyPhone(d.whatsapp)! })
+          await onSubmit(final())
         } catch {
           setFailed(true)
           setSaving(false)
@@ -167,6 +221,11 @@ export function SignUp({
           {isTutor ? t(S.signupTitleTutor, lang) : t(S.signupTitleLearner, lang)}
         </h1>
         <p className="mt-1 text-muted">{isTutor ? t(S.signupBodyTutor, lang) : t(S.signupBodyLearner, lang)}</p>
+        {!isTutor && !eventOver() && (
+          <p className="mt-2 inline-flex rounded-full border-[3px] border-navy bg-yellow px-3 py-0.5 font-display font-extrabold">
+            {t(S.offerWhat, lang).split(' · ')[0]} · {fill(t(S.trialWorth, lang), { value: trialValue(trialBand) })}
+          </p>
+        )}
       </div>
 
       <div className="clay-card flex flex-col gap-4 p-5">
@@ -205,17 +264,53 @@ export function SignUp({
         )}
 
         {!isTutor && (
-          <Field label={role === 'ibubapa' ? t(S.fChildLevel, lang) : t(S.fLevel, lang)}>
-            <select className="field" value={d.level} onChange={(e) => set('level', e.target.value)}>
-              {levels.map((l) => (
-                <option key={l.ms}>{t(l, lang)}</option>
-              ))}
-            </select>
-          </Field>
+          <>
+            <Field label={fill(t(role === 'ibubapa' ? S.fChildLevelNow : S.fLevelNow, lang), { year: NEXT_YEAR - 1 })}>
+              <select
+                className="field"
+                value={nowId}
+                onChange={(e) => {
+                  const now = e.target.value
+                  setNowId(now)
+                  set('level', levelById(now).label.ms)
+                  pickNext(nextLevelId(now))
+                }}
+              >
+                {nowLevels.map((id) => (
+                  <option key={id} value={id}>
+                    {t(levelById(id).label, lang)}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field
+              label={fill(t(role === 'ibubapa' ? S.fChildLevelNext : S.fLevelNext, lang), { year: NEXT_YEAR })}
+              hint={fill(t(S.fLevelNextHint, lang), { year: NEXT_YEAR })}
+            >
+              <select className="field" value={nextId} onChange={(e) => pickNext(e.target.value)}>
+                {NEXT_LEVELS.map((id) => (
+                  <option key={id} value={id}>
+                    {t(levelById(id).label, lang)}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            {askStream && (
+              <Field label={fill(t(role === 'ibubapa' ? S.fChildStream : S.fStream, lang), { year: NEXT_YEAR })} hint={t(S.fStreamHint, lang)}>
+                <select className="field" value={d.stream} onChange={(e) => pickStream(e.target.value as Stream)}>
+                  {STREAMS.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {t(s.label, lang)}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            )}
+          </>
         )}
 
-        {role === 'pelajar' && (
-          <Field label={t(S.fSchool, lang)}>
+        {!isTutor && (
+          <Field label={role === 'ibubapa' ? t(S.fChildSchool, lang) : t(S.fSchool, lang)}>
             <input className="field" value={d.school} onChange={(e) => set('school', e.target.value)} />
           </Field>
         )}
@@ -274,7 +369,7 @@ export function SignUp({
               {t(S.fTrialSubjects, lang)} <span className="tabular-nums text-muted">({d.trialSubjects.length}/3)</span>
             </legend>
             <span className="text-sm text-muted">{t(S.fTrialSubjectsHint, lang)}</span>
-            <Chips options={subjectOptions} value={d.trialSubjects} max={3} onChange={(v) => set('trialSubjects', v)} />
+            <Chips options={trialOptions} value={d.trialSubjects} max={3} onChange={(v) => set('trialSubjects', v)} />
             {err('trialSubjects') && <span className="text-sm font-bold text-wrong">{err('trialSubjects')}</span>}
           </fieldset>
         )}
@@ -296,10 +391,10 @@ export function SignUp({
         <div className="clay-card flex flex-col gap-3 bg-wrong-soft p-4" role="alert">
           <p className="flex items-start gap-2 font-bold">
             <WifiOff size={20} strokeWidth={2.5} className="mt-0.5 shrink-0" />
-            {t(S.signupError, lang)}
+            {t(isTutor ? S.signupErrorTutor : S.signupError, lang)}
           </p>
-          <button type="button" className="clay-btn w-full bg-white" onClick={() => onSkip({ ...d, whatsapp: normaliseMyPhone(d.whatsapp)! })}>
-            {t(S.signupSkip, lang)}
+          <button type="button" className="clay-btn w-full bg-white" onClick={() => onSkip(final())}>
+            {t(isTutor ? S.signupSkipTutor : S.signupSkip, lang)}
           </button>
         </div>
       )}

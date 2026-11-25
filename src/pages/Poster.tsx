@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Gift, Printer, ScanLine, Smartphone, Trophy } from 'lucide-react'
+import { BriefcaseBusiness, Download, Gift, Image as ImageIcon, Printer, ScanLine, Shuffle, Sticker, Trophy } from 'lucide-react'
 import { Mentol } from '../components/Mentol'
 import { Qr, gameUrl } from '../components/Qr'
 import { EVENT } from '../content/event'
@@ -8,20 +8,29 @@ import { eventSlug } from '../lib/api'
 /** Printable QR poster (A4 or A3 portrait). Open /poster?e=peskon26 and print. */
 export default function Poster() {
   useEffect(() => {
-    document.title = 'Cikgu Sehari · Poster QR'
+    document.title = 'BSA · Poster QR'
   }, [])
   const url = gameUrl(eventSlug)
   const steps = [
     { icon: ScanLine, ms: 'Imbas kod QR', en: 'Scan the QR code' },
-    { icon: Smartphone, ms: 'Main 3 minit', en: 'Play for 3 minutes' },
+    { icon: Shuffle, ms: 'Pilih permainan', en: 'Pick your game' },
     { icon: Trophy, ms: 'Masuk papan skor!', en: 'Get on the leaderboard!' },
   ]
 
   return (
     <div className="min-h-dvh bg-[#e9edf5] py-6 print:bg-white print:py-0">
       <style>{`@page { size: A4 portrait; margin: 0 } @media print { html, body { background: #fff !important } }`}</style>
-      <div className="mx-auto mb-4 flex max-w-[210mm] justify-end px-4 print:hidden">
-        <button type="button" className="clay-btn bg-yellow" onClick={() => window.print()}>
+      {/* Ready-made files (public/print/), made from this page; regenerate them when the poster changes. */}
+      <div className="mx-auto mb-4 flex max-w-[210mm] flex-wrap justify-end gap-2 px-4 print:hidden">
+        <a className="clay-btn bg-yellow" href="/print/poster-peskon26-a4.pdf" download="Poster-BSA-PESKON-UPSI-2026-A4.pdf">
+          <Download size={20} strokeWidth={2.5} />
+          Muat turun PDF (A4)
+        </a>
+        <a className="clay-btn bg-white" href="/print/poster-peskon26-a4.png" download="Poster-BSA-PESKON-UPSI-2026.png">
+          <ImageIcon size={20} strokeWidth={2.5} />
+          Gambar (PNG)
+        </a>
+        <button type="button" className="clay-btn bg-white" onClick={() => window.print()}>
           <Printer size={20} strokeWidth={2.5} />
           Cetak / Print
         </button>
@@ -30,14 +39,14 @@ export default function Poster() {
       <article className="mx-auto flex aspect-[210/297] w-full max-w-[210mm] flex-col items-center overflow-hidden bg-white text-center text-navy shadow-xl print:shadow-none">
         <div className="relative flex w-full flex-col items-center bg-navy px-[6%] pb-[4%] pt-[5%] text-white">
           <img src="/bsa-wordmark-on-navy.png" alt="Bright Scholar Academy" className="w-[70%]" />
-          <h1 className="mt-[4%] font-display text-[clamp(2rem,9vw,4.4rem)] font-extrabold leading-none text-yellow">Jadi Cikgu Sehari!</h1>
-          <p className="mt-[1.5%] font-display text-[clamp(1rem,3.4vw,1.7rem)] font-bold text-sky">Be a Cikgu for a Day!</p>
+          <h1 className="mt-[4%] font-display text-[clamp(2rem,9vw,4.4rem)] font-extrabold leading-none text-yellow">Jom Main!</h1>
+          <p className="mt-[1.5%] font-display text-[clamp(1rem,3.4vw,1.7rem)] font-bold text-sky">2 permainan · 3 minit · Let's play!</p>
         </div>
 
-        <div className="flex w-full flex-1 flex-col items-center justify-center gap-[2.2%] px-[8%] py-[3%]">
+        <div className="flex w-full flex-1 flex-col items-center justify-center gap-[2%] px-[8%] py-[2%]">
           <div className="relative">
             <div className="rounded-[2rem] border-[6px] border-navy bg-white p-3 shadow-[0_8px_0_#023E86]">
-              <Qr value={url} className="h-[min(52vw,88mm)] w-[min(52vw,88mm)]" />
+              <Qr value={url} className="h-[min(52vw,78mm)] w-[min(52vw,78mm)]" />
             </div>
             <div className="absolute -right-[22%] -top-[12%] rotate-12">
               <Mentol size={96} mood="cheer" glow={1} />
@@ -59,15 +68,29 @@ export default function Poster() {
           </ol>
         </div>
 
-        <div className="flex w-full flex-col items-center gap-1 bg-yellow px-[6%] py-[4%]">
-          <p className="flex items-center gap-2 font-display text-[clamp(1.2rem,4.4vw,2rem)] font-extrabold">
-            <Gift size={28} strokeWidth={2.5} />
-            Trial percuma 3 subjek!
+        <div className="w-full bg-yellow px-[5%] pb-[3%] pt-[2.5%]">
+          <p className="mb-2 flex items-center justify-center gap-2 font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold">
+            <Sticker size={24} strokeWidth={2.5} /> Semua pemain dapat sticker!
           </p>
-          <p className="font-bold">
-            Kod <span className="font-display text-xl font-extrabold">{EVENT.offerCode}</span> · Free trial for 3 subjects
-          </p>
-          <p className="mt-1 text-sm font-bold">{url.replace(/^https?:\/\//, '')} · WhatsApp {EVENT.whatsappDisplay}</p>
+          <div className="grid grid-cols-2 gap-3 text-left">
+            <div className="rounded-2xl border-[3px] border-navy bg-white p-3">
+              <p className="flex items-center gap-1.5 text-sm font-bold text-muted">
+                <BriefcaseBusiness size={18} strokeWidth={2.5} /> Pelajar &amp; graduan UPSI
+              </p>
+              <p className="font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold leading-tight">Cikgu Sehari</p>
+              <p className="font-bold">Jadi tutor BSA · RM25–40/jam</p>
+            </div>
+            <div className="rounded-2xl border-[3px] border-navy bg-white p-3">
+              <p className="flex items-center gap-1.5 text-sm font-bold text-muted">
+                <Gift size={18} strokeWidth={2.5} /> Adik-adik sekolah
+              </p>
+              <p className="font-display text-[clamp(1.1rem,3.6vw,1.6rem)] font-extrabold leading-tight">Misi Pelajar Bijak</p>
+              <p className="font-bold">
+                Trial 3 subjek percuma + beg · kod <span className="whitespace-nowrap font-display font-extrabold">{EVENT.offerCode}</span>
+              </p>
+            </div>
+          </div>
+          <p className="mt-2 text-center text-sm font-bold">{url.replace(/^https?:\/\//, '')} · WhatsApp {EVENT.whatsappDisplay}</p>
         </div>
       </article>
     </div>

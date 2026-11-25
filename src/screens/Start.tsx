@@ -1,38 +1,61 @@
-import { useState } from 'react'
-import { ArrowRight, Backpack, Dices, Gift, Presentation, Users } from 'lucide-react'
-import type { Band, Lang, Role, SubjectKey } from '../types'
+import { useEffect, useRef, useState } from 'react'
+import { ArrowRight, Backpack, BriefcaseBusiness, Dices, Gift, GraduationCap, Presentation, Sticker, Users } from 'lucide-react'
+import type { Band, Game, Lang, Role, Stream, SubjectKey } from '../types'
 import { S, t } from '../content/strings'
-import { BAND_SUBJECTS, BANDS, SUBJECT_NAMES } from '../content/subjects'
-import { EVENT } from '../content/event'
+import { BAND_SUBJECTS, BANDS, STREAMS, SUBJECT_NAMES } from '../content/subjects'
+import { EVENT, eventOver } from '../content/event'
 import { Mentol } from '../components/Mentol'
 import { NICK_MAX, NICK_MIN, cleanNicknameInput, isCleanNickname, suggestNickname } from '../game/nickname'
 
 export function Welcome({ lang, onStart }: { lang: Lang; onStart: () => void }) {
+  // Keep "Mula main" on the first screen of shorter phones (iPhone SE to iPhone 14): smaller mascot and
+  // tighter spacing, and on the very shortest the perk list alone explains the two games.
+  const vh = typeof window === 'undefined' ? 800 : window.innerHeight
+  const short = vh < 760
+  const tiny = vh < 620
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center anim-slide">
-      <Mentol size={150} mood="cheer" bob glow={1} />
+    <div className={`flex flex-1 flex-col items-center justify-center text-center anim-slide ${short ? 'gap-3' : 'gap-5'}`}>
+      <Mentol size={tiny ? 76 : short ? 96 : 150} mood="cheer" bob glow={1} />
       <div>
         <p className="font-display text-lg font-bold text-muted">{t(S.welcomeKicker, lang)}</p>
-        <h1 className="font-display text-[2.6rem] font-extrabold leading-[1.05]">{t(S.welcomeTitle, lang)}</h1>
+        <h1 className={`font-display font-extrabold leading-[1.05] ${short ? 'text-[2.2rem]' : 'text-[2.6rem]'}`}>{t(S.welcomeTitle, lang)}</h1>
       </div>
-      <p className="max-w-xs text-[1.05rem] leading-relaxed text-muted">{t(S.welcomeBody, lang)}</p>
-      <p className="inline-flex items-center gap-2 rounded-full border-[3px] border-navy bg-white px-4 py-1.5 font-display font-bold">
-        <Gift size={18} strokeWidth={2.5} className="text-navy" />
-        {t(S.welcomePerk, lang)}
-      </p>
+      {!tiny && <p className={`max-w-xs leading-relaxed text-muted ${short ? 'text-base' : 'text-[1.05rem]'}`}>{t(S.welcomeGames, lang)}</p>}
+      <ul className="flex w-full flex-col gap-2 text-left">
+        <li className="flex items-center gap-2.5 rounded-2xl border-[3px] border-navy bg-white px-3.5 py-2 font-display font-bold leading-snug">
+          <BriefcaseBusiness size={20} strokeWidth={2.5} className="shrink-0" />
+          {t(S.welcomePerkTutor, lang)}
+        </li>
+        <li className="flex items-center gap-2.5 rounded-2xl border-[3px] border-navy bg-white px-3.5 py-2 font-display font-bold leading-snug">
+          <Gift size={20} strokeWidth={2.5} className="shrink-0" />
+          {t(eventOver() ? S.welcomePerkTrialAfter : S.welcomePerkTrial, lang)}
+        </li>
+        {!eventOver() && (
+          <li className="flex items-center justify-center gap-2 font-display font-bold text-muted">
+            <Sticker size={18} strokeWidth={2.5} className="shrink-0" />
+            {t(S.welcomePerkAll, lang)}
+          </li>
+        )}
+      </ul>
       <button type="button" className="clay-btn w-full bg-yellow text-xl" onClick={onStart}>
         {t(S.welcomeStart, lang)}
         <ArrowRight size={22} strokeWidth={3} />
       </button>
-      <p className="text-sm font-bold tracking-wide text-muted">{EVENT.name}</p>
+      <p className="text-sm text-muted">
+        {t(S.welcomeWebTrial, lang)}{' '}
+        <a className="font-bold text-navy underline underline-offset-2" href={EVENT.websiteUrl} target="_blank" rel="noreferrer">
+          {t(S.welcomeWebTrialLink, lang)}
+        </a>
+      </p>
+      {!eventOver() && <p className="text-sm font-bold tracking-wide text-muted">{EVENT.name}</p>}
     </div>
   )
 }
 
 const ROLE_OPTIONS: { id: Role; icon: typeof Backpack; label: keyof typeof S; hint: keyof typeof S }[] = [
+  { id: 'cikgu', icon: Presentation, label: 'roleCikgu', hint: 'roleCikguHint' },
   { id: 'pelajar', icon: Backpack, label: 'rolePelajar', hint: 'rolePelajarHint' },
   { id: 'ibubapa', icon: Users, label: 'roleIbubapa', hint: 'roleIbubapaHint' },
-  { id: 'cikgu', icon: Presentation, label: 'roleCikgu', hint: 'roleCikguHint' },
 ]
 
 export function RolePick({ lang, onPick }: { lang: Lang; onPick: (r: Role) => void }) {
@@ -40,6 +63,31 @@ export function RolePick({ lang, onPick }: { lang: Lang; onPick: (r: Role) => vo
     <div className="flex flex-1 flex-col gap-4 anim-slide">
       <h1 className="font-display text-4xl font-extrabold">{t(S.roleTitle, lang)}</h1>
       {ROLE_OPTIONS.map(({ id, icon: Icon, label, hint }) => (
+        <button key={id} type="button" className="clay-option flex items-center gap-4" onClick={() => onPick(id)}>
+          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-[3px] border-navy bg-yellow">
+            <Icon size={28} strokeWidth={2.5} />
+          </span>
+          <span className="flex flex-col">
+            <span className="font-display text-2xl font-bold leading-tight">{t(S[label], lang)}</span>
+            <span className="text-muted">
+              {t(S[eventOver() && hint === 'rolePelajarHint' ? 'rolePelajarHintAfter' : eventOver() && hint === 'roleIbubapaHint' ? 'roleIbubapaHintAfter' : hint], lang)}
+            </span>
+          </span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+export function GamePick({ lang, onPick }: { lang: Lang; onPick: (g: Game) => void }) {
+  const options: { id: Game; icon: typeof Backpack; label: keyof typeof S; hint: keyof typeof S }[] = [
+    { id: 'cikgu', icon: Presentation, label: 'gamePickCikgu', hint: 'gamePickCikguHint' },
+    { id: 'pelajar', icon: GraduationCap, label: 'gamePickPelajar', hint: 'gamePickPelajarHint' },
+  ]
+  return (
+    <div className="flex flex-1 flex-col gap-4 anim-slide">
+      <h1 className="font-display text-4xl font-extrabold">{t(S.gamePickTitle, lang)}</h1>
+      {options.map(({ id, icon: Icon, label, hint }) => (
         <button key={id} type="button" className="clay-option flex items-center gap-4" onClick={() => onPick(id)}>
           <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-[3px] border-navy bg-yellow">
             <Icon size={28} strokeWidth={2.5} />
@@ -61,17 +109,23 @@ export function LevelPick({
 }: {
   lang: Lang
   role: Role
-  onDone: (band: Band, teach: SubjectKey[]) => void
+  onDone: (band: Band, teach: SubjectKey[], stream?: Stream) => void
 }) {
   const [band, setBand] = useState<Band | null>(null)
+  const streamRef = useRef<HTMLDivElement>(null)
   const [teach, setTeach] = useState<SubjectKey[]>([])
   const title = role === 'pelajar' ? S.levelTitlePelajar : role === 'ibubapa' ? S.levelTitleIbubapa : S.levelTitleCikgu
 
+  // Learners in Form 4–5 also say their stream; everyone else goes straight on.
   const choose = (b: Band) => {
-    if (role !== 'cikgu') return onDone(b, [])
+    if (role !== 'cikgu' && b !== 'f4_5') return onDone(b, [])
     setBand(b)
     setTeach([])
   }
+  const askStream = role !== 'cikgu' && band === 'f4_5'
+  useEffect(() => {
+    if (askStream) streamRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, [askStream])
   const toggle = (s: SubjectKey) =>
     setTeach((cur) => (cur.includes(s) ? cur.filter((x) => x !== s) : cur.length < 3 ? [...cur, s] : cur))
 
@@ -92,6 +146,27 @@ export function LevelPick({
           </button>
         ))}
       </div>
+
+      {askStream && (
+        <div ref={streamRef} className="flex flex-col gap-3 anim-slide">
+          <div>
+            <h2 className="font-display text-xl font-bold">{t(role === 'ibubapa' ? S.streamTitleIbubapa : S.streamTitlePelajar, lang)}</h2>
+            <p className="text-sm text-muted">{t(S.streamHint, lang)}</p>
+          </div>
+          <div className="grid grid-cols-2 gap-2.5">
+            {STREAMS.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className={`clay-option flex min-h-14 items-center font-display text-lg font-bold leading-tight ${s.id === 'belum' ? 'col-span-2' : ''}`}
+                onClick={() => onDone('f4_5', [], s.id)}
+              >
+                {t(s.label, lang)}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {role === 'cikgu' && band && (
         <div className="flex flex-col gap-3 anim-slide">
@@ -119,8 +194,8 @@ export function LevelPick({
   )
 }
 
-export function NicknamePick({ lang, initial, onDone }: { lang: Lang; initial: string; onDone: (n: string) => void }) {
-  const [name, setName] = useState(initial || suggestNickname())
+export function NicknamePick({ lang, game, initial, onDone }: { lang: Lang; game: Game; initial: string; onDone: (n: string) => void }) {
+  const [name, setName] = useState(initial || suggestNickname(game))
   const trimmed = name.trim()
   const tooShort = trimmed.length < NICK_MIN
   const bad = !tooShort && !isCleanNickname(trimmed)
@@ -149,7 +224,7 @@ export function NicknamePick({ lang, initial, onDone }: { lang: Lang; initial: s
         value={name}
         maxLength={NICK_MAX}
         autoComplete="off"
-        placeholder={t(S.nickPlaceholder, lang)}
+        placeholder={t(game === 'pelajar' ? S.nickPlaceholderB : S.nickPlaceholder, lang)}
         onChange={(e) => setName(cleanNicknameInput(e.target.value))}
         aria-invalid={bad || undefined}
         aria-describedby="nick-msg"
@@ -157,7 +232,7 @@ export function NicknamePick({ lang, initial, onDone }: { lang: Lang; initial: s
       <p id="nick-msg" className="min-h-6 font-bold text-wrong" role="status">
         {bad ? t(S.nickBad, lang) : name && tooShort ? t(S.nickShort, lang) : ''}
       </p>
-      <button type="button" className="clay-btn w-full bg-white" onClick={() => setName(suggestNickname())}>
+      <button type="button" className="clay-btn w-full bg-white" onClick={() => setName(suggestNickname(game))}>
         <Dices size={22} strokeWidth={2.5} />
         {t(S.nickSuggest, lang)}
       </button>

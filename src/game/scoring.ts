@@ -1,6 +1,6 @@
-import type { Band, Mark, PlayResult, Question, StoryChoice, SubjectKey, SubjectResult, Trait } from '../types'
+import type { Band, Game, Mark, PlayResult, Question, Stream, StoryChoice, SubjectKey, SubjectResult, Trait } from '../types'
 import { BAND_SUBJECTS } from '../content/subjects'
-import { TRAIT_ORDER } from '../content/story'
+import { TRAIT_ORDER_BY_GAME } from '../content/personalities'
 import type { ServerResult } from '../lib/api'
 
 export const SEMAK_ITEMS = 8
@@ -20,12 +20,14 @@ const shuffle = <T,>(arr: T[], rand = Math.random): T[] => {
   return a
 }
 
-/** Which 4 subjects a round uses. */
-export function roundSubjects(band: Band, teachSubjects: SubjectKey[] = []): SubjectKey[] {
+/** Which subjects a round uses: 4, or 3 for Form 4–5 streams other than Sains Tulen. Same rules as the server. */
+export function roundSubjects(band: Band, teachSubjects: SubjectKey[] = [], stream?: Stream): SubjectKey[] {
   const available = BAND_SUBJECTS[band]
   const picked = teachSubjects.filter((s) => available.includes(s))
   if (band === 'f4_5' && picked.length === 0) {
-    // SPM: BI and Matematik, plus 2 of the three sciences.
+    // Sastera, Agama, Teknik or not sure yet: the core SPM subjects every stream takes.
+    if (stream && stream !== 'sains') return ['bm', 'bi', 'math']
+    // Sains Tulen: BI and Matematik, plus 2 of the three sciences.
     return ['bi', 'math', ...shuffle(['phy', 'chem', 'bio'] as SubjectKey[]).slice(0, 2)]
   }
   const rest = shuffle(available.filter((s) => !picked.includes(s)))
@@ -33,11 +35,12 @@ export function roundSubjects(band: Band, teachSubjects: SubjectKey[] = []): Sub
 }
 
 /**
- * 8 items: 2 from each of 4 subjects, with roughly half the pupil answers wrong.
- * In M2 the server picks these and keeps `correct` hidden until the play is submitted.
+ * 8 items spread over the round's subjects (2 each for 4 subjects; 3 each for 3, trimmed to 8),
+ * with roughly half the answers shown wrong. Online, the server picks these the same way.
  */
-export function pickQuestions(bank: Question[], band: Band, teachSubjects: SubjectKey[] = []): Question[] {
-  const subjects = roundSubjects(band, teachSubjects)
+export function pickQuestions(bank: Question[], band: Band, teachSubjects: SubjectKey[] = [], stream?: Stream): Question[] {
+  const subjects = roundSubjects(band, teachSubjects, stream)
+  const per = Math.ceil(SEMAK_ITEMS / subjects.length)
   const chosen: Question[] = []
   for (const s of subjects) {
     const pool = bank.filter((q) => q.band === band && q.subject === s)
@@ -46,14 +49,17 @@ export function pickQuestions(bank: Question[], band: Band, teachSubjects: Subje
     // One right and one wrong per subject when possible, so the round isn't guessable.
     const pair = [right[0], wrong[0]].filter(Boolean) as Question[]
     const extra = shuffle(pool.filter((q) => !pair.includes(q)))
-    chosen.push(...[...pair, ...extra].slice(0, 2))
+    chosen.push(...[...pair, ...extra].slice(0, per))
   }
   return shuffle(chosen).slice(0, SEMAK_ITEMS)
 }
 
 /** XP for one mark, given the streak of right marks before it. */
-export function markXp(right: boolean, ms: number, streakBefore: number): number {
+export const HINT_XP = 10
+
+export function markXp(right: boolean, ms: number, streakBefore: number, hint = false): number {
   if (!right || ms < MIN_MARK_MS) return 0
+  if (hint) return HINT_XP
   const speed = Math.max(0, Math.round(SPEED_XP_MAX * (1 - ms / 5000)))
   const streak = streakBefore >= 2 ? STREAK_XP : 0
   return MARK_XP + speed + streak
@@ -63,14 +69,16 @@ export function scorePlay(
   storyPicks: StoryChoice[],
   questions: Question[],
   marks: Mark[],
+  game: Game = 'cikgu',
 ): PlayResult {
-  const traitCounts: Record<Trait, number> = { kreatif: 0, penyayang: 0, strategik: 0, inspirasi: 0 }
+  const order = TRAIT_ORDER_BY_GAME[game]
+  const traitCounts = Object.fromEntries([...TRAIT_ORDER_BY_GAME.cikgu, ...TRAIT_ORDER_BY_GAME.pelajar].map((t) => [t, 0])) as Record<Trait, number>
   let storyXp = 0
   for (const c of storyPicks) {
     storyXp += c.xp
     if (c.trait) traitCounts[c.trait] += 1
   }
-  const personality = TRAIT_ORDER.reduce((best, tr) => (traitCounts[tr] > traitCounts[best] ? tr : best), TRAIT_ORDER[0])
+  const personality = order.reduce((best, tr) => (traitCounts[tr] > traitCounts[best] ? tr : best), order[0])
 
   let semakXp = 0
   let streak = 0
@@ -82,7 +90,7 @@ export function scorePlay(
     const m = marks.find((x) => x.questionId === q.id)
     const right = m != null && m.verdict === q.correct && m.ms >= MIN_MARK_MS
     if (right) {
-      semakXp += markXp(true, m!.ms, streak)
+      semakXp += markXp(true, m!.ms, streak, m!.hint)
       streak += 1
       rightMarks += 1
       entry.right += 1
@@ -132,5 +140,6 @@ export function fromServer(r: ServerResult, local: PlayResult): PlayResult {
     rightMarks: r.rightMarks,
     rank: r.rank,
     players: r.players,
+    boardMode: r.boardMode,
   }
 }

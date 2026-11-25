@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import type { Band, Lang, Question, Role, SubjectKey, SubjectResult, Trait } from '../types'
+import type { Band, Game, Lang, Question, Role, Stream, SubjectKey, SubjectResult, Trait } from '../types'
 
 // The project's API address and publishable key are public by design: visitors can only call the
 // game functions, never read tables. Set VITE_SUPABASE_URL to an empty string for a local-only build.
@@ -56,17 +56,22 @@ async function rpc<T>(fn: string, args: Record<string, unknown>, tries = 3): Pro
 export async function startPlay(args: {
   nickname: string
   role: Role
+  game: Game
   band: Band
   lang: Lang
   teach: SubjectKey[]
+  stream?: Stream
 }): Promise<{ playId: string; questions: Question[] }> {
-  const r = await rpc<{ play_id: string; questions: Question[] }>('start_play', {
+  const r = await rpc<{ play_id: string; questions: Question[] }>('begin_play', {
+    p_game: args.game,
     p_event: eventSlug,
     p_nickname: args.nickname,
     p_role: args.role,
     p_band: args.band,
     p_lang: args.lang,
     p_teach: args.teach,
+    // Only Form 4–5 learners send a stream; the server picks their quiz subjects by it.
+    ...(args.stream ? { p_stream: args.stream } : {}),
   })
   return { playId: r.play_id, questions: r.questions }
 }
@@ -81,20 +86,64 @@ export interface ServerResult {
   rightMarks: number
   rank: number | null
   players: number
+  boardMode?: 'manual' | 'daily'
 }
 
-export const finishPlay = (playId: string, choices: string[], marks: { id: string; verdict: boolean | null; ms: number }[]) =>
+export const finishPlay = (playId: string, choices: string[], marks: { id: string; verdict: boolean | null; ms: number; hint: boolean }[]) =>
   rpc<ServerResult>('finish_play', { p_play: playId, p_choices: choices, p_marks: marks })
 
 export const submitSignup = (playId: string | null, data: Record<string, unknown>) =>
   rpc<{ ref: string; existing: boolean }>('submit_signup', { p_event: eventSlug, p_play: playId, p: data })
 
+/**
+ * Send a sign-up from the phone's outbox with plain fetch, so it can use `keepalive` and still
+ * arrive while the player switches to WhatsApp. 'sent': saved (or already saved); 'drop': the
+ * server refused it and a retry won't help; 'retry': no answer, try again later.
+ */
+export async function sendQueuedSignup(
+  event: string,
+  playId: string | null,
+  data: Record<string, unknown>,
+  keepalive = false,
+): Promise<'sent' | 'retry' | 'drop'> {
+  if (!url || !key) return 'drop'
+  const ctl = new AbortController()
+  const timer = keepalive ? undefined : setTimeout(() => ctl.abort(), 15000)
+  try {
+    const res = await fetch(`${url}/rest/v1/rpc/submit_signup`, {
+      method: 'POST',
+      headers: { apikey: key, 'content-type': 'application/json' },
+      body: JSON.stringify({ p_event: event, p_play: playId, p: data }),
+      keepalive,
+      signal: keepalive ? undefined : ctl.signal,
+    })
+    if (res.ok) return 'sent'
+    // Our own checks (bad input) answer 400 and won't change; anything else may be passing.
+    return res.status === 400 ? 'drop' : 'retry'
+  } catch {
+    return 'retry'
+  } finally {
+    if (timer) clearTimeout(timer)
+  }
+}
+
+type BoardRow = { nickname: string; xp: number; personality: Trait }
+
 export interface Board {
   event: { name: string; offerCode: string; offerValidUntil: string | null }
   day: string
-  top: { nickname: string; xp: number; personality: Trait }[]
-  latest: { nickname: string; xp: number; personality: Trait }[]
+  top: BoardRow[]
+  /** Top 5 per game: cikgu = Cikgu Sehari, pelajar = Misi Pelajar Bijak. */
+  boards?: Record<Game, BoardRow[]>
+  /** Latest results; claimed = the player sent the sign-up form (trial claim or tutor application). */
+  latest: (BoardRow & { game?: Game; role?: Role; claimed?: boolean })[]
   players: number
+  playersByGame?: Record<Game, number>
+  /** 'manual': boards run until an admin resets them; 'daily': they start fresh every midnight. */
+  mode?: 'manual' | 'daily'
+  /** Names per board on the projector (3, 5 or 10). */
+  size?: number
+  resetAt?: string | null
   mix: Partial<Record<Trait, number>>
 }
 

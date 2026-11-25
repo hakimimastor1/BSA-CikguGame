@@ -202,7 +202,7 @@
     "band": "std1_3",
     "subject": "bi",
     "q": {
-      "ms": "Lawan bagi 'happy':",
+      "ms": "Lawan kata bagi 'happy':",
       "en": "Opposite of 'happy':"
     },
     "a": {
@@ -796,7 +796,7 @@
     "band": "std4_6",
     "subject": "bi",
     "q": {
-      "ms": "Collective noun: a ___ of fish",
+      "ms": "Kata nama kolektif: a ___ of fish",
       "en": "Collective noun: a ___ of fish"
     },
     "a": {
@@ -1066,7 +1066,7 @@
     "band": "std4_6",
     "subject": "sci",
     "q": {
-      "ms": "Rumus kelajuan ialah…",
+      "ms": "Rumus laju ialah…",
       "en": "The formula for speed is…"
     },
     "a": {
@@ -1246,7 +1246,7 @@
     "band": "f1_3",
     "subject": "bm",
     "q": {
-      "ms": "Yang betul: 'para guru' atau 'para guru-guru'?",
+      "ms": "Bentuk yang betul: 'para guru' atau 'para guru-guru'?",
       "en": "Which is correct: 'para guru' or 'para guru-guru'?"
     },
     "a": {
@@ -1772,8 +1772,8 @@
       "en": "Meaning of the proverb 'bagai melepaskan anjing tersepit':"
     },
     "a": {
-      "ms": "menolong orang dalam kesusahan",
-      "en": "menolong orang dalam kesusahan"
+      "ms": "membuat kerja yang sia-sia",
+      "en": "membuat kerja yang sia-sia"
     },
     "correct": false,
     "fix": {
@@ -2200,7 +2200,7 @@
     "band": "f4_5",
     "subject": "phy",
     "q": {
-      "ms": "Laju atau halaju: yang manakah kuantiti vektor?",
+      "ms": "Antara laju dan halaju, yang manakah kuantiti vektor?",
       "en": "Speed or velocity: which is a vector quantity?"
     },
     "a": {
@@ -2420,13 +2420,13 @@
       "en": "General formula of alkanes:"
     },
     "a": {
-      "ms": "CₙH₂ₙ",
-      "en": "CₙH₂ₙ"
+      "ms": "CnH2n",
+      "en": "CnH2n"
     },
     "correct": false,
     "fix": {
-      "ms": "CₙH₂ₙ₊₂",
-      "en": "CₙH₂ₙ₊₂"
+      "ms": "CnH2n+2",
+      "en": "CnH2n+2"
     }
   },
   {

@@ -10,16 +10,18 @@ import {
   ListChecks,
   LogOut,
   MessageCircle,
+  Pencil,
   RefreshCw,
   Search,
   ShieldAlert,
   Trophy,
 } from 'lucide-react'
 import { eventSlug, supabase } from '../lib/api'
-import { PERSONALITIES } from '../content/story'
-import { EVENT } from '../content/event'
+import { GAME_NAME, PERSONALITY_INFO } from '../content/personalities'
+import { EVENT, NEXT_YEAR } from '../content/event'
+import { BSA_SUBJECTS, NEXT_LEVELS, SCHOOL_LEVELS, STREAMS, levelHasStream, streamById } from '../content/subjects'
 import { waLink } from '../game/whatsapp'
-import type { Trait } from '../types'
+import type { Game, Stream, Trait } from '../types'
 
 type StaffRole = 'admin' | 'booth'
 type Me = { email: string; role: StaffRole; name: string | null }
@@ -34,6 +36,10 @@ interface SignupRow {
   under18: boolean | null
   child_name: string | null
   level: string | null
+  /** Learner's class next year (the trial is for that year). */
+  level_next?: string | null
+  /** Stream for next year's class (Tingkatan 4–5 only). */
+  stream?: Stream | null
   school: string | null
   area: string | null
   trial_subjects: string[]
@@ -48,9 +54,17 @@ interface SignupRow {
   nickname: string | null
   personality: Trait | null
   total_xp: number | null
+  subjects?: { subject: string; right: number; total: number }[] | null
+  /** Game played before signing up; null when they signed up without playing. */
+  game?: Game | null
   status: string
   notes: string | null
+  /** Saved later by the player's phone: the signal was weak at the booth and they went on to WhatsApp. */
+  delayed?: boolean
   created_at: string
+  /** Last admin correction of the details, and by whom. */
+  edited_at?: string | null
+  edited_by?: string | null
 }
 
 interface BoardRow {
@@ -60,23 +74,28 @@ interface BoardRow {
   hidden: boolean
   suspicious: boolean
   role: string
+  game?: Game
 }
 
 interface Stats {
   days: { day: string; plays: number; signups: number }[]
   byRole: Record<string, { plays: number; signups: number }>
+  byGame?: Partial<Record<Game, number>>
+  /** Leads by follow-up status. */
+  funnel?: { learner: Record<string, number>; tutor: Record<string, number> }
+  delayed?: number
 }
 
-const ROLE_LABEL: Record<SignupRow['role'], string> = { pelajar: 'Pelajar', ibubapa: 'Ibu bapa', cikgu: 'Bakal cikgu' }
+const ROLE_LABEL: Record<SignupRow['role'], string> = { pelajar: 'Pelajar sekolah', ibubapa: 'Ibu bapa / keluarga', cikgu: 'Bakal tutor (UPSI)' }
 const LEARNER_STATUS: [string, string][] = [
-  ['new', 'Baru'],
+  ['new', 'Belum dihubungi'],
   ['contacted', 'Dihubungi'],
   ['trial_booked', 'Trial ditempah'],
   ['enrolled', 'Mendaftar'],
   ['not_interested', 'Tidak berminat'],
 ]
 const TUTOR_STATUS: [string, string][] = [
-  ['new', 'Baru'],
+  ['new', 'Belum dihubungi'],
   ['contacted', 'Dihubungi'],
   ['interviewed', 'Ditemu duga'],
   ['hired', 'Diambil'],
@@ -90,13 +109,24 @@ const myTime = (iso: string) =>
   new Date(iso).toLocaleString('ms-MY', { timeZone: 'Asia/Kuala_Lumpur', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
 const prettyPhone = (n: string) => `+${n.slice(0, 2)} ${n.slice(2, 4)}-${n.slice(4, 7)} ${n.slice(7)}`
 
+const SUBJECT_BM: Record<string, string> = { bm: 'BM', bi: 'BI', math: 'Matematik', sci: 'Sains', phy: 'Fizik', chem: 'Kimia', bio: 'Biologi' }
+const GAMES: Game[] = ['cikgu', 'pelajar']
+const gameName = (g: Game | null | undefined) => (g ? GAME_NAME[g].ms : '')
+/** What the question round is called in each game. */
+const roundName = (g: Game | null | undefined) => (g === 'pelajar' ? 'Kuiz Kilat' : 'Semak Kerja')
+
 function followUpMessage(s: SignupRow): string {
   if (s.role === 'cikgu') {
     return `Hai ${s.name}! Ini Bright Scholar Academy. Terima kasih kerana berminat menjadi tutor BSA di ${EVENT.name}. Boleh kami tetapkan sesi temu duga ringkas dan demo mengajar? Bila anda free? Rujukan: ${s.ref}`
   }
   const greet = s.parent_name || s.name
   const learner = s.child_name || s.name
-  return `Hai ${greet}! Ini Bright Scholar Academy. Terima kasih kerana bermain Cikgu Sehari di booth kami di ${EVENT.name}. Jom tetapkan masa untuk trial percuma 3 subjek (${s.trial_subjects.join(', ')}) untuk ${learner}. Bila masa yang sesuai? Rujukan: ${s.ref}`
+  const results = (s.subjects ?? [])
+    .map((x) => `${SUBJECT_BM[x.subject] ?? x.subject} ${x.right}/${x.total}`)
+    .join(', ')
+  const report = results ? ` Keputusan ${roundName(s.game)} ${learner}: ${results}.` : ''
+  const played = s.game ? ` bermain ${gameName(s.game)}` : ' singgah'
+  return `Hai ${greet}! Ini Bright Scholar Academy. Terima kasih kerana${played} di booth kami di ${EVENT.name}.${report} Jom tetapkan masa untuk trial percuma 3 subjek (${s.trial_subjects.join(', ')}) untuk ${learner}${s.level_next ? ` (${s.level_next} pada ${NEXT_YEAR}${s.stream ? `, aliran ${streamById(s.stream)?.label.ms}` : ''})` : ''}. Bila masa yang sesuai? Rujukan: ${s.ref}`
 }
 
 function toCsv(rows: SignupRow[]): string {
@@ -109,7 +139,10 @@ function toCsv(rows: SignupRow[]): string {
     ['Nama ibu bapa', (r) => r.parent_name],
     ['Bawah 18', (r) => (r.under18 ? 'Ya' : '')],
     ['Nama anak', (r) => r.child_name],
-    ['Tahap', (r) => r.level],
+    [`Tahap ${NEXT_YEAR - 1}`, (r) => (r.role === 'cikgu' ? '' : r.level)],
+    ['Tahap mengajar', (r) => (r.role === 'cikgu' ? r.level : '')],
+    [`Kelas ${NEXT_YEAR}`, (r) => r.level_next],
+    ['Aliran', (r) => streamById(r.stream)?.label.ms],
     ['Sekolah', (r) => r.school],
     ['Kawasan', (r) => r.area],
     ['Subjek trial', (r) => r.trial_subjects.join('; ')],
@@ -121,11 +154,13 @@ function toCsv(rows: SignupRow[]): string {
     ['Subjek diajar', (r) => r.teach_subjects.join('; ')],
     ['Masa lapang', (r) => r.availability.map((a) => AVAIL_LABEL[a] ?? a).join('; ')],
     ['Setuju pemasaran', (r) => (r.marketing ? 'Ya' : 'Tidak')],
+    ['Permainan', (r) => gameName(r.game)],
     ['Nama gelaran', (r) => r.nickname],
-    ['Personaliti', (r) => (r.personality ? PERSONALITIES[r.personality].name : '')],
+    ['Personaliti', (r) => (r.personality ? PERSONALITY_INFO[r.personality].name : '')],
     ['XP', (r) => r.total_xp],
     ['Status', (r) => ALL_STATUS.get(r.status) ?? r.status],
     ['Nota', (r) => r.notes],
+    ['Masuk lewat', (r) => (r.delayed ? 'Ya' : '')],
   ]
   const esc = (v: unknown) => {
     const s = v == null ? '' : String(v)
@@ -150,7 +185,7 @@ export default function Admin() {
   const [me, setMe] = useState<Me | null | 'checking'>('checking')
 
   useEffect(() => {
-    document.title = 'Cikgu Sehari · Admin'
+    document.title = 'BSA Booth · Admin'
     if (!supabase) return
     supabase.auth.getSession().then(({ data }) => setSession(data.session))
     const { data } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
@@ -180,7 +215,7 @@ export default function Admin() {
       <Shell>
         <div className="clay-card flex flex-col gap-3 p-5">
           <p className="flex items-center gap-2 font-bold">
-            <ShieldAlert size={20} /> Akaun {session.user.email} bukan akaun staf Cikgu Sehari.
+            <ShieldAlert size={20} /> Akaun {session.user.email} bukan akaun staf booth BSA.
           </p>
           <button type="button" className="clay-btn bg-white" onClick={() => supabase!.auth.signOut()}>
             <LogOut size={18} /> Log keluar
@@ -199,7 +234,7 @@ function Shell({ children, right }: { children: React.ReactNode; right?: React.R
         <div className="flex items-center gap-3">
           <img src="/bsa-mark.png" alt="" className="h-10 w-auto" />
           <div>
-            <p className="font-display text-xl font-extrabold leading-none">Cikgu Sehari · Admin</p>
+            <p className="font-display text-xl font-extrabold leading-none">BSA Booth · Admin</p>
             <p className="text-sm text-muted">{EVENT.name}</p>
           </div>
         </div>
@@ -288,7 +323,7 @@ function Dashboard({ me }: { me: Me }) {
         ))}
       </nav>
       {tab === 'signups' && <Signups me={me} />}
-      {tab === 'board' && <BoardTab />}
+      {tab === 'board' && <BoardTab isAdmin={me.role === 'admin'} />}
       {tab === 'stats' && <StatsTab />}
       {tab === 'account' && <Account me={me} />}
     </Shell>
@@ -343,9 +378,9 @@ function Signups({ me }: { me: Me }) {
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           <select className="field text-sm" value={role} onChange={(e) => setRole(e.target.value)} aria-label="Peranan">
             <option value="all">Semua peranan</option>
-            <option value="pelajar">Pelajar</option>
-            <option value="ibubapa">Ibu bapa</option>
-            <option value="cikgu">Bakal cikgu</option>
+            <option value="pelajar">Pelajar sekolah</option>
+            <option value="ibubapa">Ibu bapa / keluarga</option>
+            <option value="cikgu">Bakal tutor (UPSI)</option>
           </select>
           <select className="field text-sm" value={status} onChange={(e) => setStatus(e.target.value)} aria-label="Status">
             <option value="all">Semua status</option>
@@ -388,13 +423,218 @@ function Signups({ me }: { me: Me }) {
       </div>
 
       {shown.map((r) => (
-        <SignupCard key={r.id} r={r} onPatch={(p) => patch(r.id, p)} />
+        <SignupCard key={r.id} r={r} isAdmin={me.role === 'admin'} onPatch={(p) => patch(r.id, p)} />
       ))}
     </div>
   )
 }
 
-function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupRow>) => void }) {
+const ALL_SUBJECTS = [...new Set(Object.values(BSA_SUBJECTS).flat())]
+const levelByLabel = (label: string) => SCHOOL_LEVELS.find((l) => l.label.ms === label)
+/** 60123456789 -> 0123456789, the way people type it. */
+const localPhone = (n: string) => (n.startsWith('60') ? '0' + n.slice(2) : n)
+
+function editError(m: string): string {
+  if (/bad phone/.test(m)) return 'Nombor WhatsApp tidak sah. Contoh: 012-345 6789.'
+  if (/pick 3/.test(m)) return 'Pilih tepat 3 subjek trial.'
+  if (/missing subjects/.test(m)) return 'Pilih sekurang-kurangnya 1 subjek yang boleh diajar.'
+  if (/name required/.test(m)) return 'Nama wajib diisi.'
+  if (/admin only/.test(m)) return 'Hanya admin boleh edit pendaftaran.'
+  return `Tidak berjaya: ${m}`
+}
+
+function ChipPick({ options, value, max, onChange }: { options: string[]; value: string[]; max?: number; onChange: (v: string[]) => void }) {
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {options.map((o) => {
+        const on = value.includes(o)
+        return (
+          <button
+            key={o}
+            type="button"
+            aria-pressed={on}
+            onClick={() => onChange(on ? value.filter((x) => x !== o) : max && value.length >= max ? value : [...value, o])}
+            className={`min-h-10 rounded-full border-2 border-navy px-3 text-sm font-bold ${on ? 'bg-yellow' : 'bg-white'}`}
+          >
+            {o}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+/** Admin only: correct the details of a sign-up. Same checks as the sign-up form, on the server. */
+function EditSignup({ r, onSaved, onCancel }: { r: SignupRow; onSaved: (row: Partial<SignupRow>) => void; onCancel: () => void }) {
+  const [f, setF] = useState({
+    role: r.role,
+    name: r.name,
+    whatsapp: localPhone(r.whatsapp),
+    parentName: r.parent_name ?? '',
+    under18: !!r.under18,
+    childName: r.child_name ?? '',
+    level: r.level ?? '',
+    levelNext: r.level_next ?? '',
+    stream: (r.stream ?? '') as Stream | '',
+    school: r.school ?? '',
+    area: r.area ?? '',
+    trialSubjects: r.trial_subjects,
+    tutorStatus: r.tutor_status ?? 'upsi',
+    semester: r.semester ?? '',
+    cgpa: r.cgpa ?? '',
+    qualification: r.qualification ?? '',
+    course: r.course ?? '',
+    teachSubjects: r.teach_subjects,
+    availability: r.availability,
+    marketing: r.marketing,
+  })
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((c) => ({ ...c, [k]: v }))
+  // Fields follow the role chosen here, so a wrong role can be corrected too.
+  const tutor = f.role === 'cikgu'
+  const withCurrent = (list: string[], current: string) => (current && !list.includes(current) ? [current, ...list] : list)
+  const trialBand = levelByLabel(f.levelNext)?.band
+  // Tingkatan 4–5 next year: the stream can be set or corrected; other classes have none.
+  const showStream = !tutor && levelHasStream(levelByLabel(f.levelNext)?.id ?? '')
+  const trialList = [...new Set([...(trialBand ? BSA_SUBJECTS[trialBand] : ALL_SUBJECTS), ...f.trialSubjects])]
+
+  const save = async () => {
+    setBusy(true)
+    setError(null)
+    const { data, error: e } = await supabase!.rpc('staff_edit_signup', { p_id: r.id, p: { ...f, stream: showStream ? f.stream : null } })
+    setBusy(false)
+    if (e) setError(editError(e.message))
+    else onSaved(data as Partial<SignupRow>)
+  }
+
+  const text = (label: string, k: 'name' | 'whatsapp' | 'parentName' | 'childName' | 'school' | 'area' | 'semester' | 'cgpa' | 'qualification' | 'course', extra?: { inputMode?: 'tel' | 'numeric' | 'decimal' }) => (
+    <label className="flex flex-col gap-1 text-sm font-bold">
+      {label}
+      <input className="field font-normal" value={f[k] as string} inputMode={extra?.inputMode} onChange={(e) => set(k, e.target.value)} />
+    </label>
+  )
+  const select = (label: string, k: 'level' | 'levelNext', ids: string[]) => {
+    const labels = withCurrent(ids.map((id) => SCHOOL_LEVELS.find((l) => l.id === id)!.label.ms), f[k])
+    return (
+      <label className="flex flex-col gap-1 text-sm font-bold">
+        {label}
+        <select className="field font-normal" value={f[k]} onChange={(e) => set(k, e.target.value)}>
+          {!f[k] && <option value="">–</option>}
+          {labels.map((l) => (
+            <option key={l}>{l}</option>
+          ))}
+        </select>
+      </label>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-3 rounded-2xl border-[3px] border-navy bg-yellow-soft p-3">
+      <p className="font-display text-lg font-extrabold">Edit pendaftaran {r.ref}</p>
+      <label className="flex flex-col gap-1 text-sm font-bold">
+        Peranan
+        <select className="field font-normal" value={f.role} onChange={(e) => set('role', e.target.value as SignupRow['role'])}>
+          {(['pelajar', 'ibubapa', 'cikgu'] as const).map((x) => (
+            <option key={x} value={x}>
+              {ROLE_LABEL[x]}
+            </option>
+          ))}
+        </select>
+      </label>
+      {text(f.role === 'ibubapa' ? 'Nama ibu bapa' : 'Nama penuh', 'name')}
+      {text(f.role === 'pelajar' && f.under18 ? 'No. WhatsApp ibu bapa / penjaga' : 'No. WhatsApp', 'whatsapp', { inputMode: 'tel' })}
+      {f.role === 'pelajar' && (
+        <>
+          <label className="flex items-center gap-2 text-sm font-bold">
+            <input type="checkbox" className="h-5 w-5 accent-[#023E86]" checked={f.under18} onChange={(e) => set('under18', e.target.checked)} />
+            Bawah 18 tahun
+          </label>
+          {f.under18 && text('Nama ibu bapa / penjaga', 'parentName')}
+        </>
+      )}
+      {f.role === 'ibubapa' && text('Nama anak / adik', 'childName')}
+      {!tutor && (
+        <>
+          <div className="grid grid-cols-2 gap-2">
+            {select(`Tahap ${NEXT_YEAR - 1}`, 'level', SCHOOL_LEVELS.map((l) => l.id))}
+            {select(`Kelas ${NEXT_YEAR}`, 'levelNext', NEXT_LEVELS)}
+          </div>
+          {showStream && (
+            <label className="flex flex-col gap-1 text-sm font-bold">
+              Aliran {NEXT_YEAR}
+              <select className="field font-normal" value={f.stream} onChange={(e) => set('stream', e.target.value as Stream | '')}>
+                {!f.stream && <option value="">–</option>}
+                {STREAMS.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.label.ms}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          {text('Sekolah', 'school')}
+        </>
+      )}
+      {tutor && (
+        <>
+          <div className="flex flex-col gap-1 text-sm font-bold">
+            Status
+            <ChipPick options={['Pelajar UPSI', 'Graduan / bekerja']} value={[f.tutorStatus === 'grad' ? 'Graduan / bekerja' : 'Pelajar UPSI']} onChange={(v) => set('tutorStatus', v.includes('Graduan / bekerja') && f.tutorStatus !== 'grad' ? 'grad' : 'upsi')} />
+          </div>
+          {f.tutorStatus === 'upsi' ? (
+            <div className="grid grid-cols-2 gap-2">
+              {text('Semester', 'semester', { inputMode: 'numeric' })}
+              {text('CGPA', 'cgpa', { inputMode: 'decimal' })}
+            </div>
+          ) : (
+            text('Kelayakan tertinggi', 'qualification')
+          )}
+          {text('Program / bidang', 'course')}
+          <div className="flex flex-col gap-1 text-sm font-bold">
+            Subjek yang boleh diajar
+            <ChipPick options={[...new Set([...ALL_SUBJECTS, ...f.teachSubjects])]} value={f.teachSubjects} onChange={(v) => set('teachSubjects', v)} />
+          </div>
+          <div className="flex flex-col gap-1 text-sm font-bold">
+            Masa lapang
+            <ChipPick
+              options={Object.values(AVAIL_LABEL)}
+              value={f.availability.map((a) => AVAIL_LABEL[a] ?? a)}
+              onChange={(v) => set('availability', Object.keys(AVAIL_LABEL).filter((k) => v.includes(AVAIL_LABEL[k])))}
+            />
+          </div>
+        </>
+      )}
+      {text('Kawasan', 'area')}
+      {!tutor && (
+        <div className="flex flex-col gap-1 text-sm font-bold">
+          Subjek trial ({f.trialSubjects.length}/3)
+          <ChipPick options={trialList} value={f.trialSubjects} max={3} onChange={(v) => set('trialSubjects', v)} />
+        </div>
+      )}
+      <label className="flex items-center gap-2 text-sm font-bold">
+        <input type="checkbox" className="h-5 w-5 accent-[#023E86]" checked={f.marketing} onChange={(e) => set('marketing', e.target.checked)} />
+        Setuju terima tawaran lain daripada BSA
+      </label>
+      {error && (
+        <p className="rounded-xl bg-wrong-soft p-2 text-sm font-bold text-wrong" role="alert">
+          {error}
+        </p>
+      )}
+      <div className="grid grid-cols-2 gap-2">
+        <button type="button" className="clay-btn min-h-11 bg-white text-base" onClick={onCancel} disabled={busy}>
+          Batal
+        </button>
+        <button type="button" className="clay-btn min-h-11 bg-yellow text-base" onClick={save} disabled={busy}>
+          {busy ? 'Menyimpan…' : 'Simpan'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function SignupCard({ r, isAdmin, onPatch }: { r: SignupRow; isAdmin: boolean; onPatch: (p: Partial<SignupRow>) => void }) {
+  const [editing, setEditing] = useState(false)
   const [notes, setNotes] = useState(r.notes ?? '')
   const [saved, setSaved] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const statuses = r.role === 'cikgu' ? TUTOR_STATUS : LEARNER_STATUS
@@ -415,13 +655,15 @@ function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupR
     if (r.tutor_status === 'upsi') details.push(`Pelajar UPSI · Sem ${r.semester ?? '?'} · CGPA ${r.cgpa ?? '?'}`)
     if (r.tutor_status === 'grad') details.push(`Graduan · ${r.qualification ?? ''}`)
     if (r.course) details.push(r.course)
+    if (r.level) details.push(`Tahap mengajar: ${r.level}`)
     if (r.teach_subjects.length) details.push(`Boleh ajar: ${r.teach_subjects.join(', ')}`)
     if (r.availability.length) details.push(`Masa lapang: ${r.availability.map((a) => AVAIL_LABEL[a] ?? a).join(', ')}`)
   } else {
-    if (r.child_name) details.push(`Anak: ${r.child_name}`)
-    if (r.level) details.push(r.level)
+    if (r.child_name) details.push(`Anak/adik: ${r.child_name}`)
+    if (r.level) details.push((r.level_next ? `${r.level} → ${NEXT_YEAR}: ${r.level_next}` : r.level) + (r.stream ? ` · ${streamById(r.stream)?.label.ms}` : ''))
     if (r.school) details.push(r.school)
     if (r.trial_subjects.length) details.push(`Trial: ${r.trial_subjects.join(', ')}`)
+    if (r.subjects?.length) details.push(`${roundName(r.game)}: ${r.subjects.map((x) => `${SUBJECT_BM[x.subject] ?? x.subject} ${x.right}/${x.total}`).join(', ')}`)
   }
   if (r.area) details.push(r.area)
 
@@ -438,14 +680,42 @@ function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupR
         <div className="shrink-0 text-right">
           <span className="inline-block rounded-full border-2 border-navy bg-sky px-2.5 py-0.5 text-xs font-bold">{ROLE_LABEL[r.role]}</span>
           <p className="mt-1 font-display font-extrabold">{r.ref}</p>
+          {r.delayed && (
+            <span
+              className="mt-1 inline-block rounded-full border-2 border-navy bg-yellow-soft px-2 py-0.5 text-xs font-bold"
+              title="Talian lemah semasa daftar: telefon pemain hantar maklumat ini kemudian. Dia mungkin sudah WhatsApp dengan rujukan yang sama."
+            >
+              Masuk lewat
+            </span>
+          )}
         </div>
       </div>
-      <p className="text-[0.95rem] leading-snug">{details.join(' · ')}</p>
+      {editing ? (
+        <EditSignup
+          r={r}
+          onCancel={() => setEditing(false)}
+          onSaved={(row) => {
+            onPatch(row)
+            setEditing(false)
+          }}
+        />
+      ) : (
+        <div className="flex items-start gap-2">
+          <p className="min-w-0 flex-1 text-[0.95rem] leading-snug">{details.join(' · ')}</p>
+          {isAdmin && (
+            <button type="button" className="clay-btn min-h-11 shrink-0 bg-white px-3 text-sm" onClick={() => setEditing(true)} aria-label={`Edit ${r.ref}`}>
+              <Pencil size={16} /> Edit
+            </button>
+          )}
+        </div>
+      )}
       <p className="text-xs text-muted">
         {myTime(r.created_at)}
-        {r.personality ? ` · ${r.nickname} · ${PERSONALITIES[r.personality].name} · ${r.total_xp} XP` : ''}
+        {r.personality ? ` · ${gameName(r.game) || 'Main'}: ${r.nickname} · ${PERSONALITY_INFO[r.personality].name} · ${r.total_xp} XP` : ''}
         {r.marketing ? ' · setuju terima tawaran' : ''}
+        {r.edited_at ? ` · diedit ${myTime(r.edited_at)}${r.edited_by ? ` oleh ${r.edited_by}` : ''}` : ''}
       </p>
+      <p className="-mb-2 text-sm font-bold">Status susulan</p>
       <div className="grid grid-cols-[1fr_auto] gap-2">
         <select
           className="field"
@@ -485,7 +755,7 @@ function SignupCard({ r, onPatch }: { r: SignupRow; onPatch: (p: Partial<SignupR
   )
 }
 
-function BoardTab() {
+function BoardTab({ isAdmin }: { isAdmin: boolean }) {
   const [rows, setRows] = useState<BoardRow[] | null>(null)
   const load = useCallback(async () => {
     const { data } = await supabase!.rpc('staff_board', { p_event: eventSlug, p_day: null })
@@ -505,37 +775,281 @@ function BoardTab() {
   return (
     <div className="flex flex-col gap-3">
       <p className="clay-card bg-yellow-soft p-4 text-sm font-bold">
-        Papan skor hari ini, sama seperti di projektor. Sembunyikan nama yang tidak sesuai. Main yang terlalu pantas (mungkin
+        Papan skor, sama seperti di projektor. Sembunyikan nama yang tidak sesuai. Main yang terlalu pantas (mungkin
         ditipu) ditanda dan tidak dipaparkan.
       </p>
       <a className="clay-btn bg-white" href={`/tv?e=${eventSlug}`} target="_blank" rel="noreferrer">
         <Trophy size={18} /> Buka skrin projektor
       </a>
-      {rows?.length === 0 && <p className="text-center text-muted">Belum ada pemain hari ini.</p>}
-      <ol className="flex flex-col gap-2">
-        {rows?.map((r, i) => (
-          <li key={r.nickname} className={`clay-card flex items-center gap-3 p-3 ${r.hidden ? 'opacity-55' : ''}`}>
-            <span className="w-7 text-center font-display text-lg font-extrabold">{i + 1}</span>
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-bold">{r.nickname}</p>
-              <p className="text-xs text-muted">
-                {PERSONALITIES[r.personality]?.name} · {ROLE_LABEL[r.role as SignupRow['role']] ?? r.role}
-                {r.suspicious ? ' · terlalu pantas' : ''}
+      {rows?.length === 0 && <p className="text-center text-muted">Belum ada pemain di papan skor.</p>}
+      {rows != null &&
+        rows.length > 0 &&
+        GAMES.map((g) => {
+          const list = rows.filter((r) => (r.game ?? 'cikgu') === g)
+          return (
+            <section key={g} className="flex flex-col gap-2">
+              <h3 className="mt-2 font-display text-xl font-extrabold">
+                {g === 'cikgu' ? 'Top Cikgu Sehari' : 'Top Pelajar Bijak'}{' '}
+                <span className="text-sm font-bold text-muted">· {list.length} nama di papan</span>
+              </h3>
+              {list.length === 0 && <p className="text-sm text-muted">Belum ada pemain {gameName(g)} di papan.</p>}
+              <ol className="flex flex-col gap-2">
+                {list.map((r, i) => (
+                  <li key={`${g}:${r.nickname}`} className={`clay-card flex items-center gap-3 p-3 ${r.hidden ? 'opacity-55' : ''}`}>
+                    <span className="w-7 text-center font-display text-lg font-extrabold">{i + 1}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-bold">{r.nickname}</p>
+                      <p className="text-xs text-muted">
+                        {PERSONALITY_INFO[r.personality]?.name} · {ROLE_LABEL[r.role as SignupRow['role']] ?? r.role}
+                        {r.suspicious ? ' · terlalu pantas' : ''}
+                      </p>
+                    </div>
+                    <span className="font-display text-xl font-extrabold tabular-nums">{r.xp}</span>
+                    <button
+                      type="button"
+                      className="clay-btn min-h-11 bg-white px-3 text-sm"
+                      onClick={() => toggle(r)}
+                      aria-label={r.hidden ? `Papar ${r.nickname}` : `Sembunyi ${r.nickname}`}
+                    >
+                      {r.hidden ? <Eye size={18} /> : <EyeOff size={18} />}
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )
+        })}
+      {isAdmin && <AdminTools onChange={load} />}
+    </div>
+  )
+}
+
+interface EventInfo {
+  name: string
+  startsOn: string
+  today: string
+  boardResetAt: string | null
+  boardMode: 'manual' | 'daily'
+  boardSize: number
+  beforeStart: boolean
+  plays: number
+  signups: number
+}
+
+const prettyDay = (d: string) =>
+  new Date(d + 'T00:00:00+08:00').toLocaleDateString('ms-MY', { timeZone: 'Asia/Kuala_Lumpur', day: 'numeric', month: 'short' })
+
+/** Admin only: start the projector boards again, and (before the event) clear the team's test data. */
+function AdminTools({ onChange }: { onChange: () => void }) {
+  const [info, setInfo] = useState<EventInfo | null>(null)
+  const [ask, setAsk] = useState<'reset' | 'clear' | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState<string | null>(null)
+  const [mode, setMode] = useState<'manual' | 'daily'>('manual')
+  const [size, setSize] = useState(5)
+  const loadInfo = useCallback(async () => {
+    const { data } = await supabase!.rpc('staff_event', { p_event: eventSlug })
+    if (data) {
+      const d = data as EventInfo
+      setInfo(d)
+      setMode(d.boardMode ?? 'manual')
+      setSize(d.boardSize ?? 5)
+    }
+  }, [])
+  const changed = info != null && (mode !== info.boardMode || size !== info.boardSize)
+
+  const saveSettings = async () => {
+    setBusy(true)
+    setMsg(null)
+    const { error } = await supabase!.rpc('staff_set_board_settings', { p_event: eventSlug, p_mode: mode, p_size: size })
+    setBusy(false)
+    setMsg(error ? `Tidak berjaya: ${error.message}` : 'Tetapan disimpan. Projektor dikemas kini dalam beberapa saat.')
+    await loadInfo()
+    onChange()
+  }
+  useEffect(() => {
+    void loadInfo()
+  }, [loadInfo])
+
+  const run = async (what: 'reset' | 'clear') => {
+    setBusy(true)
+    setMsg(null)
+    const { data, error } = await supabase!.rpc(what === 'reset' ? 'staff_reset_board' : 'staff_clear_test_data', { p_event: eventSlug })
+    setBusy(false)
+    setAsk(null)
+    if (error) {
+      setMsg(/started/.test(error.message) ? 'Event sudah bermula, jadi data tidak boleh dikosongkan lagi.' : `Tidak berjaya: ${error.message}`)
+    } else if (what === 'reset') {
+      setMsg('Papan skor sudah direset. Projektor akan kosong dalam beberapa saat.')
+    } else {
+      const r = data as { plays: number; signups: number }
+      setMsg(`Selesai: ${r.plays} main dan ${r.signups} pendaftaran ujian sudah dikeluarkan. Event bermula bersih.`)
+    }
+    await loadInfo()
+    onChange()
+  }
+
+  const confirmRow = (what: 'reset' | 'clear', text: string, label: string) => (
+    <div className="flex flex-col gap-2 rounded-2xl border-[3px] border-wrong bg-wrong-soft p-3" role="alert">
+      <p className="text-sm font-bold">{text}</p>
+      <div className="grid grid-cols-2 gap-2">
+        <button type="button" className="clay-btn min-h-11 bg-white text-base" onClick={() => setAsk(null)} disabled={busy}>
+          Batal
+        </button>
+        <button type="button" className="clay-btn min-h-11 bg-yellow text-base" onClick={() => run(what)} disabled={busy}>
+          {busy ? 'Sedang proses…' : label}
+        </button>
+      </div>
+    </div>
+  )
+
+  return (
+    <section className="clay-card mt-4 flex flex-col gap-3 p-4" aria-labelledby="admin-tools">
+      <h3 id="admin-tools" className="font-display text-xl font-extrabold">
+        Alat admin
+      </h3>
+
+      <fieldset className="flex flex-col gap-2" disabled={busy || !info}>
+        <legend className="mb-1 font-bold">Tetapan papan skor</legend>
+        <p className="text-sm font-bold">Bila papan skor dikosongkan?</p>
+        {(
+          [
+            ['manual', 'Manual', 'Papan kekal sehingga admin tekan Reset. Sesuai untuk kumpul pemenang sepanjang event atau ikut sesi.'],
+            ['daily', 'Automatik setiap hari', 'Papan kosong sendiri setiap hari pada tengah malam. Admin masih boleh tekan Reset bila-bila masa.'],
+          ] as const
+        ).map(([id, label, hint]) => (
+          <label
+            key={id}
+            className={`flex cursor-pointer items-start gap-3 rounded-2xl border-[3px] p-3 ${mode === id ? 'border-navy bg-yellow-soft' : 'border-sky bg-white'}`}
+          >
+            <input type="radio" name="board-mode" className="mt-1 h-5 w-5 accent-[#023E86]" checked={mode === id} onChange={() => setMode(id)} />
+            <span>
+              <span className="block font-bold">{label}</span>
+              <span className="block text-sm text-muted">{hint}</span>
+            </span>
+          </label>
+        ))}
+        <p className="mt-1 text-sm font-bold">Nama di projektor (setiap papan)</p>
+        <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Nama di projektor">
+          {[3, 5, 10].map((n) => (
+            <button
+              key={n}
+              type="button"
+              role="radio"
+              aria-checked={size === n}
+              onClick={() => setSize(n)}
+              className={`min-h-11 rounded-2xl border-[3px] font-display text-lg font-extrabold ${size === n ? 'border-navy bg-yellow' : 'border-sky bg-white'}`}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+        <button type="button" className="clay-btn min-h-11 bg-yellow text-base" disabled={!changed || busy} onClick={saveSettings}>
+          Simpan tetapan
+        </button>
+      </fieldset>
+
+      <div className="flex flex-col gap-2 border-t-[3px] border-dashed border-sky pt-3">
+        <p className="font-bold">Reset papan skor</p>
+        <p className="text-sm text-muted">
+          Kosongkan kedua-dua papan di projektor dan mula semula dari sekarang. Keputusan pemain, pendaftaran dan statistik tidak
+          dipadam.
+          {info?.boardMode === 'daily' ? ' Papan juga kosong sendiri setiap tengah malam.' : ' Dalam mod Manual, papan kekal sehingga butang ini ditekan.'}
+          {info?.boardResetAt ? ` Reset terakhir: ${myTime(info.boardResetAt)}.` : ''}
+        </p>
+        {ask === 'reset' ? (
+          confirmRow('reset', 'Pasti? Semua nama di kedua-dua papan projektor akan hilang dari papan.', 'Ya, reset papan')
+        ) : (
+          <button type="button" className="clay-btn min-h-11 bg-white text-base" onClick={() => setAsk('reset')}>
+            <RefreshCw size={18} /> Reset papan skor sekarang
+          </button>
+        )}
+      </div>
+
+      {info?.beforeStart && (
+        <div className="flex flex-col gap-2 border-t-[3px] border-dashed border-sky pt-3">
+          <p className="font-bold">Kosongkan data ujian</p>
+          <p className="text-sm text-muted">
+            Untuk selepas pasukan BSA selesai menguji. Semua {info.plays} main dan {info.signups} pendaftaran setakat ini dikeluarkan
+            dari {info.name}, supaya admin dan statistik bermula bersih. Hanya boleh sebelum event bermula ({prettyDay(info.startsOn)}).
+          </p>
+          {ask === 'clear' ? (
+            confirmRow('clear', `Pasti? ${info.plays} main dan ${info.signups} pendaftaran ujian akan dikeluarkan dari senarai.`, 'Ya, kosongkan')
+          ) : (
+            <button type="button" className="clay-btn min-h-11 bg-white text-base" onClick={() => setAsk('clear')} disabled={!info.plays && !info.signups}>
+              <ShieldAlert size={18} /> Kosongkan data ujian
+            </button>
+          )}
+        </div>
+      )}
+
+      {msg && (
+        <p className="rounded-2xl bg-yellow-soft p-3 text-sm font-bold" role="status">
+          {msg}
+        </p>
+      )}
+    </section>
+  )
+}
+
+/**
+ * Leads by follow-up status (where each lead is now), and the share that reached each step:
+ * a lead at "Mendaftar" also counts as contacted and as trial booked.
+ */
+function Funnel({
+  title,
+  statuses,
+  counts,
+  rates,
+}: {
+  title: string
+  statuses: [string, string][]
+  counts: Record<string, number>
+  rates: [string, string[]][]
+}) {
+  const total = Object.values(counts).reduce((a, n) => a + n, 0)
+  const pct = (n: number) => (total ? Math.round((n / total) * 100) : 0)
+  const lost = new Set(['not_interested', 'not_suitable'])
+  const done = new Set(['enrolled', 'hired'])
+  return (
+    <section className="clay-card flex flex-col gap-3 p-4">
+      <div className="flex items-baseline justify-between gap-2">
+        <h2 className="font-display text-lg font-extrabold">{title}</h2>
+        <span className="text-sm font-bold text-muted">{total} lead</span>
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {rates.map(([label, keys]) => {
+          const n = keys.reduce((a, k) => a + (counts[k] ?? 0), 0)
+          return (
+            <div key={label} className="rounded-2xl bg-sky p-2.5 text-center">
+              <p className="font-display text-2xl font-extrabold tabular-nums">{total ? `${pct(n)}%` : '–'}</p>
+              <p className="text-xs font-bold leading-tight text-muted">
+                {label} ({n})
               </p>
             </div>
-            <span className="font-display text-xl font-extrabold tabular-nums">{r.xp}</span>
-            <button
-              type="button"
-              className="clay-btn min-h-11 bg-white px-3 text-sm"
-              onClick={() => toggle(r)}
-              aria-label={r.hidden ? `Papar ${r.nickname}` : `Sembunyi ${r.nickname}`}
-            >
-              {r.hidden ? <Eye size={18} /> : <EyeOff size={18} />}
-            </button>
-          </li>
-        ))}
-      </ol>
-    </div>
+          )
+        })}
+      </div>
+      <ul className="flex flex-col gap-2">
+        {statuses.map(([k, label]) => {
+          const n = counts[k] ?? 0
+          return (
+            <li key={k} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 text-sm">
+              <span className="font-bold">{label}</span>
+              <span className="font-display font-extrabold tabular-nums">
+                {n} <span className="text-xs font-bold text-muted">· {pct(n)}%</span>
+              </span>
+              <span className="col-span-2 h-2.5 overflow-hidden rounded-full border-2 border-navy bg-white" aria-hidden="true">
+                <span
+                  className={`block h-full ${lost.has(k) ? 'bg-wrong' : done.has(k) ? 'bg-correct' : 'bg-navy'}`}
+                  style={{ width: `${pct(n)}%` }}
+                />
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+    </section>
   )
 }
 
@@ -561,6 +1075,45 @@ function StatsTab() {
           </div>
         ))}
       </div>
+      {s.byGame && (
+        <div className="grid grid-cols-2 gap-2">
+          {GAMES.map((g) => (
+            <div key={g} className="clay-card p-3 text-center">
+              <p className="font-display text-2xl font-extrabold tabular-nums">{s.byGame?.[g] ?? 0}</p>
+              <p className="text-sm font-bold text-muted">main {gameName(g)}</p>
+            </div>
+          ))}
+        </div>
+      )}
+      {s.funnel && (
+        <>
+          <Funnel
+            title="Corong lead · Pelajar & ibu bapa"
+            statuses={LEARNER_STATUS}
+            counts={s.funnel.learner}
+            rates={[
+              ['Sudah dihubungi', ['contacted', 'trial_booked', 'enrolled', 'not_interested']],
+              ['Trial ditempah', ['trial_booked', 'enrolled']],
+              ['Mendaftar', ['enrolled']],
+            ]}
+          />
+          <Funnel
+            title="Corong lead · Bakal tutor"
+            statuses={TUTOR_STATUS}
+            counts={s.funnel.tutor}
+            rates={[
+              ['Sudah dihubungi', ['contacted', 'interviewed', 'hired', 'not_suitable']],
+              ['Ditemu duga', ['interviewed', 'hired']],
+              ['Diambil', ['hired']],
+            ]}
+          />
+        </>
+      )}
+      {!!s.delayed && (
+        <p className="text-sm text-muted">
+          {s.delayed} pendaftaran <b>masuk lewat</b>: talian lemah semasa daftar, telefon pemain hantar kemudian.
+        </p>
+      )}
       <table className="clay-card w-full overflow-hidden text-left text-sm">
         <thead className="bg-sky">
           <tr>

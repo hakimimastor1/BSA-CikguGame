@@ -5,8 +5,24 @@ export type Txt = { ms: string; en: string }
 
 export type Role = 'pelajar' | 'ibubapa' | 'cikgu'
 export type Band = 'std1_3' | 'std4_6' | 'f1_3' | 'f4_5'
+/** Form 4–5 stream (aliran): Sains Tulen, Sastera & Kemanusiaan, Agama, Teknik & Vokasional, not sure yet. */
+export type Stream = 'sains' | 'sastera' | 'agama' | 'teknik' | 'belum'
 export type SubjectKey = 'bm' | 'bi' | 'math' | 'sci' | 'phy' | 'chem' | 'bio'
-export type Trait = 'kreatif' | 'penyayang' | 'strategik' | 'inspirasi'
+/** Game A (cikgu) traits, then Game B (pelajar) learner types. */
+export type Trait =
+  | 'kreatif'
+  | 'penyayang'
+  | 'strategik'
+  | 'inspirasi'
+  | 'disiplin'
+  | 'visual'
+  | 'pendengar'
+  | 'aktif'
+  | 'pemikir'
+  | 'sosial'
+
+/** Game A = Cikgu Sehari (play the teacher); Game B = Misi Pelajar Bijak (play the student). */
+export type Game = 'cikgu' | 'pelajar'
 
 export interface Question {
   id: string
@@ -39,6 +55,8 @@ export interface Mark {
   /** What the player tapped: true = ✓ (pupil is right), false = ✗, null = ran out of time. */
   verdict: boolean | null
   ms: number
+  /** Game B: the player used "Tanya Cikgu BSA" on this item (a right answer then scores 10 XP). */
+  hint?: boolean
 }
 
 export interface SubjectResult {
@@ -57,15 +75,20 @@ export interface PlayResult {
   strongest: SubjectKey | null
   levelUp: SubjectKey[]
   rightMarks: number
-  /** Today's leaderboard rank, once the server has scored the play. */
+  /** Rank on this game's board, once the server has scored the play. */
   rank?: number | null
   players?: number
+  /** 'manual': the board runs until an admin resets it; 'daily': it starts fresh every midnight. */
+  boardMode?: 'manual' | 'daily'
 }
 
 export interface Player {
   role: Role
+  game: Game
   band: Band
   /** Only for future tutors: subjects they would teach. */
   teachSubjects: SubjectKey[]
+  /** Only for Form 4–5 learners: their stream, which decides the quiz subjects. */
+  stream?: Stream
   nickname: string
 }

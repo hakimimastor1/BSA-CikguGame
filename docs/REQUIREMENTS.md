@@ -39,8 +39,10 @@ PESKON (**M**) and what comes after (**S**, **C**).
   CGPA 3.3+, and practicum done or in progress. Graduates need a degree (education preferred).
   Apply at `brightscholaracademy.com.my/register` or on WhatsApp.
 - Brand: yellow `#F9C414`, navy `#023E86`; logo files in `assets/brand/`.
-- **Gifts** (bags, stickers) are handed out by booth staff at their own discretion. They are **not part of
-  the system**.
+- **Gifts** are handed out by booth staff and **not recorded in the system** (staff check the player's screen):
+  every player gets a simple sticker; children and families who sign up for the trial get a woven BSA bag
+  (cikgu stickers and flyers) and, while about 10 last, a small notebook; UPSI students who apply as tutors get a
+  sticker only. About 120 bags are shared with parents who enrol a child at the booth. No top-score prizes.
 
 ## 3. Who uses it
 
@@ -53,6 +55,25 @@ PESKON (**M**) and what comes after (**S**, **C**).
 | **Admin** (1) | BSA office | Manage the event and offer; follow up all sign-ups | — |
 
 ## 4. How the game serves each visitor
+
+At PESKON most players are **UPSI students and graduates**; their families bring **school-age children**.
+So the game shows two different prizes, and the role screen makes clear which is which:
+
+| Role on screen (in this order) | Who | Game | Prize |
+|---|---|---|---|
+| **Pelajar / graduan UPSI** | Future cikgu | **Game A: Cikgu Sehari** | Tutor application: *Jadi tutor BSA*, RM25–40/hour |
+| **Pelajar sekolah** | Std 1 – Form 5 students | **Game B: Misi Pelajar Bijak** | Free trial, 3 subjects |
+| **Ibu bapa / keluarga** | Parents, or older siblings and relatives playing for a child | **They choose** A or B | Free trial, 3 subjects, for the child |
+
+One QR code and one system: the role decides the game. The welcome screen, projector and poster show both games
+and both prizes side by side.
+
+- **Game A, Cikgu Sehari:** five first-day-as-a-tutor situations (personality: Kreatif, Penyayang, Strategik,
+  Inspirasi, Disiplin), then *Semak Kerja*: mark pupils' answers right or wrong.
+- **Game B, Misi Pelajar Bijak:** five study-life situations (learner type: Visual, Pendengar, Aktif, Pemikir,
+  Sosial), then *Kuiz Kilat*: say whether the shown answer is right, with one *Tanya Cikgu BSA* hint (a right
+  answer with the hint earns 10 XP instead of 20–30). The result adds study-style tips to the mini report.
+
 
 ### 4.1 School students (pelajar)
 
@@ -136,10 +157,10 @@ Priority: **M** = must have for PESKON, **S** = should have (after PESKON), **C*
 
 | # | Requirement | Pri |
 |---|---|---|
-| T1 | Leaderboard for today, updating live: top 10 nicknames, XP and personality | M |
+| T1 | Two leaderboards for today, updating live: **Top Cikgu Sehari** and **Top Pelajar Bijak**, top 5 each, with nickname, XP and personality | M |
 | T2 | QR code and "Scan to play" call to action always visible | M |
 | T3 | Live counts: players today, personality mix | S |
-| T4 | Animation when someone enters the top 10 | S |
+| T4 | Animation when someone enters a top 5 | S |
 
 ### 6.4 Admin page (BSA staff)
 
@@ -151,7 +172,7 @@ Priority: **M** = must have for PESKON, **S** = should have (after PESKON), **C*
 | A4 | Follow-up status: new / contacted / trial booked / enrolled / not interested (tutors: new / contacted / interviewed / hired / not suitable) | M |
 | A5 | Export sign-ups to Excel/CSV (admin only) | M |
 | A6a | Hide a rude nickname from the TV leaderboard | M |
-| A6 | Event stats: plays, sign-ups, sign-up rate, by role and level | S |
+| A6 | Event stats: plays, sign-ups, sign-up rate, by role and level, and a lead funnel by follow-up status (contacted, trial booked, enrolled; tutors: contacted, interviewed, hired) | S |
 | A7 | Events: create an event (name, dates, offer code, offer text) and download its QR code and TV link | S |
 | A8 | Edit result texts and WhatsApp message templates (BM and English) | S |
 | A9 | Edit story situations and the question bank | C |
