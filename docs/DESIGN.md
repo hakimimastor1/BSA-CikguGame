@@ -73,7 +73,7 @@ supported.
 Navy background. On the left: a large QR code and *"Imbas & main! / Scan & play!"*. On the right: **Today's
 top 10** (nickname, personality, XP), with the top 3 highlighted in yellow. Along the bottom: a ticker of
 the latest results (*"Cikgu Ceria 27 is a Cikgu Kreatif!"*) and the number of players today. Refreshes
-every 5 seconds by itself.
+every 3 seconds by itself.
 
 ### Admin (staff phone or laptop)
 
@@ -166,7 +166,7 @@ The personality is the trait the player picked most (ties go to the order below)
   event in the QR link, e.g. `/?e=peskon26`), the TV screen (`/tv/peskon26`) and the admin pages (`/admin`).
   Static files on Netlify's CDN, so it loads fast on mobile data.
 - **Supabase** (project `bsa-cikgu-game`): database, server functions and staff logins. Tables are in a
-  private `cs` schema; the app only calls functions. The TV page asks for the leaderboard every 5 seconds.
+  private `cs` schema; the app only calls functions. The TV page asks for the leaderboard every 3 seconds.
 
 ### Data
 
