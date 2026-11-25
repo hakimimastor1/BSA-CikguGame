@@ -8,7 +8,7 @@ import { eventSlug, leaderboard, online, type Board } from '../lib/api'
 import type { Game } from '../types'
 import { EVENT } from '../content/event'
 
-const POLL_MS = 5000
+const POLL_MS = 3000
 /** Names per board when the server does not say (older servers). Admin can choose 3, 5 or 10. */
 const DEFAULT_SIZE = 5
 
@@ -23,7 +23,7 @@ const BOARDS: { game: Game; title: string; sub: string; icon: typeof Presentatio
 const rowsFor = (b: Board | null, g: Game): Row[] =>
   (b?.boards?.[g] ?? (g === 'cikgu' ? (b?.top ?? []) : [])).slice(0, b?.size ?? DEFAULT_SIZE)
 
-/** Projector screen for the booth: QR code, today's top 5 for each game and the latest results. Updates every 5 s. */
+/** Projector screen for the booth: QR code, the top names for each game and the latest results. Updates every 3 s. */
 export default function Tv() {
   const [board, setBoard] = useState<Board | null>(null)
   const [stale, setStale] = useState(false)
@@ -50,9 +50,15 @@ export default function Tv() {
     }
     void load()
     const id = window.setInterval(load, POLL_MS)
+    // Catch up straight away when the screen comes back (laptop woke up, tab switched back).
+    const onShow = () => {
+      if (document.visibilityState === 'visible') void load()
+    }
+    document.addEventListener('visibilitychange', onShow)
     return () => {
       alive = false
       window.clearInterval(id)
+      document.removeEventListener('visibilitychange', onShow)
     }
   }, [])
 
